@@ -1,5 +1,7 @@
 package com.salesmanager.core.business.services.payments;
 
+import org.springframework.context.annotation.Lazy;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Date;
@@ -65,6 +67,7 @@ public class PaymentServiceImpl implements PaymentService {
 	@Inject
 	private TransactionService transactionService;
 	
+	@Lazy // breaks a bean dependency cycle
 	@Inject
 	private OrderService orderService;
 	

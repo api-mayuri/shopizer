@@ -1,5 +1,7 @@
 package com.salesmanager.core.business.modules.integration.shipping.impl;
 
+import org.springframework.context.annotation.Lazy;
+
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +24,7 @@ import com.salesmanager.core.modules.integration.shipping.model.Packaging;
 public class DefaultPackagingImpl implements Packaging {
 
 	
+	@Lazy // breaks a bean dependency cycle
 	@Inject
 	private ShippingService shippingService;
 	

@@ -1,5 +1,7 @@
 package com.salesmanager.core.business.services.catalog.category;
 
+import org.springframework.context.annotation.Lazy;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
@@ -34,6 +36,7 @@ public class CategoryServiceImpl extends SalesManagerEntityServiceImpl<Long, Cat
 
   private CategoryRepository categoryRepository;
 
+  @Lazy // breaks a bean dependency cycle
   @Inject
   private ProductService productService;
   

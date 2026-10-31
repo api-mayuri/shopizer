@@ -1,5 +1,7 @@
 package com.salesmanager.shop.store.facade.catalog;
 
+import org.springframework.context.annotation.Lazy;
+
 import com.salesmanager.core.business.exception.ServiceException;
 import com.salesmanager.core.business.services.catalog.catalog.CatalogEntryService;
 import com.salesmanager.core.business.services.catalog.catalog.CatalogService;
@@ -48,6 +50,7 @@ public class CatalogFacadeImpl implements CatalogFacade {
     @Autowired
     private ReadableCatalogMapper readableCatalogMapper;
 
+    @Lazy // breaks a bean dependency cycle
     @Autowired
     private Mapper<PersistableCatalogCategoryEntry, CatalogCategoryEntry> persistableCatalogEntryMapper;
 

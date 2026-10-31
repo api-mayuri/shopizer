@@ -1,5 +1,7 @@
 package com.salesmanager.core.business.services.shipping;
 
+import org.springframework.context.annotation.Lazy;
+
 import java.util.List;
 
 import jakarta.inject.Inject;
@@ -25,6 +27,7 @@ public class ShippingQuoteServiceImpl extends SalesManagerEntityServiceImpl<Long
 	
 	private ShippingQuoteRepository shippingQuoteRepository;
 	
+	@Lazy // breaks a bean dependency cycle
 	@Inject
 	private ShippingService shippingService;
 	

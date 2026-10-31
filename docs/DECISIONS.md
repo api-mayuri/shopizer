@@ -335,3 +335,14 @@
   - Убраны `IO.println` с данными токенов в stdout.
 - Тесты: `JWTTokenUtilTest` (выпуск и проверка, чужой ключ, обновление, смена пароля, пустой/короткий/невалидный секрет).
   Smoke пройден без секрета и с секретом.
+
+### D-51. Циклические зависимости бинов убраны
+- `spring.main.allow-circular-references=true` (D-10) удалён: снова действует значение Spring Boot по умолчанию (циклы запрещены).
+- Циклов оказалось 7 (5 в `sm-core`, 2 в `sm-shop`). Каждый разорван аннотацией `@Lazy` на одном поле:
+  `CategoryServiceImpl.productService`, `ProductReviewServiceImpl.productService`, `DefaultPackagingImpl.shippingService`,
+  `ShippingQuoteServiceImpl.shippingService`, `PaymentServiceImpl.orderService`, `StoreFacadeImpl.languageUtils`,
+  `CatalogFacadeImpl.persistableCatalogEntryMapper`.
+  `@Lazy` подставляет прокси, который находит настоящий бин при первом вызове. Поведение не меняется.
+- *Альтернатива:* разнести сервисы (например, вынести общую часть `Product`/`Category` в третий сервис). Это правильнее,
+  но меняет код сервисов. Лучше делать при переводе ядра на auto-configuration (этап плагинов). Новые циклы теперь
+  ловятся сразу при старте.

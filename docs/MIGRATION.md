@@ -29,7 +29,7 @@ mvn -DskipTests install && docker compose up --build   # PostgreSQL 18 + Shopize
 1. ~~**JWT-секрет и jjwt**~~ — сделано (D-50): jjwt 0.13, `SHOPIZER_JWT_SECRET` (Base64, ≥ 64 байт).
 2. **Spring Boot 4.1** (D-45): переписать запросы с фильтром по алиасам `join fetch`-коллекций, затем поднять Boot.
 3. **Bean Validation** (D-26): в исходном проекте валидация не работала. Включать отдельной задачей, проверив клиентов.
-4. **Циклические зависимости бинов** (D-10): убрать `spring.main.allow-circular-references=true`.
+4. ~~**Циклические зависимости бинов**~~ — сделано (D-51): `allow-circular-references` убран, 7 циклов разорваны `@Lazy`.
    Логично делать на этапе плагинной архитектуры.
 5. **DTO с `id = 0`** (D-24): перейти на `Long id = null` и убрать `ZeroIdMergeEventListener`.
 6. **CMS по умолчанию** (D-41): для продакшена использовать `aws`/`gcp`. Файловое хранилище годится для dev и одиночного сервера.
