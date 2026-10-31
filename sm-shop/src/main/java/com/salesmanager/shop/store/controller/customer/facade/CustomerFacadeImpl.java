@@ -150,7 +150,8 @@ public class CustomerFacadeImpl implements CustomerFacade {
   private EmailTemplatesUtils emailTemplatesUtils;
 
   @Inject
-  private AuthenticationManager customerAuthenticationManager;
+  @Qualifier("customerAuthenticationManager")
+    private AuthenticationManager customerAuthenticationManager;
 
   @Inject
   private CustomerReviewService customerReviewService;

@@ -9,7 +9,6 @@ import javax.inject.Inject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,10 +24,9 @@ import com.salesmanager.shop.model.security.ReadablePermission;
 import com.salesmanager.shop.store.api.exception.ResourceNotFoundException;
 import com.salesmanager.shop.store.api.exception.ServiceRuntimeException;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.SwaggerDefinition;
-import io.swagger.annotations.Tag;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
 
 /**
  * Api for managing security
@@ -38,9 +36,11 @@ import io.swagger.annotations.Tag;
  */
 @RestController
 @RequestMapping(value = "/api/v1/sec")
-@Api(tags = { "Groups and permissions Api" })
-@SwaggerDefinition(tags = {
-		@Tag(name = "List of supported groups and permissions", description = "List groups and attached permissions for reference") })
+@OpenAPIDefinition(
+		tags = {
+				@Tag(name = "List of supported groups and permissions", description = "List groups and attached permissions for reference")}
+)
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Groups and permissions Api")
 public class SecurityApi {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(SecurityApi.class);
@@ -53,7 +53,7 @@ public class SecurityApi {
 
 	@ResponseStatus(HttpStatus.OK)
 	@GetMapping({ "/private/{group}/permissions" })
-	@ApiOperation(httpMethod = "GET", value = "Get permissions by group", notes = "", produces = MediaType.APPLICATION_JSON_VALUE, response = List.class)
+	@Operation(method = "GET", summary = "Get permissions by group", description = "")
 	public List<ReadablePermission> listPermissions(@PathVariable String group) {
 
 		Group g = null;

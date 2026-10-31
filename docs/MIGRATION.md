@@ -18,3 +18,17 @@ Each step lives on its own branch (`migration/stepN-*`) and is done only when:
 - Notes:
   - `sm-shop/src/main/resources/database.properties` is gitignored; the default Spring profile needs it.
     The smoke script supplies the H2 config from `profiles/docker/database.properties` via `loader.path`.
+
+## Step 1 — Spring Boot 2.7.18 + Java 17 (`migration/step1-boot27-java17`)
+
+- Spring Boot 2.7.18, Java 17 (built and tested on JDK 17).
+- Tests: sm-core 21 run / 0 failures / 6 skipped; sm-shop 31 run / 0 failures / 6 skipped
+  (same 15 + 25 executed tests as baseline; see DECISIONS D-05).
+- Smoke: OK (extended: admin + customer JWT flows, negative auth, OpenAPI).
+- Changes:
+  - H2 2.x: removed `mv_store=false` from JDBC URLs.
+  - `spring.main.allow-circular-references=true` (tech debt, D-10).
+  - springfox → springdoc-openapi 1.8.0 (OpenRewrite `SpringFoxToSpringDoc` + manual `DocumentationConfiguration`).
+  - Spring Security: `WebSecurityConfigurerAdapter` → `SecurityFilterChain` beans (D-14).
+  - JUnit 4 → JUnit 5 (OpenRewrite `JUnit4to5Migration`), vintage engine removed.
+  - Fixed duplicated path variable in `ProductImageApi` (D-13).
