@@ -14,7 +14,6 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -22,7 +21,6 @@ import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.salesmanager.shop.application.ShopApplication;
 import com.salesmanager.shop.model.catalog.product.ReadableProduct;
@@ -31,7 +29,6 @@ import com.salesmanager.shop.model.shoppingcart.ReadableShoppingCart;
 import com.salesmanager.test.shop.common.ServicesTestSupport;
 
 @SpringBootTest(classes = ShopApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-@ExtendWith(SpringExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ShoppingCartAPIIntegrationTest extends ServicesTestSupport {
 
@@ -136,7 +133,7 @@ public class ShoppingCartAPIIntegrationTest extends ServicesTestSupport {
     public void updateMultiWCartId() throws Exception {
 
         PersistableShoppingCartItem cartItem1 = new PersistableShoppingCartItem();
-        cartItem1.setProduct(data.getProducts().get(0).getSku());
+        cartItem1.setProduct(data.getProducts().getFirst().getSku());
         cartItem1.setQuantity(2);
 
         PersistableShoppingCartItem cartItem2 = new PersistableShoppingCartItem();
@@ -169,7 +166,7 @@ public class ShoppingCartAPIIntegrationTest extends ServicesTestSupport {
     public void updateMultiWZeroOnOneProd() throws Exception {
 
         PersistableShoppingCartItem cartItem1 = new PersistableShoppingCartItem();
-        cartItem1.setProduct(data.getProducts().get(0).getSku());
+        cartItem1.setProduct(data.getProducts().getFirst().getSku());
         cartItem1.setQuantity(0);
 
         PersistableShoppingCartItem[] productsQtyUpdates = {cartItem1};

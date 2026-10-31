@@ -2,11 +2,9 @@ package com.salesmanager.test.shop.integration.user;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -22,7 +20,6 @@ import com.salesmanager.shop.model.user.UserPassword;
 import com.salesmanager.test.shop.common.ServicesTestSupport;
 
 @SpringBootTest(classes = ShopApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-@ExtendWith(SpringExtension.class)
 public class UserApiIntegrationTest extends ServicesTestSupport {
   
   private static Long DEFAULT_USER_ID = 1L;
@@ -85,17 +82,16 @@ public class UserApiIntegrationTest extends ServicesTestSupport {
       
       final HttpEntity<UserPassword> changePasswordEntity = new HttpEntity<UserPassword>(userPassword, getHeader());
 
-      
+
       final ResponseEntity<Void> changePassword = testRestTemplate.exchange(String.format("/api/v1/private/user/" + user.getId() + "/password"), HttpMethod.PATCH, changePasswordEntity, Void.class);
       if (changePassword.getStatusCode() != HttpStatus.OK) {
           throw new Exception(response.toString());
       } else {
         assertNotNull("Password changed"); 
       }
-      
-      
+
+
   }
-  
 
 
 }

@@ -1,8 +1,8 @@
 package com.salesmanager.shop.store.api.v1.product;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,7 +15,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -27,7 +26,6 @@ import com.salesmanager.shop.model.catalog.product.ReadableProductList;
 import com.salesmanager.shop.model.catalog.product.group.ProductGroup;
 import com.salesmanager.shop.store.controller.items.facade.ProductItemsFacade;
 
-import antlr.collections.List;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
 import io.swagger.v3.oas.annotations.Operation;
@@ -154,7 +152,7 @@ public class ProductGroupApi {
   }
 
   @ResponseStatus(HttpStatus.CREATED)
-  @RequestMapping(value = "/private/products/{productId}/group/{code}", method = RequestMethod.POST)
+  @PostMapping("/private/products/{productId}/group/{code}")
   @Parameters({
 			@Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en"))
@@ -196,9 +194,7 @@ public class ProductGroupApi {
   }
 
   @ResponseStatus(HttpStatus.OK)
-  @RequestMapping(
-      value = "/private/products/{productId}/group/{code}",
-      method = RequestMethod.DELETE)
+  @DeleteMapping("/private/products/{productId}/group/{code}")
   @Parameters({
 			@Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en"))

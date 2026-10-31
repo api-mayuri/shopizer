@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
@@ -16,11 +16,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -101,7 +103,7 @@ public class ProductVariationApi {
    * @return
    * @throws Exception
    */
-  @RequestMapping(value = "/product/{id}/variation", method = RequestMethod.POST)
+  @PostMapping("/product/{id}/variation")
   @ResponseStatus(HttpStatus.OK)
   @Operation(
       method = "POST",
@@ -158,7 +160,7 @@ public class ProductVariationApi {
   }
 
   
-  @RequestMapping(value = "/category/{id}/variations", method = RequestMethod.GET)
+  @GetMapping("/category/{id}/variations")
   @ResponseStatus(HttpStatus.OK)
   @Operation(
       method = "GET",
@@ -181,7 +183,7 @@ public class ProductVariationApi {
   }
 
 	@ResponseStatus(HttpStatus.CREATED)
-	@RequestMapping(value = { "/private/product/variation" }, method = RequestMethod.POST)
+	@PostMapping({ "/private/product/variation" })
 	@Operation(
 		      method = "POST",
 		      summary = "Creates a new product variant",
@@ -215,7 +217,7 @@ public class ProductVariationApi {
 
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/variation/{variationId}" }, method = RequestMethod.GET)
+	@GetMapping({ "/private/product/variation/{variationId}" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	@ResponseBody
@@ -230,7 +232,7 @@ public class ProductVariationApi {
 
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/variation/{variationId}" }, method = RequestMethod.PUT)
+	@PutMapping({ "/private/product/variation/{variationId}" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public void update(
@@ -246,7 +248,7 @@ public class ProductVariationApi {
 
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/variation/{variationId}" }, method = RequestMethod.DELETE)
+	@DeleteMapping({ "/private/product/variation/{variationId}" })
 	@Parameters({
 			@Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
@@ -261,7 +263,7 @@ public class ProductVariationApi {
 	
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/variations" }, method = RequestMethod.GET)
+	@GetMapping({ "/private/product/variations" })
 	@Parameters({
 			@Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })

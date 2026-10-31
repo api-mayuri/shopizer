@@ -5,10 +5,8 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Map;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -19,15 +17,14 @@ import com.salesmanager.core.model.system.IntegrationModule;
 import com.salesmanager.test.configuration.ConfigurationTest;
 
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {ConfigurationTest.class})
 @Disabled
 public class ImportIntegrationModule  {
 
 	@Inject
 	private IntegrationModulesLoader integrationModulesLoader;
-	
-	
+
+
 	@Inject
 	private ModuleConfigurationService moduleCongigurationService;
 	
@@ -39,7 +36,7 @@ public class ImportIntegrationModule  {
 	@Disabled
 	//@Test
 	public void importSpecificIntegrationModule() throws Exception {
-		
+
 
 			ObjectMapper mapper = new ObjectMapper();
 			File file = new File(" /Users/carlsamson/Documents/dev/workspaces/shopizer-master/shopizer/sm-core/src/main/resources/reference/integrationmodules.json");
@@ -83,7 +80,7 @@ public class ImportIntegrationModule  {
 	@Disabled
 	//@Test
 	public void importNonExistingIntegrationModule() throws Exception {
-		
+
 
 			ObjectMapper mapper = new ObjectMapper();
 			File file = new File("/Users/carlsamson/Documents/dev/workspaces/shopizer-master/shopizer/sm-core/src/main/resources/reference/integrationmodules.json");

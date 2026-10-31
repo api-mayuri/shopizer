@@ -1,8 +1,8 @@
 package com.salesmanager.shop.store.api.v1.customer;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -103,7 +102,7 @@ public class ResetCustomerPasswordApi {
 	 * @param language
 	 * @param request
 	 */
-	@RequestMapping(value = "/customer/{store}/password/{token}", method = RequestMethod.POST, produces = {
+	@PostMapping(value = "/customer/{store}/password/{token}", produces = {
 			"application/json" })
 	@Operation(method = "POST", summary = "Change customer password")
 	public void changePassword(

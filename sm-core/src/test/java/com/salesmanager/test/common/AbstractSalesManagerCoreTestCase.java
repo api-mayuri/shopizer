@@ -5,13 +5,11 @@
  */
 package com.salesmanager.test.common;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.salesmanager.core.business.exception.ServiceException;
@@ -51,15 +49,13 @@ import com.salesmanager.test.configuration.ConfigurationTest;
  *
  */
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes=ConfigurationTest.class)
 @Disabled
 public class AbstractSalesManagerCoreTestCase {
 	
 	private static final String CONTEXT_LOAD_NAME = "TEST";
 
-	
-	
+
 	protected static String CAD_CURRENCY_CODE = "CAD";
 	protected static String USD_CURRENCY_CODE = "USD";
 	

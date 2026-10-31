@@ -3,11 +3,12 @@ package com.salesmanager.core.business.repositories.catalog.catalog;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.salesmanager.core.model.catalog.catalog.CatalogCategoryEntry;
 
-public interface PageableCatalogEntryRepository extends PagingAndSortingRepository<CatalogCategoryEntry, Long> {
+public interface PageableCatalogEntryRepository extends PagingAndSortingRepository<CatalogCategoryEntry, Long>, CrudRepository<CatalogCategoryEntry, Long> {
 
 	
 /*	  @Query(value = "select distinct c from CatalogEntry c join fetch c.product cp "

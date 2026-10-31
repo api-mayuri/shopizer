@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
@@ -258,7 +258,7 @@ public class TaxServiceImpl
 				
 				TaxItem taxItem = new TaxItem();
 				taxItem.setItemPrice(taxedItemValue);
-				taxItem.setLabel(taxRate.getDescriptions().get(0).getName());
+				taxItem.setLabel(taxRate.getDescriptions().getFirst().getName());
 				taxItem.setTaxRate(taxRate);
 				taxItems.add(taxItem);
 				

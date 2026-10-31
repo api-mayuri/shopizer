@@ -2,19 +2,22 @@ package com.salesmanager.shop.store.api.v1.product;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -45,14 +48,12 @@ public class ProductReviewApi {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ProductReviewApi.class);
 
-  @RequestMapping(
-      value = {
+  @PostMapping({
         "/private/products/{id}/reviews",
         "/auth/products/{id}/reviews",
         "/auth/products/{id}/reviews",
         "/auth/products/{id}/reviews"
-      },
-      method = RequestMethod.POST)
+      })
   @ResponseStatus(HttpStatus.CREATED)
   @ResponseBody
   @Parameters({
@@ -100,7 +101,7 @@ public class ProductReviewApi {
     }
   }
 
-  @RequestMapping(value = "/product/{id}/reviews", method = RequestMethod.GET)
+  @GetMapping("/product/{id}/reviews")
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   @Parameters({
@@ -138,12 +139,10 @@ public class ProductReviewApi {
     }
   }
 
-  @RequestMapping(
-      value = {
+  @PutMapping({
         "/private/products/{id}/reviews/{reviewid}",
         "/auth/products/{id}/reviews/{reviewid}"
-      },
-      method = RequestMethod.PUT)
+      })
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   @Parameters({
@@ -194,12 +193,10 @@ public class ProductReviewApi {
     }
   }
 
-  @RequestMapping(
-      value = {
+  @DeleteMapping({
         "/private/products/{id}/reviews/{reviewid}",
         "/auth/products/{id}/reviews/{reviewid}"
-      },
-      method = RequestMethod.DELETE)
+      })
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
   @Parameters({

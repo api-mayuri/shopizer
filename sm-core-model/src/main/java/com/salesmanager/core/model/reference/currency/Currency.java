@@ -1,15 +1,16 @@
 package com.salesmanager.core.model.reference.currency;
 
+import java.io.Serial;
 import java.io.Serializable;
 
-import javax.persistence.Cacheable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
+import jakarta.persistence.Cacheable;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.persistence.TableGenerator;
 
 import com.salesmanager.core.constants.SchemaConstant;
 import com.salesmanager.core.model.generic.SalesManagerEntity;
@@ -18,6 +19,7 @@ import com.salesmanager.core.model.generic.SalesManagerEntity;
 @Table(name = "CURRENCY")
 @Cacheable
 public class Currency extends SalesManagerEntity<Long, Currency> implements Serializable {
+	@Serial
 	private static final long serialVersionUID = -999926410367685145L;
 	
 	@Id

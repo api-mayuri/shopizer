@@ -4,7 +4,7 @@ import java.util.Date;
 
 public class CloneUtils {
 	
-	private CloneUtils() {};
+	private CloneUtils() {}
 	
 	public static Date clone(Date date) {
 		if (date != null) {

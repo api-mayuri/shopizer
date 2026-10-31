@@ -16,7 +16,7 @@ import java.util.Map;
 import java.util.StringTokenizer;
 import java.util.UUID;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -117,8 +117,8 @@ public class BeanStreamPayment implements PaymentModule {
 				
 			} catch(Exception e) {
 				
-				if(e instanceof IntegrationException)
-					throw (IntegrationException)e;
+				if(e instanceof IntegrationException exception)
+					throw exception;
 				throw new IntegrationException("Error while processing BeanStream transaction",e);
 	
 			} 
@@ -216,8 +216,8 @@ public class BeanStreamPayment implements PaymentModule {
 			
 		} catch(Exception e) {
 			
-			if(e instanceof IntegrationException)
-				throw (IntegrationException)e;
+			if(e instanceof IntegrationException exception)
+				throw exception;
 			throw new IntegrationException("Error while processing BeanStream transaction",e);
 
 		} finally {
@@ -411,8 +411,8 @@ public class BeanStreamPayment implements PaymentModule {
 			
 			
 		} catch(Exception e) {
-			if(e instanceof IntegrationException) {
-				throw (IntegrationException)e;
+			if(e instanceof IntegrationException exception) {
+				throw exception;
 			}
 			
 			throw new IntegrationException("Error while processing BeanStream transaction",e);
@@ -629,8 +629,8 @@ public class BeanStreamPayment implements PaymentModule {
 			
 		} catch(Exception e) {
 			
-			if(e instanceof IntegrationException)
-				throw (IntegrationException)e;
+			if(e instanceof IntegrationException exception)
+				throw exception;
 			throw new IntegrationException("Error while processing BeanStream transaction",e);
 
 		} finally {

@@ -3,15 +3,15 @@ package com.salesmanager.shop.store.api.v1.order;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
@@ -73,9 +73,7 @@ public class OrderTotalApi {
    * @return
    * @throws Exception
    */
-  @RequestMapping(
-      value = {"/auth/cart/{id}/total"},
-      method = RequestMethod.GET)
+  @GetMapping({"/auth/cart/{id}/total"})
   @ResponseBody
   @Parameters({
 			@Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
@@ -163,9 +161,7 @@ public class OrderTotalApi {
    * @param response
    * @return
    */
-  @RequestMapping(
-      value = {"/cart/{code}/total"},
-      method = RequestMethod.GET)
+  @GetMapping({"/cart/{code}/total"})
   @ResponseBody
   @Parameters({
 			@Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),

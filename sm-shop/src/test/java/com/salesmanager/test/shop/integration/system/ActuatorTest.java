@@ -1,10 +1,8 @@
 package com.salesmanager.test.shop.integration.system;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -19,13 +17,12 @@ import com.salesmanager.shop.application.ShopApplication;
 
 
 @SpringBootTest(classes = ShopApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-@ExtendWith(SpringExtension.class)
 public class ActuatorTest {
 	
 	  @Inject
 	  private TestRestTemplate testRestTemplate;
-	
-	
+
+
 	  @Test
 	  public void testPing() throws Exception {
 		  HttpHeaders headers = new HttpHeaders();

@@ -1,6 +1,8 @@
 package com.salesmanager.shop.model.entity;
 
-import javax.validation.constraints.NotEmpty;
+import java.io.Serial;
+
+import jakarta.validation.constraints.NotEmpty;
 
 /**
  * Used as an input request object where an entity name and or id is important
@@ -8,10 +10,11 @@ import javax.validation.constraints.NotEmpty;
  *
  */
 public class NameEntity extends Entity {
-	
+
 	/**
 	 * 
 	 */
+	@Serial
 	private static final long serialVersionUID = 1L;
 	@NotEmpty
 	private String name;

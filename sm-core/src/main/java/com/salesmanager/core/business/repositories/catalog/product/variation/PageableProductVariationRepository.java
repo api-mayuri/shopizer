@@ -3,11 +3,12 @@ package com.salesmanager.core.business.repositories.catalog.product.variation;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.salesmanager.core.model.catalog.product.variation.ProductVariation;
 
-public interface PageableProductVariationRepository extends PagingAndSortingRepository<ProductVariation, Long> {
+public interface PageableProductVariationRepository extends PagingAndSortingRepository<ProductVariation, Long>, CrudRepository<ProductVariation, Long> {
 
 	
 	@Query(value = "select distinct p from ProductVariation p join fetch p.merchantStore pm "

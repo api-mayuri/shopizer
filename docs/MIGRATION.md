@@ -32,3 +32,14 @@ Each step lives on its own branch (`migration/stepN-*`) and is done only when:
   - Spring Security: `WebSecurityConfigurerAdapter` → `SecurityFilterChain` beans (D-14).
   - JUnit 4 → JUnit 5 (OpenRewrite `JUnit4to5Migration`), vintage engine removed.
   - Fixed duplicated path variable in `ProductImageApi` (D-13).
+
+## Step 2 — Spring Boot 3.5.16 + Java 21 (`migration/step2-boot35-java21`)
+
+- Spring Boot 3.5.16 (Spring Framework 6.2, Security 6.5, Hibernate 6.6), Java 21 (built and tested on JDK 21).
+- Tests: sm-core 21 run / 0 failures / 6 skipped; sm-shop 31 run / 0 failures / 6 skipped (same as step 1).
+- Smoke: OK.
+- OpenRewrite: `UpgradeSpringBoot_3_5`, `UpgradeToJava21`, `MigrateToHibernate66` (rewrite-spring 6.37.1);
+  poms done by hand (D-20).
+- Main manual changes: Ehcache 3/JCache (D-21), text columns (D-22), Hibernate 6.6 mappings & JPQL (D-23),
+  id=0 merge listener (D-24), validation kept off (D-26), trailing slash filter (D-27),
+  third party leftovers (D-28: shopizer starters, Infinispan + Caffeine 2, jjwt + jaxb-api).

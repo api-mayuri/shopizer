@@ -3,11 +3,12 @@ package com.salesmanager.core.business.repositories.catalog.product.variant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.salesmanager.core.model.catalog.product.variant.ProductVariant;
 
-public interface PageableProductVariantRepositoty extends PagingAndSortingRepository<ProductVariant, Long> {
+public interface PageableProductVariantRepositoty extends PagingAndSortingRepository<ProductVariant, Long>, CrudRepository<ProductVariant, Long> {
 
 
 	
@@ -17,7 +18,7 @@ public interface PageableProductVariantRepositoty extends PagingAndSortingReposi
 			+ "left join fetch pv.productOption pvpo " 
 			+ "left join fetch pv.productOptionValue pvpov "
 			+ "left join fetch pvpo.descriptions pvpod " 
-			+ "left join fetch pvpov.descriptions pvpovd "
+			+ " "
 
 			+ "left join fetch p.variationValue pvv " 
 			+ "left join fetch pvv.productOption pvvpo "

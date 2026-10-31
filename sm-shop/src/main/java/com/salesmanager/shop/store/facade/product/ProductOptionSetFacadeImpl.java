@@ -36,7 +36,7 @@ public class ProductOptionSetFacadeImpl implements ProductOptionSetFacade {
 	private ProductOptionSetService productOptionSetService;
 
 	@Autowired
-	private ProductTypeFacade productTypeFacade;;
+	private ProductTypeFacade productTypeFacade;
 
 	@Override
 	public ReadableProductOptionSet get(Long id, MerchantStore store, Language language) {

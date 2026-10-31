@@ -9,8 +9,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpEntity;
@@ -32,10 +30,9 @@ import com.salesmanager.test.shop.common.ServicesTestSupport;
 
 
 @SpringBootTest(classes = ShopApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-@ExtendWith(SpringExtension.class)
 public class ProductV2ManagementAPIIntegrationTest extends ServicesTestSupport {
-	
-	
+
+
 	@Test
 	public void createProductWithCategory() throws Exception {
 
@@ -100,8 +97,8 @@ public class ProductV2ManagementAPIIntegrationTest extends ServicesTestSupport {
 				"/api/v1/private/product/option?store=" + Constants.DEFAULT_STORE, colorEntity, PersistableProductOption.class);
 		assertTrue(colorResponse.getStatusCode()== CREATED);
 		System.out.println(colorResponse.getBody().getId());
-		
-		
+
+
 		PersistableProductOption size = new PersistableProductOption();
 		size.setCode("size");
 		ProductOptionDescription sizeEn = new ProductOptionDescription();

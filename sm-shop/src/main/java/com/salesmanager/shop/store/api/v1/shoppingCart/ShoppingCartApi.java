@@ -6,10 +6,10 @@ import java.security.Principal;
 import java.util.Arrays;
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -18,12 +18,12 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -106,8 +106,8 @@ public class ShoppingCartApi {
 			return new ResponseEntity<>(cart, HttpStatus.CREATED);
 
 		} catch (Exception e) {
-			if(e instanceof ResourceNotFoundException) {
-				throw (ResourceNotFoundException)e;
+			if(e instanceof ResourceNotFoundException exception) {
+				throw exception;
 			} else {
 				throw new ServiceRuntimeException(e);
 			}
@@ -137,8 +137,8 @@ public class ShoppingCartApi {
 			return new ResponseEntity<>(cart, HttpStatus.CREATED);
 
 		} catch (Exception e) {
-			if(e instanceof ResourceNotFoundException) {
-				throw (ResourceNotFoundException)e;
+			if(e instanceof ResourceNotFoundException exception) {
+				throw exception;
 			} else {
 				throw new ServiceRuntimeException(e);
 			}
@@ -164,8 +164,8 @@ public class ShoppingCartApi {
 			return new ResponseEntity<>(cart, HttpStatus.CREATED);
 
 		} catch (Exception e) {
-			if(e instanceof ResourceNotFoundException) {
-				throw (ResourceNotFoundException)e;
+			if(e instanceof ResourceNotFoundException exception) {
+				throw exception;
 			} else {
 				throw new ServiceRuntimeException(e);
 			}
@@ -174,7 +174,7 @@ public class ShoppingCartApi {
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = "/cart/{code}", method = RequestMethod.GET)
+	@GetMapping("/cart/{code}")
 	@Operation(method = "GET", summary = "Get a chopping cart by code", description = "")
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
@@ -193,8 +193,8 @@ public class ShoppingCartApi {
 			return cart;
 
 		} catch (Exception e) {
-			if(e instanceof ResourceNotFoundException) {
-				throw (ResourceNotFoundException)e;
+			if(e instanceof ResourceNotFoundException exception) {
+				throw exception;
 			} else {
 				throw new ServiceRuntimeException(e);
 			}
@@ -204,7 +204,7 @@ public class ShoppingCartApi {
 
 	@Deprecated
 	@ResponseStatus(HttpStatus.CREATED)
-	@RequestMapping(value = "/customers/{id}/cart", method = RequestMethod.POST)
+	@PostMapping("/customers/{id}/cart")
 	@Operation(method = "POST", summary = "Add product to a specific customer shopping cart", description = "")
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
@@ -218,7 +218,7 @@ public class ShoppingCartApi {
 
 	@Deprecated
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = "/auth/customer/{id}/cart", method = RequestMethod.GET)
+	@GetMapping("/auth/customer/{id}/cart")
 	@Operation(method = "GET", summary = "Get a shopping cart by customer id. Customer must be authenticated", description = "")
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
@@ -250,7 +250,7 @@ public class ShoppingCartApi {
 	}
 	
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = "/auth/customer/cart", method = RequestMethod.GET)
+	@GetMapping("/auth/customer/cart")
 	@Operation(method = "GET", summary = "Get a shopping cart by authenticated customer", description = "")
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })

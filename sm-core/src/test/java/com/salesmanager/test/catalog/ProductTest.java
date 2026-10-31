@@ -302,7 +302,7 @@ public class ProductTest extends com.salesmanager.test.common.AbstractSalesManag
 		//System.out.println("Number of manufacturer for all category " + manufacturers.size());
 		
 		//Update product -- get first from the list
-		Product updatableProduct = products.get(0);
+		Product updatableProduct = products.getFirst();
 
 		//Get first availability, which is the only one created
 		ProductAvailability updatableAvailability = updatableProduct.getAvailabilities().iterator().next();
@@ -333,7 +333,7 @@ public class ProductTest extends com.salesmanager.test.common.AbstractSalesManag
 		//go and get products again
 		products = productService.listByStore(store);
 
-		updatableProduct = products.get(0);
+		updatableProduct = products.getFirst();
 		
 		//test attributes
 		this.testAttributes(updatableProduct);

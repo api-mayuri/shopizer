@@ -3,8 +3,8 @@ package com.salesmanager.shop.store.api.v2.product;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
-import javax.validation.Valid;
+import jakarta.inject.Inject;
+import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,13 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -155,7 +155,7 @@ public class ProductVariantApi {
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/{id}/variants" }, method = RequestMethod.GET)
+	@GetMapping({ "/private/product/{id}/variants" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public @ResponseBody ReadableEntityList<ReadableProductVariant> list(@PathVariable final Long id,
@@ -168,7 +168,7 @@ public class ProductVariantApi {
 	}
 	
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/{id}/variant/{variantId}" }, method = RequestMethod.DELETE)
+	@DeleteMapping({ "/private/product/{id}/variant/{variantId}" })
 	@Parameters({
 			@Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })

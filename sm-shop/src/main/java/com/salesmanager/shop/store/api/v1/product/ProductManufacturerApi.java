@@ -1,21 +1,23 @@
 package com.salesmanager.shop.store.api.v1.product;
 
 import java.util.List;
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -67,7 +69,7 @@ public class ProductManufacturerApi {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/private/manufacturer", method = RequestMethod.POST)
+	@PostMapping("/private/manufacturer")
 	@ResponseStatus(HttpStatus.CREATED)
 	@ResponseBody
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
@@ -91,7 +93,7 @@ public class ProductManufacturerApi {
 		}
 	}
 
-	@RequestMapping(value = "/manufacturer/{id}", method = RequestMethod.GET)
+	@GetMapping("/manufacturer/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
@@ -120,7 +122,7 @@ public class ProductManufacturerApi {
 	}
 
 	
-	@RequestMapping(value = "/private/manufacturers", method = RequestMethod.GET)
+	@GetMapping("/private/manufacturers")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
@@ -139,7 +141,7 @@ public class ProductManufacturerApi {
 	}
 	
 	
-	@RequestMapping(value = "/manufacturers", method = RequestMethod.GET)
+	@GetMapping("/manufacturers")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
@@ -167,7 +169,7 @@ public class ProductManufacturerApi {
 
 	}
 
-	@RequestMapping(value = "/private/manufacturer/{id}", method = RequestMethod.PUT)
+	@PutMapping("/private/manufacturer/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
@@ -188,7 +190,7 @@ public class ProductManufacturerApi {
 		}
 	}
 
-	@RequestMapping(value = "/private/manufacturer/{id}", method = RequestMethod.DELETE)
+	@DeleteMapping("/private/manufacturer/{id}")
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
@@ -214,7 +216,7 @@ public class ProductManufacturerApi {
 		}
 	}
 
-	@RequestMapping(value = "/category/{id}/manufacturer", method = RequestMethod.GET)
+	@GetMapping("/category/{id}/manufacturer")
 	@ResponseStatus(HttpStatus.OK)
 	@Operation(method = "GET", summary = "Get all manufacturers for all items in a given category", description = "")
 	@ResponseBody

@@ -2,12 +2,12 @@ package com.salesmanager.shop.store.api.v1.customer;
 
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
 import org.apache.commons.lang3.Validate;
-import org.apache.http.auth.AuthenticationException;
+import org.apache.hc.client5.http.auth.AuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,9 +20,10 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -90,7 +91,7 @@ public class AuthenticateCustomerApi {
     /**
      * Create new customer for a given MerchantStore, then authenticate that customer
      */
-    @RequestMapping( value={"/customer/register"}, method=RequestMethod.POST, produces ={ "application/json" })
+    @PostMapping( value={"/customer/register"}, produces ={ "application/json" })
     @ResponseStatus(HttpStatus.CREATED)
     @Operation(method = "POST", summary = "Registers a customer to the application", description = "Used as self-served operation")
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
@@ -153,7 +154,7 @@ public class AuthenticateCustomerApi {
      * @return
      * @throws AuthenticationException
      */
-    @RequestMapping(value = "/customer/login", method = RequestMethod.POST, produces ={ "application/json" })
+    @PostMapping(value = "/customer/login", produces ={ "application/json" })
     @Operation(method = "POST", summary = "Authenticates a customer to the application", description = "Customer can authenticate after registration, request is {\"username\":\"admin\",\"password\":\"password\"}")
     @ResponseBody
     public ResponseEntity<?> authenticate(@RequestBody @Valid AuthenticationRequest authenticationRequest) throws AuthenticationException {
@@ -194,7 +195,7 @@ public class AuthenticateCustomerApi {
         return ResponseEntity.ok(new AuthenticationResponse(userDetails.getId(),token));
     }
 
-    @RequestMapping(value = "/auth/customer/refresh", method = RequestMethod.GET, produces ={ "application/json" })
+    @GetMapping(value = "/auth/customer/refresh", produces ={ "application/json" })
     public ResponseEntity<?> refreshToken(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);
 
@@ -211,7 +212,7 @@ public class AuthenticateCustomerApi {
     
     
 
-    @RequestMapping(value = "/auth/customer/password", method = RequestMethod.POST, produces ={ "application/json" })
+    @PostMapping(value = "/auth/customer/password", produces ={ "application/json" })
     @Operation(method = "POST", summary = "Sends a request to reset password", description = "Password reset request is {\"username\":\"test@email.com\"}")
     public ResponseEntity<?> changePassword(@RequestBody @Valid PasswordRequest passwordRequest, HttpServletRequest request) {
 

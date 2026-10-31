@@ -11,8 +11,8 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.annotation.PostConstruct;
-import javax.inject.Inject;
+import jakarta.annotation.PostConstruct;
+import jakarta.inject.Inject;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -80,12 +80,15 @@ public class SearchServiceImpl implements com.salesmanager.core.business.service
 	 * TODO properties file
 	 */
 	
-	private final static String KEYWORDS_MAPPING_DEFAULT = "{\"properties\":"
-			+ "      {\n\"id\": {\n"
-			+ "        \"type\": \"long\"\n"
-			+ "      }\n"
-			+ "     }\n"
-			+ "    }";	
+	private final static String KEYWORDS_MAPPING_DEFAULT = """
+			{"properties":\
+			      {
+			"id": {
+			        "type": "long"
+			      }
+			     }
+			    }\
+			""";	
 	
 
 
@@ -142,7 +145,7 @@ public class SearchServiceImpl implements com.salesmanager.core.business.service
 				}
 	
 				if (!CollectionUtils.isEmpty(documents)) {
-					if (documents.iterator().next() != null) {
+					if (documents.getFirst() != null) {
 						searchModule.delete(languages, product.getId());
 					}
 				}
@@ -174,7 +177,7 @@ public class SearchServiceImpl implements com.salesmanager.core.business.service
 			}
 		}
 		
-		List<Document> filteredList = documents.stream().filter(Optional::isPresent).map(Optional::get)
+		List<Document> filteredList = documents.stream().flatMap(Optional::stream)
 				.collect(Collectors.toList());
 
 		return filteredList;

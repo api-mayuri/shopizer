@@ -10,12 +10,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -65,7 +66,7 @@ public class ShippingConfigurationApi {
 	private ShippingService shippingService;
 
 	@Operation(method = "GET", summary = "Get shipping origin for a specific merchant store", description = "")
-	@RequestMapping(value = { "/private/shipping/origin" }, method = RequestMethod.GET)
+	@GetMapping({ "/private/shipping/origin" })
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public ReadableAddress shippingOrigin(@Parameter(hidden = true) MerchantStore merchantStore, @Parameter(hidden = true) Language language) {
@@ -78,7 +79,7 @@ public class ShippingConfigurationApi {
 
 	}
 
-	@RequestMapping(value = { "/private/shipping/origin" }, method = RequestMethod.POST)
+	@PostMapping({ "/private/shipping/origin" })
 	@ResponseStatus(HttpStatus.OK)
 	public void saveShippingOrigin(@RequestBody PersistableAddress address, @Parameter(hidden = true) MerchantStore merchantStore,
 			@Parameter(hidden = true) Language language) {
@@ -93,7 +94,7 @@ public class ShippingConfigurationApi {
 
 	// list packaging
 	@Operation(method = "GET", summary = "Get list of configured packages types for a specific merchant store", description = "")
-	@RequestMapping(value = { "/private/shipping/packages" }, method = RequestMethod.GET)
+	@GetMapping({ "/private/shipping/packages" })
 	@ResponseStatus(HttpStatus.OK)
 	public List<PackageDetails> listPackages(@Parameter(hidden = true) MerchantStore merchantStore, @Parameter(hidden = true) Language language) {
 
@@ -107,7 +108,7 @@ public class ShippingConfigurationApi {
 
 	// get packaging
 	@Operation(method = "GET", summary = "Get package details", description = "")
-	@RequestMapping(value = { "/private/shipping/package/{code}" }, method = RequestMethod.GET)
+	@GetMapping({ "/private/shipping/package/{code}" })
 	@ResponseStatus(HttpStatus.OK)
 	public PackageDetails getPackage(@PathVariable String code, @Parameter(hidden = true) MerchantStore merchantStore,
 			@Parameter(hidden = true) Language language) {
@@ -122,7 +123,7 @@ public class ShippingConfigurationApi {
 
 	// create packaging
 	@Operation(method = "POST", summary = "Create new package specification", description = "")
-	@RequestMapping(value = { "/private/shipping/package" }, method = RequestMethod.POST)
+	@PostMapping({ "/private/shipping/package" })
 	@ResponseStatus(HttpStatus.OK)
 	public void createPackage(@RequestBody PackageDetails details, @Parameter(hidden = true) MerchantStore merchantStore,
 			@Parameter(hidden = true) Language language) {
@@ -137,7 +138,7 @@ public class ShippingConfigurationApi {
 
 	// edit packaging
 	@Operation(method = "PUT", summary = "Edit package specification", description = "")
-	@RequestMapping(value = { "/private/shipping/package/{code}" }, method = RequestMethod.PUT)
+	@PutMapping({ "/private/shipping/package/{code}" })
 	@ResponseStatus(HttpStatus.OK)
 	public void updatePackage(@PathVariable String code, @RequestBody PackageDetails details,
 			@Parameter(hidden = true) MerchantStore merchantStore, @Parameter(hidden = true) Language language) {
@@ -152,7 +153,7 @@ public class ShippingConfigurationApi {
 
 	// delete packaging
 	@Operation(method = "DELETE", summary = "Delete a package specification", description = "")
-	@RequestMapping(value = { "/private/shipping/package/{code}" }, method = RequestMethod.DELETE)
+	@DeleteMapping({ "/private/shipping/package/{code}" })
 	@ResponseStatus(HttpStatus.OK)
 	public void deletePackage(@PathVariable String code, @Parameter(hidden = true) MerchantStore merchantStore,
 			@Parameter(hidden = true) Language language) {
@@ -217,7 +218,7 @@ public class ShippingConfigurationApi {
 			//check if exist
 			Optional<IntegrationModule> checkIfExist = modules.stream().filter(m -> m.getCode().equals(code)).findAny();
 			
-			if(!checkIfExist.isPresent()) {
+			if(checkIfExist.isEmpty()) {
 				throw new ResourceNotFoundException("Shipping module [" + code + "] not found");
 			}
 			

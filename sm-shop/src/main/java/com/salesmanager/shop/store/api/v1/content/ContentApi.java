@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Optional;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -506,7 +506,7 @@ public class ContentApi {
 	 *
 	 * @param name
 	 */
-	@DeleteMapping(value = "/private/content/")
+	@DeleteMapping(value = "/private/content")
 	@Operation(method = "DELETE", summary = "Deletes a file from CMS", description = "Delete a file from server")
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })

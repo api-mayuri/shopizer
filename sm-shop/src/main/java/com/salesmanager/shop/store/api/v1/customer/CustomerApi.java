@@ -5,9 +5,9 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -169,7 +169,7 @@ public class CustomerApi {
 
 	}
 
-	@PatchMapping("/auth/customer/")
+	@PatchMapping("/auth/customer")
 	@Operation(method = "PATCH", summary = "Updates a loged in customer profile", description = "Requires authentication")
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")) })
 	public PersistableCustomer update(@Parameter(hidden = true) MerchantStore merchantStore,
@@ -181,7 +181,7 @@ public class CustomerApi {
 		return customerFacade.update(userName, customer, merchantStore);
 	}
 	
-	@DeleteMapping("/auth/customer/")
+	@DeleteMapping("/auth/customer")
 	@Operation(method = "DELETE", summary = "Deletes a loged in customer profile", description = "Requires authentication")
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")) })
 	public void delete(@Parameter(hidden = true) MerchantStore merchantStore, @Parameter(hidden = true) Language language,

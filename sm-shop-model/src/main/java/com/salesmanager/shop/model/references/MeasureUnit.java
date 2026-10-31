@@ -7,6 +7,6 @@ public enum MeasureUnit {
 	IN,
 	//METER,
 	//FOOT
-	;
+	
 
 }

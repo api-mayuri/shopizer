@@ -14,8 +14,6 @@ import java.util.List;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpEntity;
@@ -47,7 +45,6 @@ import com.salesmanager.shop.model.catalog.product.product.ProductSpecification;
 import com.salesmanager.test.shop.common.ServicesTestSupport;
 
 @SpringBootTest(classes = ShopApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-@ExtendWith(SpringExtension.class)
 public class ProductManagementAPIIntegrationTest extends ServicesTestSupport {
 
 	private RestTemplate restTemplate;
@@ -267,7 +264,6 @@ public class ProductManagementAPIIntegrationTest extends ServicesTestSupport {
 
 		final PersistableProduct product = super.product(code);
 
-		
 
 		final String categoryCode = "ROOT";// root category
 
@@ -316,12 +312,11 @@ public class ProductManagementAPIIntegrationTest extends ServicesTestSupport {
 		specifications.setWidth(new BigDecimal(23));
 
 		product.setProductSpecifications(specifications);
-		
-		
+
+
 		PersistableProductInventory inventory = new PersistableProductInventory();
 		inventory.setQuantity(5);
 		inventory.setSku(code);
-		
 
 
 		final PersistableProductPrice productPrice = new PersistableProductPrice();

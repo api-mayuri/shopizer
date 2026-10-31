@@ -1,5 +1,6 @@
 package com.salesmanager.shop.model.customer;
 
+import java.io.Serial;
 import java.util.List;
 import com.salesmanager.shop.model.customer.attribute.PersistableCustomerAttribute;
 import com.salesmanager.shop.model.security.PersistableGroup;
@@ -15,6 +16,7 @@ public class PersistableCustomer extends CustomerEntity {
     @Schema
 	private String password = null;
     private String repeatPassword = null;
+	@Serial
 	private static final long serialVersionUID = 1L;
 	private List<PersistableCustomerAttribute> attributes;
 	private List<PersistableGroup> groups;

@@ -2,11 +2,11 @@ package com.salesmanager.shop.store.api.v1.user;
 
 
 import org.springframework.beans.factory.annotation.Qualifier;
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.validation.Valid;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.Valid;
 
-import org.apache.http.auth.AuthenticationException;
+import org.apache.hc.client5.http.auth.AuthenticationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,9 +19,10 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.salesmanager.shop.store.security.AuthenticationRequest;
 import com.salesmanager.shop.store.security.AuthenticationResponse;
@@ -67,7 +68,7 @@ public class AuthenticateUserApi {
 	 * @return
 	 * @throws AuthenticationException
 	 */
-    @RequestMapping(value = "/private/login", method = RequestMethod.POST)
+    @PostMapping("/private/login")
     public ResponseEntity<?> authenticate(@RequestBody @Valid AuthenticationRequest authenticationRequest) throws AuthenticationException {
 
     	//TODO SET STORE in flow
@@ -108,7 +109,7 @@ public class AuthenticateUserApi {
 
     }
 
-    @RequestMapping(value = "/auth/refresh", method = RequestMethod.GET)
+    @GetMapping("/auth/refresh")
     public ResponseEntity<AuthenticationResponse> refreshAndGetAuthenticationToken(HttpServletRequest request) {
         String token = request.getHeader(tokenHeader);
 

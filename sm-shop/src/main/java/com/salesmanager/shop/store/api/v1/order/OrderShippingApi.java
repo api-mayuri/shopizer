@@ -4,19 +4,20 @@ import java.security.Principal;
 import java.util.List;
 import java.util.Locale;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.salesmanager.core.business.services.catalog.pricing.PricingService;
@@ -77,9 +78,7 @@ public class OrderShippingApi {
    * @return
    * @throws Exception
    */
-  @RequestMapping(
-      value = {"/auth/cart/{code}/shipping"},
-      method = RequestMethod.GET)
+  @GetMapping({"/auth/cart/{code}/shipping"})
   @ResponseBody
   @Parameters({
 			@Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
@@ -188,9 +187,7 @@ public class OrderShippingApi {
    * @return
    * @throws Exception
    */
-  @RequestMapping(
-      value = {"/cart/{code}/shipping"},
-      method = RequestMethod.POST)
+  @PostMapping({"/cart/{code}/shipping"})
   @ResponseBody
   @Parameters({
 			@Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),

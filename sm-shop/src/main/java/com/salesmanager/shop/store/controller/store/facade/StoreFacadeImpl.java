@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.Validate;
@@ -346,7 +346,7 @@ public class StoreFacadeImpl implements StoreFacade {
 		configTO.setKey(config.getKey());
 		configTO.setMerchantConfigurationType(configurationType);
 		configTO.setValue(config.getValue());
-		configTO.setActive(new Boolean(config.isActive()));
+		configTO.setActive(Boolean.valueOf(config.isActive()));
 		return configTO;
 	}
 

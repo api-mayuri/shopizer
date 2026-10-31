@@ -1,14 +1,16 @@
 package com.salesmanager.shop.model.entity;
 
+import java.io.Serial;
 import java.io.Serializable;
-import javax.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotNull;
 
 public class UniqueEntity implements Serializable {
-  
-  /**
-   * 
-   */
-  private static final long serialVersionUID = 1L;
+
+	/**
+	 * 
+	 */
+	@Serial
+	private static final long serialVersionUID = 1L;
   @NotNull
   private String unique;
   @NotNull

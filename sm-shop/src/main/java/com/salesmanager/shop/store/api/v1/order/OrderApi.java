@@ -6,10 +6,10 @@ import java.util.Locale;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 import com.salesmanager.core.business.services.order.OrderService;
 import com.salesmanager.core.model.order.orderstatus.OrderStatus;
@@ -20,10 +20,13 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -110,7 +113,7 @@ public class OrderApi {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = { "/private/orders/customers/{id}" }, method = RequestMethod.GET)
+	@GetMapping({ "/private/orders/customers/{id}" })
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
@@ -129,10 +132,10 @@ public class OrderApi {
 		}
 
 		if (start == null) {
-			start = new Integer(0);
+			start = Integer.valueOf(0);
 		}
 		if (count == null) {
-			count = new Integer(100);
+			count = Integer.valueOf(100);
 		}
 
 		ReadableCustomer readableCustomer = new ReadableCustomer();
@@ -163,7 +166,7 @@ public class OrderApi {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = { "/auth/orders" }, method = RequestMethod.GET)
+	@GetMapping({ "/auth/orders" })
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
@@ -183,10 +186,10 @@ public class OrderApi {
 		}
 
 		if (page == null) {
-			page = new Integer(0);
+			page = Integer.valueOf(0);
 		}
 		if (count == null) {
-			count = new Integer(100);
+			count = Integer.valueOf(100);
 		}
 
 		ReadableCustomer readableCustomer = new ReadableCustomer();
@@ -218,7 +221,7 @@ public class OrderApi {
 	 * @return List of orders
 	 * @throws Exception
 	 */
-	@RequestMapping(value = { "/private/orders" }, method = RequestMethod.GET)
+	@GetMapping({ "/private/orders" })
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	public ReadableOrderList list(
@@ -261,7 +264,7 @@ public class OrderApi {
 	 * @param language
 	 * @return
 	 */
-	@RequestMapping(value = { "/private/orders/{id}" }, method = RequestMethod.GET)
+	@GetMapping({ "/private/orders/{id}" })
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
@@ -290,7 +293,7 @@ public class OrderApi {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = { "/auth/orders/{id}" }, method = RequestMethod.GET)
+	@GetMapping({ "/auth/orders/{id}" })
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
@@ -341,7 +344,7 @@ public class OrderApi {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = { "/auth/cart/{code}/checkout" }, method = RequestMethod.POST)
+	@PostMapping({ "/auth/cart/{code}/checkout" })
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
@@ -400,7 +403,7 @@ public class OrderApi {
 	 * @param language
 	 * @return
 	 */
-	@RequestMapping(value = { "/cart/{code}/checkout" }, method = RequestMethod.POST)
+	@PostMapping({ "/cart/{code}/checkout" })
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
@@ -471,7 +474,7 @@ public class OrderApi {
 
 	}
 
-	@RequestMapping(value = { "/private/orders/{id}/customer" }, method = RequestMethod.PATCH)
+	@PatchMapping({ "/private/orders/{id}/customer" })
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	@Parameters({
@@ -492,7 +495,7 @@ public class OrderApi {
 		return;
 	}
 
-	@RequestMapping(value = { "/private/orders/{id}/status" }, method = RequestMethod.PUT)
+	@PutMapping({ "/private/orders/{id}/status" })
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	@Parameters({

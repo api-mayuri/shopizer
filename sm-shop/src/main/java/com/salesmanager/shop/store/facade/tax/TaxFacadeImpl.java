@@ -70,7 +70,7 @@ public class TaxFacadeImpl implements TaxFacade {
 
 			taxClass.setStore(store.getCode());
 			TaxClass model = persistableTaxClassMapper.convert(taxClass, store, language);
-			model = taxClassService.saveOrUpdate(model);;
+			model = taxClassService.saveOrUpdate(model);
 			Entity id = new Entity();
 			id.setId(model.getId());
 			return id;

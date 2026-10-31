@@ -6,8 +6,6 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpEntity;
@@ -23,10 +21,9 @@ import com.salesmanager.shop.model.tax.TaxRateDescription;
 import com.salesmanager.test.shop.common.ServicesTestSupport;
 
 @SpringBootTest(classes = ShopApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-@ExtendWith(SpringExtension.class)
 public class TaxRateIntegrationTest extends ServicesTestSupport {
-	
-	
+
+
     @Test
     public void manageTaxClass() throws Exception {
     	
@@ -42,8 +39,8 @@ public class TaxRateIntegrationTest extends ServicesTestSupport {
         
         assertNotNull(e.getId());
         assertTrue(e.getId() > 0);
-        
-        
+
+
         final HttpEntity<String> httpEntity = new HttpEntity<>(getHeader());
         
         //tax class exists
@@ -91,7 +88,7 @@ public class TaxRateIntegrationTest extends ServicesTestSupport {
     	taxRate.getDescriptions().add(en);
     	taxRate.getDescriptions().add(fr);
 
-    	
+
         final HttpEntity<PersistableTaxRate> taxClassEntity = new HttpEntity<>(taxRate, getHeader());
         final ResponseEntity<Entity> response = testRestTemplate.postForEntity(String.format("/api/v1/private/tax/rate/"), taxClassEntity, Entity.class);
         
@@ -99,8 +96,8 @@ public class TaxRateIntegrationTest extends ServicesTestSupport {
         
         assertNotNull(e.getId());
         assertTrue(e.getId() > 0);
-        
-        
+
+
         final HttpEntity<String> httpEntity = new HttpEntity<>(getHeader());
         
         //tax class exists
@@ -110,7 +107,6 @@ public class TaxRateIntegrationTest extends ServicesTestSupport {
         assertTrue(exists.getBody().isExists());
 
 
-	
     }
 
 }

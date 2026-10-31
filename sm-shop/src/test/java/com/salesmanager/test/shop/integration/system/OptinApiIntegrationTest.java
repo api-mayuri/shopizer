@@ -1,7 +1,5 @@
 package com.salesmanager.test.shop.integration.system;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
@@ -21,25 +19,24 @@ import com.salesmanager.shop.model.system.PersistableOptin;
 import com.salesmanager.test.shop.common.ServicesTestSupport;
 
 @SpringBootTest(classes = ShopApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-@ExtendWith(SpringExtension.class)
 public class OptinApiIntegrationTest extends ServicesTestSupport {
   
   @Autowired
   private TestRestTemplate testRestTemplate;
-  
-  
+
+
   @Test
   public void createOptin() throws Exception {
 
       PersistableOptin optin = new PersistableOptin();
       optin.setCode(OptinType.PROMOTIONS.name());
       optin.setOptinType(OptinType.PROMOTIONS.name());
-     
-      
+
+
       final ObjectWriter writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
       final String json = writer.writeValueAsString(optin);
- 
-      
+
+
       final HttpEntity<String> entity = new HttpEntity<>(json, getHeader());
       final ResponseEntity<PersistableOptin> response = testRestTemplate.postForEntity("/api/v1/private/optin", entity, PersistableOptin.class);
 
@@ -70,8 +67,8 @@ public class OptinApiIntegrationTest extends ServicesTestSupport {
     } else {
       assertTrue(true);
     }
-    
-    
+
+
 }
 
 }

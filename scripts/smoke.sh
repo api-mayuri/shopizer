@@ -11,7 +11,7 @@ LOG="$WORK/app.log"
 # database.properties is gitignored: use the H2 config from the docker profile, outside the jar
 mkdir -p "$WORK/conf"
 cp "$ROOT/sm-shop/src/main/resources/profiles/docker/database.properties" "$WORK/conf/"
-LAUNCHER=org.springframework.boot.loader.PropertiesLauncher
+LAUNCHER=org.springframework.boot.loader.launch.PropertiesLauncher
 unzip -l "$JAR" | grep -q 'org/springframework/boot/loader/launch/PropertiesLauncher' && LAUNCHER=org.springframework.boot.loader.launch.PropertiesLauncher
 cd "$WORK"
 java -Dloader.path="$WORK/conf" -cp "$JAR" $LAUNCHER --server.port="$PORT" > "$LOG" 2>&1 &
@@ -34,6 +34,7 @@ check /api/v1/store/DEFAULT 200
 check "/api/v1/category?lang=en" 200
 check "/api/v1/products?lang=en" 200
 check /api/v1/country 200
+check /api/v1/country/ 200
 check /api/v1/zones?code=CA 200
 check /api/v1/private/stores 401
 check /v3/api-docs 200

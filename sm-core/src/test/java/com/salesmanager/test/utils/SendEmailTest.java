@@ -3,12 +3,10 @@ package com.salesmanager.test.utils;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.salesmanager.core.business.exception.ServiceException;
@@ -18,7 +16,6 @@ import com.salesmanager.core.model.merchant.MerchantStore;
 import com.salesmanager.test.common.AbstractSalesManagerCoreTestCase;
 import com.salesmanager.test.configuration.ConfigurationTest;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest(classes = {ConfigurationTest.class})
 @Disabled
 public class SendEmailTest extends AbstractSalesManagerCoreTestCase {
@@ -39,7 +36,7 @@ public class SendEmailTest extends AbstractSalesManagerCoreTestCase {
       templateTokens.put("EMAIL_SPAM_DISCLAIMER", "");
       templateTokens.put("LOGOPATH", "");
 
-      
+
       templateTokens.put("EMAIL_CONTACT_NAME", "Test");
       templateTokens.put("EMAIL_CONTACT_EMAIL", "test@gmail.com");
       templateTokens.put("EMAIL_CONTACT_CONTENT", "Hello");
@@ -47,7 +44,6 @@ public class SendEmailTest extends AbstractSalesManagerCoreTestCase {
       templateTokens.put("EMAIL_CUSTOMER_CONTACT", "Contact");
       templateTokens.put("EMAIL_CONTACT_NAME_LABEL", "Name");
       templateTokens.put("EMAIL_CONTACT_EMAIL_LABEL", "Email");
-
 
 
       Email email = new Email();
@@ -60,7 +56,7 @@ public class SendEmailTest extends AbstractSalesManagerCoreTestCase {
 
       emailService.sendHtmlEmail(merchant, email);
 
-    
+
   }
 
 

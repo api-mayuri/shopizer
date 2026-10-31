@@ -6,10 +6,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -21,12 +21,14 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -101,11 +103,7 @@ public class ProductApi {
 	 * @return Entity
 	 */
 	@ResponseStatus(HttpStatus.CREATED)
-	@RequestMapping(value = { "/private/product", "/auth/products" }, // private
-																			// for
-			// adding
-			// products
-			method = RequestMethod.POST)
+	@PostMapping({ "/private/product", "/auth/products" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public @ResponseBody Entity create(@Valid @RequestBody PersistableProduct product,
@@ -119,7 +117,7 @@ public class ProductApi {
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/{id}", "/auth/product/{id}" }, method = RequestMethod.PUT)
+	@PutMapping({ "/private/product/{id}", "/auth/product/{id}" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	@Operation(method = "PUT", summary = "Update product", description = "")
@@ -163,7 +161,7 @@ public class ProductApi {
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/{id}", "/auth/product/{id}" }, method = RequestMethod.DELETE)
+	@DeleteMapping({ "/private/product/{id}", "/auth/product/{id}" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public void delete(@PathVariable Long id, @Parameter(hidden = true) MerchantStore merchantStore, @Parameter(hidden = true) Language language) {
@@ -183,7 +181,7 @@ public class ProductApi {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = "/products", method = RequestMethod.GET)
+	@GetMapping("/products")
 	@ResponseBody
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
@@ -360,8 +358,8 @@ public class ProductApi {
 	 *                   <p>
 	 *                   /api/product/123
 	 */
-	@RequestMapping(value = { "/product/{friendlyUrl}",
-			"/product/friendly/{friendlyUrl}" }, method = RequestMethod.GET)
+	@GetMapping({ "/product/{friendlyUrl}",
+			"/product/friendly/{friendlyUrl}" })
 	@Operation(method = "GET", summary = "Get a product by friendlyUrl (slug)", description = "For administration and shop purpose. Specifying ?merchant is "
 			+ "required otherwise it falls back to DEFAULT")
 	@ApiResponses(value = {
@@ -395,7 +393,7 @@ public class ProductApi {
 	}
 
 	@ResponseStatus(HttpStatus.CREATED)
-	@RequestMapping(value = { "/private/product/{productId}/category/{categoryId}"}, method = RequestMethod.POST)
+	@PostMapping({ "/private/product/{productId}/category/{categoryId}"})
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public void addProductToCategory(@PathVariable Long productId,
@@ -434,7 +432,7 @@ public class ProductApi {
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/{productId}/category/{categoryId}" }, method = RequestMethod.DELETE)
+	@DeleteMapping({ "/private/product/{productId}/category/{categoryId}" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public void removeProductFromCategory(@PathVariable Long productId,
@@ -481,7 +479,7 @@ public class ProductApi {
 	 */
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/{id}", "/auth/product/{id}" }, method = RequestMethod.PATCH)
+	@PatchMapping({ "/private/product/{id}", "/auth/product/{id}" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	@Operation(method = "POST", summary = "Patch product sort order", description = "Change product sortOrder")

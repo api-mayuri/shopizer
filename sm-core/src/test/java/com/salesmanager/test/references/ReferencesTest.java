@@ -2,11 +2,9 @@ package com.salesmanager.test.references;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Disabled;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import com.salesmanager.core.business.exception.ServiceException;
@@ -17,13 +15,11 @@ import com.salesmanager.core.model.reference.country.CountryDescription;
 import com.salesmanager.core.model.reference.language.Language;
 import com.salesmanager.test.configuration.ConfigurationTest;
 
-@ExtendWith(SpringExtension.class)
 @SpringBootTest	(classes = {ConfigurationTest.class})
 @Disabled
 public class ReferencesTest {
-	
 
-	
+
 	@Inject
 	LanguageService languageService;
 	
@@ -45,8 +41,8 @@ public class ReferencesTest {
 		fr.setSortOrder(0);
 		
 		languageService.save(fr);
-		
-		
+
+
 		List<Language> langs = languageService.getLanguages();
 		
 		System.out.println("Language size " + langs.size());
@@ -73,13 +69,11 @@ public class ReferencesTest {
 		Country c = countryService.getByCode("US");
 		
 		System.out.println(c.getId());
-		
-		
-		
+
+
 		System.out.println("***********Done**************");
-		
-		
-		
+
+
 	}
 
 }

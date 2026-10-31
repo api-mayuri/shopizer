@@ -18,7 +18,7 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -236,8 +236,7 @@ public class OrderFacadeImpl implements OrderFacade {
 
 		OrderSummary summary = new OrderSummary();
 
-		if (order instanceof ShopOrder) {
-			ShopOrder o = (ShopOrder) order;
+		if (order instanceof ShopOrder o) {
 			summary.setProducts(o.getShoppingCartItems());
 
 			if (o.getShippingSummary() != null) {

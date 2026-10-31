@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.Reader;
 import java.io.StringReader;
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -13,15 +14,15 @@ import java.util.Set;
 import org.apache.commons.digester.Digester;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import org.apache.http.HttpEntity;
-import org.apache.http.client.ClientProtocolException;
-import org.apache.http.client.ResponseHandler;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.client5.http.ClientProtocolException;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.core5.http.ContentType;
+import org.apache.hc.core5.http.io.HttpClientResponseHandler;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.io.entity.StringEntity;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -159,7 +160,7 @@ public class UPSShippingQuote implements ShippingQuoteModule {
 			language = Locale.ENGLISH.getLanguage();
 		}
 		
-		String pack = configuration.getIntegrationOptions().get("packages").get(0);
+		String pack = configuration.getIntegrationOptions().get("packages").getFirst();
 		Map<String,String> keys = configuration.getIntegrationKeys();
 		
 		String accessKey = keys.get("accessKey");
@@ -339,7 +340,7 @@ public class UPSShippingQuote implements ShippingQuoteModule {
 				xmldatabuffer.append("</UnitOfMeasurement>");
 				xmldatabuffer.append("<Weight>");
 				xmldatabuffer.append(new BigDecimal(packageDetail.getShippingWeight())
-						.setScale(1, BigDecimal.ROUND_HALF_UP));
+						.setScale(1, RoundingMode.HALF_UP));
 				xmldatabuffer.append("</Weight>");
 				xmldatabuffer.append("</PackageWeight>");
 
@@ -352,15 +353,15 @@ public class UPSShippingQuote implements ShippingQuoteModule {
 				xmldatabuffer.append("</UnitOfMeasurement>");
 				xmldatabuffer.append("<Length>");
 				xmldatabuffer.append(new BigDecimal(packageDetail.getShippingLength())
-						.setScale(2, BigDecimal.ROUND_HALF_UP));
+						.setScale(2, RoundingMode.HALF_UP));
 				xmldatabuffer.append("</Length>");
 				xmldatabuffer.append("<Width>");
 				xmldatabuffer.append(new BigDecimal(packageDetail.getShippingWidth())
-						.setScale(2, BigDecimal.ROUND_HALF_UP));
+						.setScale(2, RoundingMode.HALF_UP));
 				xmldatabuffer.append("</Width>");
 				xmldatabuffer.append("<Height>");
 				xmldatabuffer.append(new BigDecimal(packageDetail.getShippingHeight())
-						.setScale(2, BigDecimal.ROUND_HALF_UP));
+						.setScale(2, RoundingMode.HALF_UP));
 				xmldatabuffer.append("</Height>");
 				xmldatabuffer.append("</Dimensions>");
 				xmldatabuffer.append("</Package>");
@@ -387,8 +388,8 @@ public class UPSShippingQuote implements ShippingQuoteModule {
 			//		xmlbuffer.toString(), "text/plain", "UTF-8");
 			httppost.setEntity(entity);
             // Create a custom response handler
-            ResponseHandler<String> responseHandler = response -> {
-				int status = response.getStatusLine().getStatusCode();
+            HttpClientResponseHandler<String> responseHandler = response -> {
+				int status = response.getCode();
 				if (status >= 200 && status < 300) {
 					HttpEntity entity1 = response.getEntity();
 					return entity1 != null ? EntityUtils.toString(entity1) : null;
@@ -627,7 +628,7 @@ public class UPSShippingQuote implements ShippingQuoteModule {
 			}
 
 			if (httppost != null) {
-				httppost.releaseConnection();
+				httppost.reset();
 			}
 		}
 }

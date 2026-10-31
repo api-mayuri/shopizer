@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Ehcache 3 configuration (JCache). Replaces spring/ehcache.xml (Ehcache 2).
+  Used by the Spring cache abstraction (@Cacheable, serviceCache) and by the Hibernate second level cache.
+  Ehcache 3 has a single expiry per cache: the former timeToIdle/timeToLive pairs (same values) become a TTL.
+-->
+<config xmlns="http://www.ehcache.org/v3"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://www.ehcache.org/v3 http://www.ehcache.org/schema/ehcache-core-3.0.xsd">
+
+    <cache-template name="default">
+        <expiry><ttl unit="seconds">120</ttl></expiry>
+        <heap unit="entries">10000</heap>
+    </cache-template>
+
+    <cache alias="com.shopizer.OBJECT_CACHE">
+        <expiry><ttl unit="seconds">1200</ttl></expiry>
+        <heap unit="entries">10000</heap>
+    </cache>
+
+    <cache alias="store"><heap unit="entries">1000</heap></cache>
+    <cache alias="countriesMap"><heap unit="entries">500</heap></cache>
+    <cache alias="countrByCode"><heap unit="entries">300</heap></cache>
+    <cache alias="zoneByCode"><heap unit="entries">800</heap></cache>
+    <cache alias="languageByCode"><heap unit="entries">50</heap></cache>
+
+    <!-- Hibernate second level cache regions (entities annotated with @Cacheable) -->
+    <cache alias="com.salesmanager.core.model.reference.country.Country" uses-template="default"/>
+    <cache alias="com.salesmanager.core.model.reference.currency.Currency" uses-template="default"/>
+    <cache alias="com.salesmanager.core.model.reference.language.Language" uses-template="default"/>
+    <cache alias="default-query-results-region" uses-template="default"/>
+    <cache alias="default-update-timestamps-region">
+        <heap unit="entries">10000</heap>
+    </cache>
+
+</config>

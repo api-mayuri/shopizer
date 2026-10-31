@@ -97,3 +97,99 @@
 ### D-16. Что рецепт удалил попутно
 - Из корневого `pom.xml` удалены закомментированные блоки oracle/postgres-зависимостей. Postgres вернётся нормальной
   зависимостью на шаге 3.
+
+---
+
+## Шаг 2. Spring Boot 2.7.18 → 3.5.16, Java 17 → 21
+
+Основной инструмент — рецепты OpenRewrite (`UpgradeSpringBoot_3_5` + `UpgradeToJava21` + `MigrateToHibernate66`).
+Они перевели javax→jakarta (≈700 файлов), Security 6, springdoc 2, HttpClient 5 и т.д.
+
+### D-20. pom.xml рецептом не принят, переписан руками
+- Рецепт испортил `dependencyManagement`: дубли, версия `6.0.x`, закреплённый `hibernate-ehcache 5.6`, Ehcache 2,
+  milestone-версия `commons-fileupload 2.0.0-M4`. Я откатил pom'ы и перенёс изменения вручную:
+  - убраны переопределения версий, которыми управляет Boot: jackson, postgresql (стояла 42.2.18!), commons-lang3, elasticsearch;
+  - `javax.*` → `jakarta.*` (inject, validation, annotation, mail → `jakarta.mail-api` + `angus-mail`);
+  - `mysql:mysql-connector-java` → `com.mysql:mysql-connector-j`;
+  - `commons-fileupload` удалён (в коде не используется);
+  - HttpClient 4 → `httpclient5` (рецепт перевёл UPS/USPS/Captcha на API 5);
+  - mapstruct 1.3 → 1.6.3 (поддержка Java 21);
+  - `maven.compiler.source/target` → `<release>${java.version}</release>`; убран отдельный `java.version` в `sm-core-model`.
+
+### D-21. Кэш: Ehcache 2 → Ehcache 3 (JCache)
+- `hibernate-ehcache` и `EhCacheCacheManager` удалены из Hibernate 6 и Spring 6.
+- **Решение:** Ehcache 3 через JCache и для Spring Cache, и для L2-кэша Hibernate. Используется **один** `javax.cache.CacheManager`
+  (бин `jCacheManager`, Hibernate получает его через `hibernate.javax.cache.cache_manager`).
+  Конфиг `spring/ehcache3.xml`: те же регионы и размеры. В Ehcache 3 у кэша один тип истечения, поэтому пары TTI/TTL с одинаковыми
+  значениями превратились в TTL. XML-конфиг `shopizer-core-ehcache.xml` заменён на `CacheConfiguration.java`.
+- `CacheUtils` перебирал ключи через нативный API Ehcache 2, теперь перебирает через `javax.cache.Cache`.
+- *Альтернативы:* Caffeine (проще, но нужен другой провайдер для L2 Hibernate); отключить L2-кэш (он работает только для Country/Currency/Language).
+
+### D-22. Длинные текстовые колонки
+- Рецепт **молча удалил** `@Type(type="org.hibernate.type.TextType")` у 8 полей (описания, комментарии, логи, конфиги).
+  Без аннотации колонки стали бы `varchar(255)`, и при создании новой схемы длинные тексты обрезались бы.
+- **Решение:** `@JdbcTypeCode(SqlTypes.LONG32VARCHAR)`. Это `text` в PostgreSQL, `longtext` в MySQL, `character varying` в H2.
+- `@Type(type="locale")` удалён: Hibernate 6 маппит `Locale` нативно в тот же varchar.
+
+### D-23. Hibernate 6.6 строже к маппингам и JPQL (исправлено в коде)
+- `@Inheritance` и `@Table` на `@MappedSuperclass` удалены. JPA их всегда игнорировал, Hibernate 6 отвергает. Имена таблиц не меняются.
+- `@JoinTable(... updatable = false)` → без `updatable` (6 мест): для связующей таблицы это ничего не значило.
+- JPQL: повторный `join fetch` одного и того же пути (17 запросов в `@Query` и 8 мест в построителях запросов в Java-коде),
+  а также один алиас для двух путей (`m.country mc` + `m.currency mc`, 6 запросов).
+  Исправлено скриптами: повтор удалён, второй алиас переименован. На результат запросов это не влияет.
+- Нативный запрос `findBySku` теперь возвращает `Long`, а не `BigInteger` → приведение через `Number`.
+
+### D-24. ⚠️ id = 0 у новых сущностей (важно)
+- DTO Shopizer приходят с `id = 0`, мапперы копируют это в сущность → Spring Data делает `merge()`.
+  Hibernate 5 вставлял такую строку, а Hibernate 6.6 бросает *"Row was updated or deleted by another transaction"*.
+- **Решение:** `ZeroIdMergeEventListener` подключён через Hibernate `Integrator` (`META-INF/services`). Если у сущности
+  **сгенерированный** id равен `0`, слушатель считает её новой. Это одно место на весь проект, включая каскады.
+- *Альтернативы:* править каждый маппер (их десятки, легко пропустить); реализовать `Persistable.isNew()` в базовом классе
+  (не покрывает сущности не из `SalesManagerEntity` и каскады).
+- Правильное долгосрочное решение — DTO с `Long id = null`. Это задача на рефакторинг.
+
+### D-25. ⚠️ Генераторы id (`@TableGenerator`) и существующие данные
+- В Hibernate 5 был выставлен `hibernate.id.new_generator_mappings=false`, то есть старый hilo-режим `@TableGenerator`
+  (80 сущностей, таблица `SM_SEQUENCER`). В Hibernate 6 этого режима нет.
+- Для **новой** БД (H2, новый PostgreSQL) это неважно. Для **существующей** БД MySQL значения в `SM_SEQUENCER` нужно
+  выставить не ниже `max(id)+1` каждой таблицы, иначе возможны конфликты ключей. Это часть переноса данных на шаге 3.
+
+### D-26. Bean Validation: поведение сохранено (валидация выключена, как и было)
+- Неожиданная находка: **в исходном проекте валидация не работала совсем**. С Boot 2.3+ провайдер (hibernate-validator)
+  не входит в `starter-web`, а в проекте его не было. Аннотации `@NotEmpty`, `@Pattern`, `@Valid` ничего не проверяли.
+- springdoc 2 подтягивает hibernate-validator (и без него `/v3/api-docs` падает). Валидация включилась сама и сломала
+  тесты: например, API создаёт продукт без `sku`, а `Product.sku` помечен `@NotEmpty`.
+- **Решение:** провайдер на classpath оставлен, но валидация явно выключена в двух местах:
+  - JPA: `jakarta.persistence.validation.mode=none` (`DataConfiguration`);
+  - MVC: no-op `Validator` в `ShopApplicationConfiguration.getValidator()`.
+- Включить валидацию = удалить эти два места. Но это **изменение поведения API**: клиенты начнут получать 400 там, где раньше
+  получали 200. Нужна отдельная задача с проверкой мобильного/веб-клиента.
+
+### D-27. Слеш в конце URL
+- Spring 6 убрал сопоставление `/path/` с `/path`. Тесты (и, вероятно, клиенты) вызывают `/api/v1/cart/`, `/api/v1/private/tax/class/`.
+- **Решение:** `UrlHandlerFilter.trailingSlashHandler("/**").wrapRequest()`. Это рекомендованная Spring замена,
+  она есть и в Spring 7. Фильтр стоит первым и прозрачно убирает слеш в конце. Четыре маппинга, объявленные со слешем
+  в конце (`/private/user/`, `/auth/customer/`, `/private/content/`), приведены к виду без слеша.
+- *Альтернативы:* `setUseTrailingSlashMatch(true)` (удалён в Spring 7), дублировать пути во всех контроллерах.
+
+### D-28. Сторонние зависимости, которые оставлены как есть (техдолг)
+- **Стартеры `com.shopizer`** (canadapost, opensearch): javax persistence/servlet они не используют, но регистрируются через
+  `spring.factories`, а Boot 3 его для автоконфигурации не читает. Их классы перечислены в
+  `sm-core/.../META-INF/spring/org.springframework.boot.autoconfigure.AutoConfiguration.imports`. Форк не понадобился.
+- **Infinispan 9.4** (CMS-хранилище файлов/картинок) несовместим с Caffeine 3 (`CacheWriter` удалён) и падал при старте.
+  **Решение:** `caffeine.version=2.9.3`. Caffeine больше никто в проекте не использует. Infinispan 14+ убрал модуль
+  `tree`, на котором написан CMS. Переход = переписать CMS-модуль (или сразу на S3/файловую систему). **Техдолг.**
+- **jjwt 0.8** использует `javax.xml.bind.DatatypeConverter` → добавлен `javax.xml.bind:jaxb-api:2.3.1`.
+  Обновлять jjwt до 0.12 сейчас не стал: секрет по умолчанию `aSecret` (≈5 байт после base64), а jjwt 0.12 требует
+  ≥ 64 байт для HS512. Апгрейд = новый секрет во всех окружениях + перелогин всех пользователей. **Рекомендую сделать
+  отдельно, и секрет в любом случае заменить: текущий небезопасен.**
+- **Drools 7.32** работает на Java 21 без изменений (тесты с правилами доставки зелёные).
+
+### D-29. Method security
+- `@EnableGlobalMethodSecurity` + наследование от `GlobalMethodSecurityConfiguration` → `@EnableMethodSecurity`
+  (`prePostEnabled` теперь включён по умолчанию). Рецепт поменял аннотацию, но оставил наследование. Исправлено.
+
+### D-30. Прочее
+- H2 2.x + Hibernate 6: колонка `VALUE` (MerchantConfiguration, CustomerOptin) — зарезервированное слово. В H2-URL добавлен
+  `NON_KEYWORDS=VALUE` (только для H2). Глобальное `hibernate.auto_quote_keyword` не включал: оно меняет регистр имён в PostgreSQL.
+- JAX-RS `@Produces` в Spring-контроллере ни на что не влиял (и не компилировался без JAX-RS), удалён. Удалены неиспользуемые импорты `antlr`.

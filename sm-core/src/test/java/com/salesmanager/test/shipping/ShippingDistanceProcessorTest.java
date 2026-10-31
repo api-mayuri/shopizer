@@ -1,6 +1,6 @@
 package com.salesmanager.test.shipping;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.salesmanager.core.model.common.Delivery;
 

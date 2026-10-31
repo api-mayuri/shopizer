@@ -1,23 +1,25 @@
 package com.salesmanager.core.model.order.orderstatus;
 
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
+
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-
-import org.hibernate.annotations.Type;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.TableGenerator;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.salesmanager.core.constants.SchemaConstant;
@@ -27,6 +29,7 @@ import com.salesmanager.core.utils.CloneUtils;
 @Entity
 @Table (name="ORDER_STATUS_HISTORY" )
 public class OrderStatusHistory implements Serializable {
+	@Serial
 	private static final long serialVersionUID = 3438730310126102187L;
 	
 	@Id
@@ -52,7 +55,7 @@ public class OrderStatusHistory implements Serializable {
 	private java.lang.Integer customerNotified;
 	
 	@Column(name = "COMMENTS")
-	@Type(type = "org.hibernate.type.TextType")
+	@JdbcTypeCode(SqlTypes.LONG32VARCHAR)
 	private String comments;
 	
 	public OrderStatusHistory() {

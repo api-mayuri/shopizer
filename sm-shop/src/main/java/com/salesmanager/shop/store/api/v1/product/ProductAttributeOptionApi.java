@@ -2,20 +2,22 @@ package com.salesmanager.shop.store.api.v1.product;
 
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -57,7 +59,7 @@ public class ProductAttributeOptionApi {
 	private ProductOptionFacade productOptionFacade;
 
 	@ResponseStatus(HttpStatus.CREATED)
-	@RequestMapping(value = { "/private/product/option" }, method = RequestMethod.POST)
+	@PostMapping({ "/private/product/option" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public @ResponseBody ReadableProductOptionEntity createOption(
@@ -93,7 +95,7 @@ public class ProductAttributeOptionApi {
 	}
 
 	@ResponseStatus(HttpStatus.CREATED)
-	@RequestMapping(value = { "/private/product/option/value" }, method = RequestMethod.POST)
+	@PostMapping({ "/private/product/option/value" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public @ResponseBody ReadableProductOptionValue createOptionValue(
@@ -111,7 +113,7 @@ public class ProductAttributeOptionApi {
 	}
 	
 	@ResponseStatus(HttpStatus.CREATED)
-	@RequestMapping(value = { "/private/product/option/value/{id}/image" }, method = RequestMethod.POST)
+	@PostMapping({ "/private/product/option/value/{id}/image" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public void addOptionValueImage(
@@ -128,7 +130,7 @@ public class ProductAttributeOptionApi {
 	}
 	
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/option/value/{id}/image" }, method = RequestMethod.DELETE)
+	@DeleteMapping({ "/private/product/option/value/{id}/image" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public void removeOptionValueImage(
@@ -142,7 +144,7 @@ public class ProductAttributeOptionApi {
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/option/{id}" }, method = RequestMethod.GET)
+	@GetMapping({ "/private/product/option/{id}" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	@ResponseBody
@@ -154,7 +156,7 @@ public class ProductAttributeOptionApi {
 	}
 	
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/option/value/{id}" }, method = RequestMethod.GET)
+	@GetMapping({ "/private/product/option/value/{id}" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	@ResponseBody
@@ -166,7 +168,7 @@ public class ProductAttributeOptionApi {
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/option/{optionId}" }, method = RequestMethod.PUT)
+	@PutMapping({ "/private/product/option/{optionId}" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public void updateOption(@Valid @RequestBody PersistableProductOptionEntity option, @PathVariable Long optionId,
@@ -179,7 +181,7 @@ public class ProductAttributeOptionApi {
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/option/{optionId}" }, method = RequestMethod.DELETE)
+	@DeleteMapping({ "/private/product/option/{optionId}" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public void deleteOption(@PathVariable Long optionId, @Parameter(hidden = true) MerchantStore merchantStore,
@@ -191,7 +193,7 @@ public class ProductAttributeOptionApi {
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/option/value/{id}" }, method = RequestMethod.PUT)
+	@PutMapping({ "/private/product/option/value/{id}" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public void updateOptionValue(
@@ -208,7 +210,7 @@ public class ProductAttributeOptionApi {
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/option/value/{id}" }, method = RequestMethod.DELETE)
+	@DeleteMapping({ "/private/product/option/value/{id}" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public void deleteOptionValue(
@@ -223,7 +225,7 @@ public class ProductAttributeOptionApi {
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/options" }, method = RequestMethod.GET)
+	@GetMapping({ "/private/product/options" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public @ResponseBody ReadableProductOptionList options(
@@ -238,7 +240,7 @@ public class ProductAttributeOptionApi {
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/options/values" }, method = RequestMethod.GET)
+	@GetMapping({ "/private/product/options/values" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public @ResponseBody ReadableProductOptionValueList optionsValues(
@@ -262,7 +264,7 @@ public class ProductAttributeOptionApi {
 	 * @return
 	 */
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/{id}/attributes" }, method = RequestMethod.GET)
+	@GetMapping({ "/private/product/{id}/attributes" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	@Operation(method = "GET", summary = "Get product attributes", description = "")
@@ -278,7 +280,7 @@ public class ProductAttributeOptionApi {
 	}
 	
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/{id}/attribute/{attributeId}" }, method = RequestMethod.GET)
+	@GetMapping({ "/private/product/{id}/attribute/{attributeId}" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	@Operation(method = "GET", summary = "Get product attributes", description = "")
@@ -294,7 +296,7 @@ public class ProductAttributeOptionApi {
 	}
 	
 	@ResponseStatus(HttpStatus.CREATED)
-	@RequestMapping(value = { "/private/product/{id}/attribute" }, method = RequestMethod.POST)
+	@PostMapping({ "/private/product/{id}/attribute" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public @ResponseBody Entity createAttribute(
@@ -324,7 +326,7 @@ public class ProductAttributeOptionApi {
 	 * @param response
 	 */
 	@ResponseStatus(HttpStatus.CREATED)
-	@RequestMapping(value = { "/private/product/{id}/attributes" }, method = RequestMethod.POST)
+	@PostMapping({ "/private/product/{id}/attributes" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	@Operation(method = "POST", summary = "Saves multiple attributes")
@@ -340,7 +342,7 @@ public class ProductAttributeOptionApi {
 	}
 	
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/{id}/attribute/{attributeId}" }, method = RequestMethod.PUT)
+	@PutMapping({ "/private/product/{id}/attribute/{attributeId}" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public void updateAttribute(@PathVariable Long id, @Valid @RequestBody PersistableProductAttribute attribute, @PathVariable Long attributeId,
@@ -356,7 +358,7 @@ public class ProductAttributeOptionApi {
 
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/{id}/attribute/{attributeId}" }, method = RequestMethod.DELETE)
+	@DeleteMapping({ "/private/product/{id}/attribute/{attributeId}" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public void deleteAttribute(@PathVariable Long id,@PathVariable Long attributeId, @Parameter(hidden = true) MerchantStore merchantStore,

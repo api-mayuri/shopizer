@@ -1,6 +1,8 @@
 package com.salesmanager.core.model.customer.connection;
 
-import javax.persistence.Entity;
+import java.io.Serial;
+
+import jakarta.persistence.Entity;
 
 @Deprecated
 @Entity
@@ -9,6 +11,7 @@ public class UserConnection extends AbstractUserConnectionWithCompositeKey {
 	/**
 	 * 
 	 */
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 

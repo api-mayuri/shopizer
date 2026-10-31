@@ -9,20 +9,21 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -86,7 +87,7 @@ public class OrderPaymentApi {
 	@Inject
 	private AuthorizationUtils authorizationUtils;
 
-	@RequestMapping(value = { "/cart/{code}/payment/init" }, method = RequestMethod.POST)
+	@PostMapping({ "/cart/{code}/payment/init" })
 	@ResponseBody
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
@@ -118,7 +119,7 @@ public class OrderPaymentApi {
 
 	}
 
-	@RequestMapping(value = { "/auth/cart/{code}/payment/init" }, method = RequestMethod.POST)
+	@PostMapping({ "/auth/cart/{code}/payment/init" })
 	@ResponseBody
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
@@ -181,7 +182,7 @@ public class OrderPaymentApi {
 		}
 	}
 
-	@RequestMapping(value = { "/private/orders/{id}/payment/nextTransaction" }, method = RequestMethod.GET)
+	@GetMapping({ "/private/orders/{id}/payment/nextTransaction" })
 	@ResponseStatus(HttpStatus.OK)
 
 	@ResponseBody
@@ -202,7 +203,7 @@ public class OrderPaymentApi {
 
 	}
 	
-	@RequestMapping(value = { "/private/orders/{id}/payment/transactions" }, method = RequestMethod.GET)
+	@GetMapping({ "/private/orders/{id}/payment/transactions" })
 	@ResponseStatus(HttpStatus.OK)
 
 	@ResponseBody
@@ -234,7 +235,7 @@ public class OrderPaymentApi {
 	 * @return ReadableOrderList
 	 * @throws Exception
 	 */
-	@RequestMapping(value = { "/private/orders/payment/capturable" }, method = RequestMethod.GET)
+	@GetMapping({ "/private/orders/payment/capturable" })
 	@ResponseStatus(HttpStatus.ACCEPTED)
 	@ResponseBody
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
@@ -290,7 +291,7 @@ public class OrderPaymentApi {
 	 * @return
 	 * @throws Exception
 	 */
-	@RequestMapping(value = { "/private/orders/{id}/capture" }, method = RequestMethod.POST)
+	@PostMapping({ "/private/orders/{id}/capture" })
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
@@ -333,7 +334,7 @@ public class OrderPaymentApi {
 	 * @param language
 	 * @return
 	 */
-	@RequestMapping(value = { "/private/orders/{id}/refund" }, method = RequestMethod.POST)
+	@PostMapping({ "/private/orders/{id}/refund" })
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
@@ -351,7 +352,7 @@ public class OrderPaymentApi {
 	 * @param language
 	 * @return
 	 */
-	@RequestMapping(value = { "/private/orders/{id}/authorize" }, method = RequestMethod.POST)
+	@PostMapping({ "/private/orders/{id}/authorize" })
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),

@@ -13,6 +13,10 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
+import org.springframework.core.Ordered;
+import org.springframework.validation.Errors;
+import org.springframework.validation.Validator;
+import org.springframework.web.filter.UrlHandlerFilter;
 import org.springframework.boot.web.servlet.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -51,6 +55,20 @@ public class ShopApplicationConfiguration implements WebMvcConfigurer {
     logger.info("Current working directory : " + workingDir);
   }
 
+  /**
+   * Spring Framework 6 no longer matches "/path/" against "/path" (trailing slash matching removed).
+   * Existing clients (and tests) call URLs such as "/api/v1/cart/", so trailing slashes are stripped
+   * before the request reaches security and MVC. UrlHandlerFilter is the replacement recommended by Spring
+   * and is also available in Spring Framework 7.
+   */
+  @Bean
+  public FilterRegistrationBean<UrlHandlerFilter> trailingSlashFilter() {
+      FilterRegistrationBean<UrlHandlerFilter> registrationBean = new FilterRegistrationBean<>(
+              UrlHandlerFilter.trailingSlashHandler("/**").wrapRequest().build());
+      registrationBean.setOrder(Ordered.HIGHEST_PRECEDENCE);
+      return registrationBean;
+  }
+
   @Bean
   public FilterRegistrationBean<XssFilter> croseSiteFilter(){
       FilterRegistrationBean<XssFilter> registrationBean 
@@ -62,6 +80,26 @@ public class ShopApplicationConfiguration implements WebMvcConfigurer {
       registrationBean.addUrlPatterns("/customer/**");
           
       return registrationBean;    
+  }
+
+  /**
+   * Request validation (@Valid) was never enforced: before Spring Boot 3 there was no Bean Validation provider
+   * on the classpath. springdoc 2 brings one (hibernate-validator), so MVC validation is explicitly kept off
+   * to preserve the API behaviour. Remove this method to enable request validation (see docs/DECISIONS.md).
+   */
+  @Override
+  public Validator getValidator() {
+    return new Validator() {
+      @Override
+      public boolean supports(Class<?> clazz) {
+        return true;
+      }
+
+      @Override
+      public void validate(Object target, Errors errors) {
+        // no-op
+      }
+    };
   }
 
   @Override

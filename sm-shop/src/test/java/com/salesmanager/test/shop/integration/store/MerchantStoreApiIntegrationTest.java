@@ -5,11 +5,9 @@ import static org.hamcrest.Matchers.is;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import java.util.Arrays;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.web.client.TestRestTemplate;
@@ -28,7 +26,6 @@ import com.salesmanager.shop.model.store.ReadableMerchantStore;
 import com.salesmanager.test.shop.common.ServicesTestSupport;
 
 @SpringBootTest(classes = ShopApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-@ExtendWith(SpringExtension.class)
 public class MerchantStoreApiIntegrationTest extends ServicesTestSupport {
   
   private static final String TEST_STORE_CODE = "test";
@@ -62,8 +59,8 @@ public class MerchantStoreApiIntegrationTest extends ServicesTestSupport {
    */
   @Test
   public void testCreateStore() throws Exception {
-      
-      
+
+
       PersistableAddress address = new PersistableAddress();
       address.setAddress("121212 simple address");
       address.setPostalCode("12345");
@@ -88,8 +85,8 @@ public class MerchantStoreApiIntegrationTest extends ServicesTestSupport {
       assertThat(response.getStatusCode(), is(HttpStatus.OK));
 
   }
-  
-  
+
+
   @Test
   public void testAddAndDeleteStoreLogo() {
       LinkedMultiValueMap<String, Object> parameters = new LinkedMultiValueMap<String, Object>();
@@ -115,6 +112,5 @@ public class MerchantStoreApiIntegrationTest extends ServicesTestSupport {
 
   }
 
-  
-  
+
 }

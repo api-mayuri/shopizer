@@ -8,10 +8,10 @@ import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.slf4j.Logger;
@@ -20,9 +20,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -82,8 +85,8 @@ public class ProductImageApi {
 	 * @throws Exception
 	 */
 	@ResponseStatus(HttpStatus.CREATED)
-	@RequestMapping(value = { "/private/product/{id}/image", "/auth/product/{id}/image" }, consumes = {
-			MediaType.MULTIPART_FORM_DATA_VALUE }, method = RequestMethod.POST)
+	@PostMapping(value = { "/private/product/{id}/image", "/auth/product/{id}/image" }, consumes = {
+			MediaType.MULTIPART_FORM_DATA_VALUE })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public void uploadImage(
@@ -149,8 +152,8 @@ public class ProductImageApi {
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/image/{id}",
-			"/auth/product/images/{id}" }, method = RequestMethod.DELETE)
+	@DeleteMapping({ "/private/product/image/{id}",
+			"/auth/product/images/{id}" })
 	public void deleteImage(@PathVariable Long id, HttpServletRequest request, HttpServletResponse response)
 			throws Exception {
 
@@ -173,7 +176,7 @@ public class ProductImageApi {
 	}
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/{id}/image/{imageId}" }, method = RequestMethod.DELETE)
+	@DeleteMapping({ "/private/product/{id}/image/{imageId}" })
 	public void deleteImage(@PathVariable Long id, @PathVariable Long imageId, @Valid NameEntity imageName,
 			@Parameter(hidden = true) MerchantStore merchantStore, @Parameter(hidden = true) Language language) {
 
@@ -206,7 +209,7 @@ public class ProductImageApi {
 	 */
 	
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/product/{productId}/images" }, method = RequestMethod.GET)
+	@GetMapping({ "/product/{productId}/images" })
 	@Operation(method = "GET", summary = "Get images for a given product")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "200", description = "List of ProductImage found", content = @Content(mediaType = "application/json", schema = @Schema(implementation = List.class))) })
@@ -266,8 +269,8 @@ public class ProductImageApi {
 	 */
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/{id}/image/{imageId}",
-			"/auth/product/{id}/image/{imageId}" }, method = RequestMethod.PATCH)
+	@PatchMapping({ "/private/product/{id}/image/{imageId}",
+			"/auth/product/{id}/image/{imageId}" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public void imageDetails(@PathVariable Long id, @PathVariable Long imageId,

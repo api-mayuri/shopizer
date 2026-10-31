@@ -2,7 +2,7 @@ package com.salesmanager.shop.store.api.v1.product;
 
 import java.util.List;
 
-import javax.validation.Valid;
+import jakarta.validation.Valid;
 
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,11 +10,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
@@ -46,7 +48,7 @@ public class ProductPropertySetApi {
 	private ProductOptionSetFacade productOptionSetFacade;
 
 	@ResponseStatus(HttpStatus.CREATED)
-	@RequestMapping(value = { "/private/product/property/set" }, method = RequestMethod.POST)
+	@PostMapping({ "/private/product/property/set" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public void create(
@@ -74,7 +76,7 @@ public class ProductPropertySetApi {
 
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/property/set/{id}" }, method = RequestMethod.GET)
+	@GetMapping({ "/private/product/property/set/{id}" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	@ResponseBody
@@ -89,7 +91,7 @@ public class ProductPropertySetApi {
 
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/property/set/{id}" }, method = RequestMethod.PUT)
+	@PutMapping({ "/private/product/property/set/{id}" })
 	@Parameters({ @Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
 	public void update(
@@ -105,7 +107,7 @@ public class ProductPropertySetApi {
 
 
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/property/set/{id}" }, method = RequestMethod.DELETE)
+	@DeleteMapping({ "/private/product/property/set/{id}" })
 	@Parameters({
 			@Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })
@@ -126,7 +128,7 @@ public class ProductPropertySetApi {
 	 * @return
 	 */
 	@ResponseStatus(HttpStatus.OK)
-	@RequestMapping(value = { "/private/product/property/set" }, method = RequestMethod.GET)
+	@GetMapping({ "/private/product/property/set" })
 	@Parameters({
 			@Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
 			@Parameter(name = "lang", schema = @Schema(defaultValue = "en")) })

@@ -1,25 +1,26 @@
 package com.salesmanager.core.model.catalog.product.manufacturer;
 
+import java.io.Serial;
 import java.util.HashSet;
 import java.util.Set;
 
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.EntityListeners;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-import javax.persistence.UniqueConstraint;
+import jakarta.persistence.CascadeType;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
+import jakarta.persistence.Table;
+import jakarta.persistence.TableGenerator;
+import jakarta.persistence.UniqueConstraint;
 
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.NotEmpty;
 
 import com.salesmanager.core.constants.SchemaConstant;
 import com.salesmanager.core.model.common.audit.AuditListener;
@@ -33,6 +34,7 @@ import com.salesmanager.core.model.merchant.MerchantStore;
 @Table(name = "MANUFACTURER", uniqueConstraints=
 @UniqueConstraint(columnNames = {"MERCHANT_ID", "CODE"}) )
 public class Manufacturer extends SalesManagerEntity<Long, Manufacturer> implements Auditable {
+	@Serial
 	private static final long serialVersionUID = 1L;
 	
 	public static final String DEFAULT_MANUFACTURER = "DEFAULT";
@@ -53,7 +55,7 @@ public class Manufacturer extends SalesManagerEntity<Long, Manufacturer> impleme
 	private String image;
 	
 	@Column(name="SORT_ORDER")
-	private Integer order = new Integer(0);
+	private Integer order = Integer.valueOf(0);
 
 	@ManyToOne(fetch = FetchType.EAGER)
 	@JoinColumn(name="MERCHANT_ID", nullable=false)

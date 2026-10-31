@@ -6,11 +6,11 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Set;
 
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.NonUniqueResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.NoResultException;
+import jakarta.persistence.NonUniqueResultException;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -103,7 +103,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
 			return (Product) q.getSingleResult();
 
-		} catch (javax.persistence.NoResultException ers) {
+		} catch (jakarta.persistence.NoResultException ers) {
 			return null;
 		}
 
@@ -156,7 +156,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
 			return (Product) q.getSingleResult();
 
-		} catch (javax.persistence.NoResultException ers) {
+		} catch (jakarta.persistence.NoResultException ers) {
 			return null;
 		}
 
@@ -198,7 +198,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
 			return (Product) q.getSingleResult();
 
-		} catch (javax.persistence.NoResultException ers) {
+		} catch (jakarta.persistence.NoResultException ers) {
 			return null;
 		}
 
@@ -259,8 +259,8 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 				LOGGER.error("Found multiple products for list of criterias with main criteria [" + seUrl + "]");
 			}
 			// p = (Product)q.getSingleResult();
-			p = products.get(0);
-		} catch (javax.persistence.NoResultException ignore) {
+			p = products.getFirst();
+		} catch (jakarta.persistence.NoResultException ignore) {
 
 		}
 
@@ -329,7 +329,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 		if (results.isEmpty())
 			return null;
 		else if (results.size() == 1)
-			return results.get(0);
+			return results.getFirst();
 		throw new NonUniqueResultException();
 
 	}
@@ -804,7 +804,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 			qs.append(" left join fetch pvv.productOption pvvpo ");
 			qs.append(" left join fetch pvv.productOptionValue pvvpov ");
 			qs.append(" left join fetch pvvpo.descriptions povvpod ");
-			qs.append(" left join fetch pvpov.descriptions povvpovd ");	
+			// duplicate fetch of pvpov.descriptions removed (rejected by Hibernate 6)
 			
 			//variant availability and price
 			qs.append(" left join fetch pinst.availabilities pinsta ");
@@ -1144,7 +1144,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 		// other lefts
 		qs.append("left join fetch p.manufacturer manuf ");
 		qs.append("left join fetch manuf.descriptions manufd ");
-		qs.append("left join fetch p.type type ");
+		// duplicate fetch removed (rejected by Hibernate 6): qs.append("left join fetch p.type type ");
 		
 		//variants
 		qs.append("left join fetch p.variants pinst ");
@@ -1158,7 +1158,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 		qs.append("left join fetch pvv.productOption pvvpo ");
 		qs.append("left join fetch pvv.productOptionValue pvvpov ");
 		qs.append("left join fetch pvvpo.descriptions povvpod ");
-		qs.append("left join fetch pvpov.descriptions povvpovd ");	
+		// duplicate fetch of pvpov.descriptions removed (rejected by Hibernate 6)
 		
 		//variant availability and price
 		qs.append("left join fetch pinst.availabilities pinsta ");
@@ -1201,7 +1201,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 			// other lefts
 			qs.append("left join fetch p.manufacturer manuf ");
 			qs.append("left join fetch manuf.descriptions manufd ");
-			qs.append("left join fetch p.type type ");
+			// duplicate fetch removed (rejected by Hibernate 6): qs.append("left join fetch p.type type ");
 			
 			//variants
 			qs.append("left join fetch p.variants pinst ");
@@ -1215,7 +1215,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 			qs.append("left join fetch pvv.productOption pvvpo ");
 			qs.append("left join fetch pvv.productOptionValue pvvpov ");
 			qs.append("left join fetch pvvpo.descriptions povvpod ");
-			qs.append("left join fetch pvpov.descriptions povvpovd ");	
+			// duplicate fetch of pvpov.descriptions removed (rejected by Hibernate 6)
 			
 			//variant availability and price
 			qs.append("left join fetch pinst.availabilities pinsta ");
@@ -1236,7 +1236,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 
 			return (Product) q.getSingleResult();
 
-		} catch (javax.persistence.NoResultException ers) {
+		} catch (jakarta.persistence.NoResultException ers) {
 			return null;
 		}
 		

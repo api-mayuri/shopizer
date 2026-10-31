@@ -1,12 +1,10 @@
 package com.salesmanager.test.shop.util;
 
-import javax.inject.Inject;
-import javax.inject.Named;
+import jakarta.inject.Inject;
+import jakarta.inject.Named;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,7 +21,6 @@ import com.salesmanager.test.shop.common.ServicesTestSupport;
  *
  */
 @SpringBootTest(classes = ShopApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-@ExtendWith(SpringExtension.class)
 public class GeneratePasswordTest extends ServicesTestSupport {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(GeneratePasswordTest.class);
@@ -34,7 +31,7 @@ public class GeneratePasswordTest extends ServicesTestSupport {
   
   @Test
   public void createPassword() throws Exception {
- 
+
 
       String password ="password";
       String encoded = passwordEncoder.encode(password);
@@ -43,7 +40,6 @@ public class GeneratePasswordTest extends ServicesTestSupport {
       //To comply with sonarlint rule java:S2699
       Assertions.assertNotNull(encoded);
   }
-
 
 
 }

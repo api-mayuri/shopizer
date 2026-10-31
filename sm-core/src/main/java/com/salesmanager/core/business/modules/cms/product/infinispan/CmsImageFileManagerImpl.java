@@ -3,13 +3,14 @@ package com.salesmanager.core.business.modules.cms.product.infinispan;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.Serial;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import org.apache.commons.io.IOUtils;
 import org.infinispan.tree.Fqn;
 import org.infinispan.tree.Node;
@@ -38,10 +39,11 @@ import com.salesmanager.core.model.merchant.MerchantStore;
  */
 public class CmsImageFileManagerImpl implements ProductAssetsManager {
 
-  /**
-   * 
-   */
-  private static final long serialVersionUID = 1L;
+	/**
+	 * 
+	 */
+	@Serial
+	private static final long serialVersionUID = 1L;
 
   private static final Logger LOGGER = LoggerFactory.getLogger(CmsImageFileManagerImpl.class);
 
