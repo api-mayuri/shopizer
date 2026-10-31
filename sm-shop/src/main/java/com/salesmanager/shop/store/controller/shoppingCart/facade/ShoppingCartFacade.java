@@ -11,10 +11,11 @@ import com.salesmanager.shop.model.shoppingcart.PersistableShoppingCartItem;
 import com.salesmanager.shop.model.shoppingcart.ReadableShoppingCart;
 import com.salesmanager.shop.model.shoppingcart.ShoppingCartData;
 import com.salesmanager.shop.model.shoppingcart.ShoppingCartItem;
-import org.springframework.lang.Nullable;
 
 import java.util.List;
 import java.util.Optional;
+
+import org.jspecify.annotations.Nullable;
 
 /**
  * </p>Shopping cart Facade which provide abstraction layer between

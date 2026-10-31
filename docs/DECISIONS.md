@@ -236,3 +236,63 @@
 - Добавлен `docker-compose.yml` (PostgreSQL 18 + Shopizer).
 - ⚠️ **Сборку образа проверить не удалось:** Docker Hub ответил 429 (rate limit) на `eclipse-temurin`. Сам PostgreSQL 18
   из Docker Hub скачался и работал. Приложение с этим профилем проверено напрямую (`java -jar`), но не в контейнере.
+
+---
+
+## Шаг 4. Spring Boot 3.5.16 → 4.0.9, Java 21 → 25
+
+Рецепты: `UpgradeSpringBoot_4_0` (Spring Framework 7, Security 7, Hibernate 7.1, springdoc 3, модульные стартеры),
+`UpgradeToJava25`, `UpgradeJackson_2_3` (Jackson 3, пакеты `tools.jackson.*`).
+
+### D-40. Правки после рецепта в pom.xml
+- Рецепт удалил `dependencyManagement` для `infinispan-core` и заменил `javax.xml.bind:jaxb-api` на jakarta (а jjwt 0.8
+  нужен именно javax). Это откатил. Жёстко прописанные версии `4.0.9` у Boot-артефактов убрал: ими управляет parent.
+- Остальное принято: `spring-boot-starter-aop` → `spring-boot-starter-aspectj`, `spring-security-test` →
+  `spring-boot-starter-security-test`, `spring-boot-starter-flyway`, `spring-boot-resttestclient` для `TestRestTemplate`,
+  javaagent Mockito для surefire (требование JDK 21+).
+
+### D-41. ⚠️ Infinispan удалён, CMS по умолчанию переведён на файловую систему
+- Infinispan 9.4 **не работает на Java 24+**: вызывает `Subject.getSubject()`, удалённый вместе с SecurityManager (JEP 486).
+  Модуль `infinispan-tree`, на котором написан CMS по умолчанию (картинки товаров, статика, загрузки), существует
+  только до 9.x, поэтому просто обновить Infinispan нельзя.
+- **Решение:** небольшая замена TreeCache на файловой системе (`cms/impl/tree`: `TreeCache`, `Node`, `Fqn` с тем же API,
+  что использовал CMS). Узел = каталог, ключ = файл. Имена кодируются (URL-encode), так что ключ не может выйти за
+  пределы каталога (есть тест). Запись атомарная (temp + move). Классы CMS поменялись только импортами.
+  Данные лежат в `<config.cms.store.location>/StoreRepository/...` и т.д.
+- Infinispan, jgroups и закреплённый Caffeine 2.9.3 удалены из зависимостей.
+- ⚠️ **Существующие данные CMS в формате Infinispan (`*.dat`) новая реализация не читает.** Для продакшена в Shopizer
+  в любом случае рекомендуются `config.cms.method=aws|gcp` (S3/GCS). Если есть боевые картинки в Infinispan-хранилище,
+  их нужно выгрузить до перехода на Java 25 (на сборке шага 3, Java 21). Инструмент выгрузки не писал: в репозитории
+  файлы `.dat` были пустыми (только заголовок). Удалил их из git, каталоги `files/store`, `files/repos` оставил.
+- *Альтернативы:* сделать `httpd`/`aws` методом по умолчанию (меняет URL картинок и требует внешний веб-сервер или S3);
+  остаться на Java 21 (противоречит цели).
+
+### D-42. Jackson 3 — формат JSON API не изменился
+- REST API: убран лишний `MappingJackson2HttpMessageConverter` в `configureMessageConverters`. JSON пишет авто-сконфигурированный
+  Boot-конвертер Jackson 3, плюс `spring.jackson.use-jackson2-defaults=true`.
+- Программные мапперы (детали транзакций и конфигурации модулей **хранятся в БД как JSON**, загрузчики справочников):
+  рецепт заменил `new ObjectMapper()` на `new JsonMapper()`. Я поменял на `JsonMapper.builderWithJackson2Defaults().build()`,
+  чтобы новые записи были в том же формате, а старые читались.
+- **Проверено сравнением**: 17 эндпоинтов (публичные и приватные) на сборке шага 3 (Boot 3.5 + Jackson 2) и шага 4,
+  нормализованный JSON. Все ответы совпали байт в байт, кроме:
+  - времени в `timestamp` у ответов-ошибок (формат тот же, отличается только само время);
+  - порядка двух стран в `/api/v1/country`: названия стран приложение берёт из данных локалей JDK (CLDR), а они
+    в JDK 25 обновились. Это не связано со Spring.
+- Аннотации `com.fasterxml.jackson.annotation.*` в Jackson 3 остались в том же пакете, их не трогали.
+- Сторонние библиотеки (Stripe, Braintree, AWS SDK, OpenSearch-клиент) продолжают тянуть Jackson 2. Он живёт рядом в своём пакете.
+
+### D-43. Прочие изменения Boot 4 / Spring 7 / Hibernate 7
+- **`javax.inject.@Inject` больше не поддерживается Spring 7.** Один пропущенный импорт в `ProductFacadeImpl`
+  молча оставлял поле `null` (`/api/v1/products` отвечал 503). Исправлено, `javax.inject`/`javax.annotation` в коде больше нет.
+- Spring Data 4 подключил к `PageableCategoryRepository` класс `PageableCategoryRepositoryImpl` по имени, и тот перекрыл
+  `@Query`. Класс был мёртвым и сломанным (несуществующий именованный запрос, count через `getMaxResults()`). Удалён.
+- Security 7: `DaoAuthenticationProvider` принимает `UserDetailsService` в конструкторе (у JWT-провайдеров добавлены конструкторы).
+- Hibernate 7: `@org.hibernate.annotations.OrderBy` → `@SQLOrder`.
+- Boot 4: `ServletComponentScan`, `WebServerInitializedEvent`, `TestRestTemplate` переехали в новые модули/пакеты;
+  `server.error.whitelabel.enabled` → `spring.web.error.whitelabel.enabled`.
+- Случайный импорт `org.jgroups.util.UUID` (jgroups приходил с Infinispan) генерировал временные пароли из «сырых» байт.
+  Заменён на `java.util.UUID.randomUUID()`.
+
+### D-44. Версия Boot 4
+- Рецепт OpenRewrite есть только для 4.0, поэтому сначала Boot **4.0.9** (полностью зелёный, коммит), затем отдельным
+  шагом последняя 4.1.x (см. D-45).

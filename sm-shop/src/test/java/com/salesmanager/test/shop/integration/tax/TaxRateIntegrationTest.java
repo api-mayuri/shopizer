@@ -6,6 +6,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import java.math.BigDecimal;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpEntity;
@@ -20,6 +21,7 @@ import com.salesmanager.shop.model.tax.PersistableTaxRate;
 import com.salesmanager.shop.model.tax.TaxRateDescription;
 import com.salesmanager.test.shop.common.ServicesTestSupport;
 
+@AutoConfigureTestRestTemplate
 @SpringBootTest(classes = ShopApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 public class TaxRateIntegrationTest extends ServicesTestSupport {
 

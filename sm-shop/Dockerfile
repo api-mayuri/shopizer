@@ -1,5 +1,5 @@
 # Build the jar first: ./mvnw clean install (or mvn clean install)
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:25-jre
 RUN mkdir -p /opt/app /files
 COPY target/shopizer.jar /opt/app/shopizer.jar
 COPY ./files /files

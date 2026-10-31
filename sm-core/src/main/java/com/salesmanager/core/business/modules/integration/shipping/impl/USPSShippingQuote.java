@@ -2,7 +2,6 @@ package com.salesmanager.core.business.modules.integration.shipping.impl;
 
 import java.io.IOException;
 import java.io.Reader;
-import java.io.StringReader;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.text.SimpleDateFormat;
@@ -543,7 +542,7 @@ public class USPSShippingQuote implements ShippingQuoteModule {
 			//<Description>Invalid Country Name</Description><HelpFile></HelpFile><HelpContext>1000440</HelpContext></Error></Package></IntlRateResponse>
 
 
-			xmlreader = new StringReader(data);
+			xmlreader = Reader.of(data);
 			digester.parse(xmlreader);
 
 			if (!StringUtils.isBlank(parsed.getError())) {

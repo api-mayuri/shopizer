@@ -44,8 +44,8 @@ public class ReferencesTest {
 
 
 		List<Language> langs = languageService.getLanguages();
-		
-		System.out.println("Language size " + langs.size());
+
+		IO.println("Language size " + langs.size());
 		
 		Country us = new Country();
 		us.setIsoCode("US");
@@ -67,11 +67,11 @@ public class ReferencesTest {
 		countryService.save(us);
 		
 		Country c = countryService.getByCode("US");
-		
-		System.out.println(c.getId());
+
+		IO.println(c.getId());
 
 
-		System.out.println("***********Done**************");
+		IO.println("***********Done**************");
 
 
 	}

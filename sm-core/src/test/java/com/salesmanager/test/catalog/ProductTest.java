@@ -274,8 +274,8 @@ public class ProductTest extends com.salesmanager.test.common.AbstractSalesManag
 	    //testReview(product);
 
 	    List<Product> products = productService.listByStore(store);
-	    
-	    System.out.println("Total number of items " + products.size());
+
+		IO.println("Total number of items " + products.size());
 	    
 	    //count products by category
 		String lineage = new StringBuilder().append(book.getLineage()).toString();

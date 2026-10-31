@@ -17,7 +17,7 @@ import org.springframework.core.Ordered;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
 import org.springframework.web.filter.UrlHandlerFilter;
-import org.springframework.boot.web.servlet.ServletComponentScan;
+import org.springframework.boot.web.server.servlet.context.ServletComponentScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -27,7 +27,6 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.http.MediaType;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ViewControllerRegistry;
@@ -102,10 +101,8 @@ public class ShopApplicationConfiguration implements WebMvcConfigurer {
     };
   }
 
-  @Override
-  public void configureMessageConverters(List<HttpMessageConverter<?>> converters) {
-    converters.add(new MappingJackson2HttpMessageConverter());
-  }
+  // JSON is written by the Spring Boot auto-configured Jackson 3 converter (spring.jackson.use-jackson2-defaults=true).
+  // The former extra MappingJackson2HttpMessageConverter was never used first with Spring Boot 3 (see docs/DECISIONS.md).
 
   @Override
   public void addViewControllers(ViewControllerRegistry registry) {

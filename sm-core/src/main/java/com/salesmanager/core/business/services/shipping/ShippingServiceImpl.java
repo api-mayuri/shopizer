@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
-
+import tools.jackson.databind.json.JsonMapper;
 import jakarta.annotation.Resource;
 import jakarta.inject.Inject;
 
@@ -22,7 +22,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.salesmanager.core.business.constants.ShippingConstants;
 import com.salesmanager.core.business.exception.ServiceException;
 import com.salesmanager.core.business.services.catalog.pricing.PricingService;
@@ -124,7 +124,7 @@ public class ShippingServiceImpl implements ShippingService {
 		if(configuration!=null) {
 			String value = configuration.getValue();
 			
-			ObjectMapper mapper = new ObjectMapper();
+			ObjectMapper mapper = JsonMapper.builderWithJackson2Defaults().build();
 			try {
 				shippingConfiguration = mapper.readValue(value, ShippingConfiguration.class);
 			} catch(Exception e) {
@@ -826,7 +826,7 @@ public class ShippingServiceImpl implements ShippingService {
 		
 		
 		//transform a list of string to json entry
-		ObjectMapper mapper = new ObjectMapper();
+		ObjectMapper mapper = JsonMapper.builderWithJackson2Defaults().build();
 		
 		try {
 			String value  = mapper.writeValueAsString(countryCodes);

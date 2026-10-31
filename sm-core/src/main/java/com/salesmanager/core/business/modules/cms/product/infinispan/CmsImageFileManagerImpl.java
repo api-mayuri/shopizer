@@ -12,8 +12,8 @@ import java.util.List;
 import java.util.Set;
 import jakarta.annotation.PostConstruct;
 import org.apache.commons.io.IOUtils;
-import org.infinispan.tree.Fqn;
-import org.infinispan.tree.Node;
+import com.salesmanager.core.business.modules.cms.impl.tree.Fqn;
+import com.salesmanager.core.business.modules.cms.impl.tree.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import com.salesmanager.core.business.constants.Constants;
@@ -66,7 +66,7 @@ public class CmsImageFileManagerImpl implements ProductAssetsManager {
 
     try {
       LOGGER.info("Stopping CMS");
-      cacheManager.getManager().stop();
+      cacheManager.stop();
     } catch (Exception e) {
       LOGGER.error("Error while stopping CmsImageFileManager", e);
     }

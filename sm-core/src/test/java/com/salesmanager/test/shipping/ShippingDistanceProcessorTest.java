@@ -44,11 +44,11 @@ public class ShippingDistanceProcessorTest {
 		origin.setPostalCode("H2S 3S3");
 		origin.setZone(zone);
 		origin.setCountry(country);
-		
+
 		//shippingDecisionTablePreProcessor.prePostProcessShippingQuotes(shippingQuote, null, null, delivery, origin, null, null, null, null, null, Locale.CANADA);
 		
-		System.out.println(delivery.getLatitude());
-		System.out.println(delivery.getLongitude());
+		IO.println(delivery.getLatitude());
+		IO.println(delivery.getLongitude());
 		//System.out.println(shippingQuote.getQuoteInformations().get(Constants.DISTANCE_KEY));
 
 	}

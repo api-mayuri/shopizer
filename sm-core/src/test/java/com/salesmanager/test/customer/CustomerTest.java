@@ -192,9 +192,9 @@ public class CustomerTest extends com.salesmanager.test.common.AbstractSalesMana
 		customerOptionService.update(option);
 		
 		List<CustomerOptionSet> optionSetList = customerOptionSetService.listByStore(store, en);
-		
+
 		//Assert.assertEquals(3, optionSetList.size());
-		System.out.println("Size of options : " + optionSetList.size());
+		IO.println("Size of options : " + optionSetList.size());
 		
 		/**
 		 * Now create a customer option attribute

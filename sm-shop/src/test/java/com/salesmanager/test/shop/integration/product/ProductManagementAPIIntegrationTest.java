@@ -11,9 +11,10 @@ import java.io.FileInputStream;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
-
+import tools.jackson.databind.json.JsonMapper;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpEntity;
@@ -22,8 +23,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.client.RestTemplate;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectWriter;
 import com.salesmanager.core.business.constants.Constants;
 import com.salesmanager.core.model.catalog.product.attribute.ProductOptionType;
 import com.salesmanager.shop.application.ShopApplication;
@@ -44,6 +45,7 @@ import com.salesmanager.shop.model.catalog.product.product.PersistableProductInv
 import com.salesmanager.shop.model.catalog.product.product.ProductSpecification;
 import com.salesmanager.test.shop.common.ServicesTestSupport;
 
+@AutoConfigureTestRestTemplate
 @SpringBootTest(classes = ShopApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ProductManagementAPIIntegrationTest extends ServicesTestSupport {
 
@@ -156,10 +158,10 @@ public class ProductManagementAPIIntegrationTest extends ServicesTestSupport {
 		optionValue.setCode("colorred");
 		optionValue.setDescriptions(descriptions);
 
-		final ObjectWriter writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		final ObjectWriter writer = JsonMapper.builderWithJackson2Defaults().build().writer().withDefaultPrettyPrinter();
 		final String json = writer.writeValueAsString(optionValue);
 
-		System.out.println(json);
+		IO.println(json);
 
 		/**
 		 * { "descriptions" : [ { "name" : "Red", "description" : null,
@@ -177,7 +179,7 @@ public class ProductManagementAPIIntegrationTest extends ServicesTestSupport {
 				PersistableProductOptionValue.class);
 
 		final PersistableProductOptionValue opt = (PersistableProductOptionValue) response.getBody();
-		System.out.println("New optionValue ID : " + opt.getId());
+		IO.println("New optionValue ID : " + opt.getId());
 
 	}
 
@@ -203,10 +205,10 @@ public class ProductManagementAPIIntegrationTest extends ServicesTestSupport {
 		option.setType(ProductOptionType.Select.name());
 		option.setDescriptions(descriptions);
 
-		final ObjectWriter writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		final ObjectWriter writer = JsonMapper.builderWithJackson2Defaults().build().writer().withDefaultPrettyPrinter();
 		final String json = writer.writeValueAsString(option);
 
-		System.out.println(json);
+		IO.println(json);
 
 		/**
 		 * { "descriptions" : [ { "name" : "Color", "description" : null,
@@ -224,7 +226,7 @@ public class ProductManagementAPIIntegrationTest extends ServicesTestSupport {
 				PersistableProductOption.class);
 
 		final PersistableProductOption opt = (PersistableProductOption) response.getBody();
-		System.out.println("New option ID : " + opt.getId());
+		IO.println("New option ID : " + opt.getId());
 
 	}
 
@@ -242,7 +244,7 @@ public class ProductManagementAPIIntegrationTest extends ServicesTestSupport {
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new Exception();
 		} else {
-			System.out.println(response.getBody().length + " Product records found.");
+			IO.println(response.getBody().length + " Product records found.");
 		}
 	}
 
@@ -356,10 +358,10 @@ public class ProductManagementAPIIntegrationTest extends ServicesTestSupport {
 
 		product.setDescriptions(descriptions);
 
-		final ObjectWriter writer = new ObjectMapper().writer().withDefaultPrettyPrinter();
+		final ObjectWriter writer = JsonMapper.builderWithJackson2Defaults().build().writer().withDefaultPrettyPrinter();
 		final String json = writer.writeValueAsString(product);
 
-		System.out.println(json);
+		IO.println(json);
 
 		final HttpEntity<String> entity = new HttpEntity<>(json, getHeader());
 
@@ -369,7 +371,7 @@ public class ProductManagementAPIIntegrationTest extends ServicesTestSupport {
 
 		final PersistableProduct prod = (PersistableProduct) response.getBody();
 
-		System.out.println("---------------------");
+		IO.println("---------------------");
 
 	}
 

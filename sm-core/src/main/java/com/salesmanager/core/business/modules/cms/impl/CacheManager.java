@@ -1,13 +1,14 @@
 package com.salesmanager.core.business.modules.cms.impl;
 
-import org.infinispan.manager.EmbeddedCacheManager;
-import org.infinispan.tree.TreeCache;
+import com.salesmanager.core.business.modules.cms.impl.tree.TreeCache;
 
 public interface CacheManager extends CMSManager {
 
-  EmbeddedCacheManager getManager();
-
   @SuppressWarnings("rawtypes")
   TreeCache getTreeCache();
+
+  /** Releases resources of the store (nothing to release for the file system store). */
+  default void stop() {
+  }
 
 }

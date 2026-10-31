@@ -291,9 +291,9 @@ public class DefaultPackagingImpl implements Packaging {
 
 		//Iterator ubIt = usedBoxesList.iterator();
 
-		System.out.println("###################################");
-		System.out.println("Number of boxes " + boxesList.size());
-		System.out.println("###################################");
+		IO.println("###################################");
+		IO.println("Number of boxes " + boxesList.size());
+		IO.println("###################################");
 
 		for(PackingBox pb : boxesList) {
 			PackageDetails details = new PackageDetails();

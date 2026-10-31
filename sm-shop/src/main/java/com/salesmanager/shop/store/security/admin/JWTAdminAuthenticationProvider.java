@@ -19,6 +19,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
  *
  */
 public class JWTAdminAuthenticationProvider extends DaoAuthenticationProvider {
+
+    /** Spring Security 7: the UserDetailsService is a constructor argument of DaoAuthenticationProvider. */
+    public JWTAdminAuthenticationProvider(UserDetailsService userDetailsService) {
+        super(userDetailsService);
+    }
 	
     @Autowired
     private UserDetailsService jwtAdminDetailsService;

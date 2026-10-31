@@ -1,10 +1,10 @@
 package com.salesmanager.core.business.services.system;
 
 import jakarta.inject.Inject;
-
+import tools.jackson.databind.json.JsonMapper;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.salesmanager.core.business.constants.Constants;
 import com.salesmanager.core.business.exception.ServiceException;
 import com.salesmanager.core.business.modules.email.Email;
@@ -39,7 +39,7 @@ public class EmailServiceImpl implements EmailService {
 		if(configuration!=null) {
 			String value = configuration.getValue();
 			
-			ObjectMapper mapper = new ObjectMapper();
+			ObjectMapper mapper = JsonMapper.builderWithJackson2Defaults().build();
 			try {
 				emailConfig = mapper.readValue(value, EmailConfig.class);
 			} catch(Exception e) {

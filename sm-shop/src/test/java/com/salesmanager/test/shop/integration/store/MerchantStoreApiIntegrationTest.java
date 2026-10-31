@@ -8,9 +8,10 @@ import java.util.Arrays;
 import jakarta.inject.Inject;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -25,6 +26,7 @@ import com.salesmanager.shop.model.store.PersistableMerchantStore;
 import com.salesmanager.shop.model.store.ReadableMerchantStore;
 import com.salesmanager.test.shop.common.ServicesTestSupport;
 
+@AutoConfigureTestRestTemplate
 @SpringBootTest(classes = ShopApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 public class MerchantStoreApiIntegrationTest extends ServicesTestSupport {
   

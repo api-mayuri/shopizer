@@ -16,8 +16,8 @@ import java.util.Optional;
 
 import jakarta.annotation.PostConstruct;
 import org.apache.commons.io.IOUtils;
-import org.infinispan.tree.Fqn;
-import org.infinispan.tree.Node;
+import com.salesmanager.core.business.modules.cms.impl.tree.Fqn;
+import com.salesmanager.core.business.modules.cms.impl.tree.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +57,7 @@ public class CmsStaticContentFileManagerImpl
 	public void stopFileManager() {
 
 		try {
-			cacheManager.getManager().stop();
+			cacheManager.stop();
 			LOGGER.info("Stopping CMS");
 		} catch (final Exception e) {
 			LOGGER.error("Error while stopping CmsStaticContentFileManager", e);

@@ -72,8 +72,8 @@ public class UtilsTestCase  {
 		
 		NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.US);
 		numberFormat.setCurrency(c);
-		
-		System.out.println("Done");
+
+		IO.println("Done");
 		
 	}
 	
@@ -82,7 +82,7 @@ public class UtilsTestCase  {
 		
 		Address address = geoLoaction.getAddress("96.21.132.0");
 		if(address!=null) {
-			System.out.println(address.getCountry());
+			IO.println(address.getCountry());
 		}
 		
 	}

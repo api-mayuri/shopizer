@@ -3,11 +3,11 @@ package com.salesmanager.core.business.services.reference.loader;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import tools.jackson.databind.json.JsonMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.salesmanager.core.business.exception.ServiceException;
 import com.salesmanager.core.model.system.IntegrationConfiguration;
 
@@ -53,7 +53,7 @@ public class ConfigurationModulesLoader {
 		
 		Map<String,IntegrationConfiguration> modules = new HashMap<String,IntegrationConfiguration>();
 		
-		ObjectMapper mapper = new ObjectMapper();
+		ObjectMapper mapper = JsonMapper.builderWithJackson2Defaults().build();
 		
 		try {
 			

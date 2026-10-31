@@ -45,7 +45,7 @@ public class ZeroIdMergeEventListener implements MergeEventListener {
 			return; // application assigned ids are left untouched
 		}
 		Object id = persister.getIdentifier(entity, session);
-		if (id instanceof Number && ((Number) id).longValue() == 0L) {
+		if (id instanceof Number number && number.longValue() == 0L) {
 			persister.setIdentifier(entity, null, session);
 		}
 	}

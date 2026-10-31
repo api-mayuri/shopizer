@@ -51,3 +51,12 @@ Each step lives on its own branch (`migration/stepN-*`) and is done only when:
 - **Tests on PostgreSQL 18.6** (`scripts/test-postgres.sh`): same numbers, all green.
 - Smoke: OK on H2 and on PostgreSQL 18 (fresh DB and restart on a populated DB).
 - See `docs/POSTGRESQL.md` (running, data migration from MySQL) and DECISIONS D-31..D-36.
+
+## Step 4 — Spring Boot 4.0.9 + Java 25 (`migration/step4-boot4-java25`)
+
+- Spring Boot 4.0.9 (Spring Framework 7.0, Security 7, Hibernate 7.1, Jackson 3, springdoc 3), Java 25 (JDK 25.0.4).
+- Tests on H2: sm-core 23 / 0 failures / 6 skipped (+2 new CMS store tests); sm-shop 31 / 0 failures / 6 skipped.
+- Tests on PostgreSQL 18: same numbers, all green.
+- Smoke: OK on H2 and PostgreSQL.
+- REST API JSON compared with step 3 on 17 endpoints: identical (D-42).
+- See DECISIONS D-40..D-44 (Infinispan removed, CMS on file system, Jackson 3, Spring 7 pitfalls).

@@ -2,7 +2,6 @@ package com.salesmanager.core.business.modules.integration.shipping.impl;
 
 import java.io.BufferedReader;
 import java.io.Reader;
-import java.io.StringReader;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.util.ArrayList;
@@ -468,7 +467,7 @@ public class UPSShippingQuote implements ShippingQuoteModule {
 			// XML document is well formed but the document is not
 			// valid</ErrorDescription><ErrorLocation><ErrorLocationElementName>AddressValidationRequest</ErrorLocationElementName></ErrorLocation></Error></Response></AddressValidationResponse>
 
-			Reader xmlreader = new StringReader(data);
+			Reader xmlreader = Reader.of(data);
 
 			digester.parse(xmlreader);
 

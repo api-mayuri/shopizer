@@ -110,7 +110,7 @@ public class IndexProductEventListener implements ApplicationListener<ProductEve
 			if(fullProduct != null) {
 				product = fullProduct;
 			} else {
-				System.out.println("Product not loaded");
+				IO.println("Product not loaded");
 			}
 			
 		return product;

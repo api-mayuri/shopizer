@@ -1,6 +1,5 @@
 package com.salesmanager.shop.application.config;
 
-import com.salesmanager.core.business.modules.cms.impl.VendorCacheManager;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import java.util.Properties;
@@ -26,7 +25,5 @@ public class ShopServletContextListener implements ServletContextListener {
 	@Override
 	public void contextDestroyed(ServletContextEvent servletContextEvent) {
 		logger.info("===context destroy===");
-		VendorCacheManager cacheManager = VendorCacheManager.getInstance();
-		cacheManager.getManager().stop();
 	}
 }

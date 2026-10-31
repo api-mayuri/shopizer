@@ -127,14 +127,14 @@ public class ShippingQuoteByWeightTest extends com.salesmanager.test.common.Abst
 	    for(ProductAvailability as : avails) {
 		    Set<ProductPrice> availabilityPrices = as.getPrices();
 		    for(ProductPrice ps : availabilityPrices) {
-		    	System.out.println(ps.getProductPriceAmount().toString());
+					IO.println(ps.getProductPriceAmount().toString());
 		    }
 	    }
 	    
 	    //check availability
 	    Set<ProductPrice> availabilityPrices = availability.getPrices();
 	    for(ProductPrice ps : availabilityPrices) {
-	    	System.out.println(ps.getProductPriceAmount().toString());
+				IO.println(ps.getProductPriceAmount().toString());
 	    }
 	    
 

@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
+import tools.jackson.databind.json.JsonMapper;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
@@ -31,7 +31,7 @@ import org.json.simple.JSONAware;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.salesmanager.core.constants.SchemaConstant;
 import com.salesmanager.core.model.common.audit.AuditListener;
 import com.salesmanager.core.model.common.audit.AuditSection;
@@ -174,7 +174,7 @@ public class Transaction extends SalesManagerEntity<Long, Transaction> implement
 	public String toJSONString() {
 		
 		if(this.getTransactionDetails()!=null && this.getTransactionDetails().size()>0) {
-			ObjectMapper mapper = new ObjectMapper();
+			ObjectMapper mapper = JsonMapper.builderWithJackson2Defaults().build();
 			try {
 				return mapper.writeValueAsString(this.getTransactionDetails());
 			} catch (Exception e) {

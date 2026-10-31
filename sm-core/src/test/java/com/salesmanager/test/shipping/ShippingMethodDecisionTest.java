@@ -80,8 +80,8 @@ public class ShippingMethodDecisionTest extends com.salesmanager.test.common.Abs
 		allModules.add(inhouse);
 
 		shippingMethodDecisionProcess.prePostProcessShippingQuotes(quote, details, null, delivery, null, null, null, currentModule, null, allModules, Locale.CANADA);
-		
-		System.out.println("Done : " + quote.getCurrentShippingModule()!=null ? quote.getCurrentShippingModule().getCode() : currentModule.getCode());
+
+		IO.println("Done : " + quote.getCurrentShippingModule() != null ? quote.getCurrentShippingModule().getCode() : currentModule.getCode());
 
 	}
 }

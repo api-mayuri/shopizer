@@ -1,7 +1,9 @@
 package com.salesmanager.shop.utils;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+
 import com.salesmanager.core.business.utils.CoreConfiguration;
 import com.salesmanager.shop.constants.ApplicationConstants;
 import org.apache.commons.lang3.StringUtils;
@@ -84,7 +86,7 @@ public class CaptchaRequestUtils {
 	      String json = new String(responseBody);
 	      
 	      Map<String,String> map = new HashMap<String,String>();
-	  	  ObjectMapper mapper = new ObjectMapper();
+	  	  ObjectMapper mapper = JsonMapper.builderWithJackson2Defaults().build();
 	  	  
 	  	  map = mapper.readValue(json, 
 			    new TypeReference<HashMap<String,String>>(){});

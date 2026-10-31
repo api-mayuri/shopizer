@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpEntity;
@@ -29,6 +30,7 @@ import com.salesmanager.shop.model.catalog.product.variation.PersistableProductV
 import com.salesmanager.test.shop.common.ServicesTestSupport;
 
 
+@AutoConfigureTestRestTemplate
 @SpringBootTest(classes = ShopApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
 public class ProductV2ManagementAPIIntegrationTest extends ServicesTestSupport {
 
@@ -96,7 +98,7 @@ public class ProductV2ManagementAPIIntegrationTest extends ServicesTestSupport {
 		final ResponseEntity<PersistableProductOption> colorResponse = testRestTemplate.postForEntity(
 				"/api/v1/private/product/option?store=" + Constants.DEFAULT_STORE, colorEntity, PersistableProductOption.class);
 		assertTrue(colorResponse.getStatusCode()== CREATED);
-		System.out.println(colorResponse.getBody().getId());
+		IO.println(colorResponse.getBody().getId());
 
 
 		PersistableProductOption size = new PersistableProductOption();
@@ -110,7 +112,7 @@ public class ProductV2ManagementAPIIntegrationTest extends ServicesTestSupport {
 		final ResponseEntity<PersistableProductOption> sizeResponse = testRestTemplate.postForEntity(
 				"/api/v1/private/product/option?store=" + Constants.DEFAULT_STORE, sizeEntity, PersistableProductOption.class);
 		assertTrue(sizeResponse.getStatusCode()== CREATED);
-		System.out.println(colorResponse.getBody().getId());
+		IO.println(colorResponse.getBody().getId());
 		
 		//opions values
 		PersistableProductOptionValue white = new PersistableProductOptionValue();
@@ -124,7 +126,7 @@ public class ProductV2ManagementAPIIntegrationTest extends ServicesTestSupport {
 		final ResponseEntity<PersistableProductOptionValue> whiteResponse = testRestTemplate.postForEntity(
 				"/api/v1/private/product/option?store=" + Constants.DEFAULT_STORE, whiteEntity, PersistableProductOptionValue.class);
 		assertTrue(whiteResponse.getStatusCode()== CREATED);
-		System.out.println(whiteResponse.getBody().getId());
+		IO.println(whiteResponse.getBody().getId());
 		
 		PersistableProductOptionValue medium = new PersistableProductOptionValue();
 		medium.setCode("medium");

@@ -6,10 +6,11 @@ import java.io.InputStream;
 import java.util.Map;
 
 import jakarta.inject.Inject;
+import tools.jackson.databind.json.JsonMapper;
 import org.junit.jupiter.api.Disabled;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.salesmanager.core.business.exception.ServiceException;
 import com.salesmanager.core.business.services.reference.loader.IntegrationModulesLoader;
 import com.salesmanager.core.business.services.system.ModuleConfigurationService;
@@ -38,7 +39,7 @@ public class ImportIntegrationModule  {
 	public void importSpecificIntegrationModule() throws Exception {
 
 
-			ObjectMapper mapper = new ObjectMapper();
+			ObjectMapper mapper = JsonMapper.builderWithJackson2Defaults().build();
 			File file = new File(" /Users/carlsamson/Documents/dev/workspaces/shopizer-master/shopizer/sm-core/src/main/resources/reference/integrationmodules.json");
 
 
@@ -82,7 +83,7 @@ public class ImportIntegrationModule  {
 	public void importNonExistingIntegrationModule() throws Exception {
 
 
-			ObjectMapper mapper = new ObjectMapper();
+			ObjectMapper mapper = JsonMapper.builderWithJackson2Defaults().build();
 			File file = new File("/Users/carlsamson/Documents/dev/workspaces/shopizer-master/shopizer/sm-core/src/main/resources/reference/integrationmodules.json");
 
 

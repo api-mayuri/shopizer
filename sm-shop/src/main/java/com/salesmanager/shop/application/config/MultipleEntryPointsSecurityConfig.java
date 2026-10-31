@@ -106,8 +106,7 @@ public class MultipleEntryPointsSecurityConfig {
 
 	private static DaoAuthenticationProvider daoProvider(UserDetailsService userDetailsService,
 			PasswordEncoder passwordEncoder) {
-		DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
-		provider.setUserDetailsService(userDetailsService);
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
 		provider.setPasswordEncoder(passwordEncoder);
 		return provider;
 	}
@@ -216,9 +215,7 @@ public class MultipleEntryPointsSecurityConfig {
 		@Bean
 		public JWTAdminAuthenticationProvider jwtAdminAuthenticationProvider(
 				JWTAdminServicesImpl jwtUserDetailsService) {
-			JWTAdminAuthenticationProvider provider = new JWTAdminAuthenticationProvider();
-			provider.setUserDetailsService(jwtUserDetailsService);
-			return provider;
+			return new JWTAdminAuthenticationProvider(jwtUserDetailsService);
 		}
 
 		@Bean("jwtAdminAuthenticationManager")
@@ -263,9 +260,7 @@ public class MultipleEntryPointsSecurityConfig {
 		@Bean
 		public JWTCustomerAuthenticationProvider jwtCustomerAuthenticationProvider(
 				@Qualifier("jwtCustomerDetailsService") UserDetailsService jwtCustomerDetailsService) {
-			JWTCustomerAuthenticationProvider provider = new JWTCustomerAuthenticationProvider();
-			provider.setUserDetailsService(jwtCustomerDetailsService);
-			return provider;
+			return new JWTCustomerAuthenticationProvider(jwtCustomerDetailsService);
 		}
 
 		@Bean("jwtCustomerAuthenticationManager")
