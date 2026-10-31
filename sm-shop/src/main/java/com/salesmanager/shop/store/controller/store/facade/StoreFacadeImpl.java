@@ -1,5 +1,7 @@
 package com.salesmanager.shop.store.controller.store.facade;
 
+import org.springframework.context.annotation.Lazy;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -70,6 +72,7 @@ public class StoreFacadeImpl implements StoreFacade {
 	@Qualifier("img")
 	private ImageFilePath imageUtils;
 
+	@Lazy // breaks a bean dependency cycle
 	@Inject
 	private LanguageUtils languageUtils;
 	

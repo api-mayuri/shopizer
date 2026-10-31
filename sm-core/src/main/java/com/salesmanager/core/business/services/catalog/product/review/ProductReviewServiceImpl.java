@@ -1,5 +1,7 @@
 package com.salesmanager.core.business.services.catalog.product.review;
 
+import org.springframework.context.annotation.Lazy;
+
 import java.math.BigDecimal;
 import java.util.List;
 
@@ -25,6 +27,7 @@ public class ProductReviewServiceImpl extends
 
 	private ProductReviewRepository productReviewRepository;
 	
+	@Lazy // breaks a bean dependency cycle
 	@Inject
 	private ProductService productService;
 	
