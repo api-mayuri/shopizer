@@ -104,6 +104,8 @@ public class DataConfiguration {
         
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", hbm2ddl);
         hibernateProperties.setProperty("hibernate.default_schema", schema);
+        // create the schema (namespace) when Hibernate creates/updates tables (not used with validate + Flyway)
+        hibernateProperties.setProperty("hibernate.hbm2ddl.create_namespaces", "true");
         hibernateProperties.setProperty("hibernate.dialect", dialect);
         hibernateProperties.setProperty("hibernate.show_sql", showSql);
         hibernateProperties.setProperty("hibernate.cache.use_second_level_cache", "true");

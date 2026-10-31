@@ -14,7 +14,24 @@ jobs:
           distribution: temurin
           java-version: '21'
           cache: maven
-      - name: Build and test
+      - name: Build and test (H2)
         run: mvn -B -ntp install
-      - name: Smoke test
+      - name: Smoke test (H2)
         run: ./scripts/smoke.sh
+
+  postgresql:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '21'
+          cache: maven
+      - name: Tests on PostgreSQL 18
+        run: ./scripts/test-postgres.sh
+      - name: Smoke test (PostgreSQL 18)
+        env:
+          SPRING_PROFILES_ACTIVE: postgresql
+          SHOPIZER_DB_URL: jdbc:postgresql://localhost:55432/shopizer_test_shop
+        run: mvn -B -ntp -q package -DskipTests && ./scripts/smoke.sh

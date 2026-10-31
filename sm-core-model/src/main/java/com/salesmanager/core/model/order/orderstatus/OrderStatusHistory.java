@@ -1,7 +1,6 @@
 package com.salesmanager.core.model.order.orderstatus;
 
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import org.hibernate.Length;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -54,8 +53,7 @@ public class OrderStatusHistory implements Serializable {
 	@Column(name = "CUSTOMER_NOTIFIED")
 	private java.lang.Integer customerNotified;
 	
-	@Column(name = "COMMENTS")
-	@JdbcTypeCode(SqlTypes.LONG32VARCHAR)
+	@Column(name = "COMMENTS", length = Length.LONG32)
 	private String comments;
 	
 	public OrderStatusHistory() {

@@ -28,6 +28,16 @@
 			<artifactId>spring-boot-starter-data-jpa</artifactId>
 		</dependency>
 
+		<!-- Database migrations (PostgreSQL profile) -->
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-core</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.flywaydb</groupId>
+			<artifactId>flyway-database-postgresql</artifactId>
+		</dependency>
+
 		<!-- Hibernate second level cache through JCache (Ehcache 3), replaces hibernate-ehcache -->
 		<dependency>
 			<groupId>org.hibernate.orm</groupId>

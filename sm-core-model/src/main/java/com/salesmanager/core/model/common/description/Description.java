@@ -1,7 +1,6 @@
 package com.salesmanager.core.model.common.description;
 
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import org.hibernate.Length;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -49,8 +48,7 @@ public class Description implements Auditable, Serializable {
 	@Column(name="TITLE", length=100)
 	private String title;
 	
-	@Column(name="DESCRIPTION")
-	@JdbcTypeCode(SqlTypes.LONG32VARCHAR)
+	@Column(name="DESCRIPTION", length = Length.LONG32)
 	private String description;
 	
 	public Description() {

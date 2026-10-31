@@ -1,7 +1,6 @@
 package com.salesmanager.core.model.system;
 
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import org.hibernate.Length;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -58,8 +57,7 @@ public class IntegrationModule extends SalesManagerEntity<Long, IntegrationModul
 	@Column(name = "CONFIGURATION", length=4000)
 	private String configuration;
 
-	@Column(name = "DETAILS")
-	@JdbcTypeCode(SqlTypes.LONG32VARCHAR)
+	@Column(name = "DETAILS", length = Length.LONG32)
 	private String configDetails;
 
 	@Column(name = "TYPE")

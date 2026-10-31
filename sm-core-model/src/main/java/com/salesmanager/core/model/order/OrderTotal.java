@@ -1,7 +1,6 @@
 package com.salesmanager.core.model.order;
 
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import org.hibernate.Length;
 
 import java.io.Serial;
 import java.math.BigDecimal;
@@ -47,8 +46,7 @@ public class OrderTotal extends SalesManagerEntity<Long, OrderTotal> {
 	@Column (name ="TITLE", nullable=true)
 	private String title;
 	
-	@Column (name ="TEXT", nullable=true)
-	@JdbcTypeCode(SqlTypes.LONG32VARCHAR)
+	@Column(name ="TEXT", nullable=true, length = Length.LONG32)
 	private String text;
 	
 	@Column (name ="VALUE", precision=15, scale=4, nullable=false )

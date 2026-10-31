@@ -1,5 +1,7 @@
 #!/usr/bin/env bash
-# Smoke test: starts sm-shop jar on H2 (default profile), checks key endpoints, stops the app.
+# Smoke test: starts the sm-shop jar, checks key endpoints, stops the app.
+# Default: H2 (default profile). PostgreSQL: SPRING_PROFILES_ACTIVE=postgresql ./scripts/smoke.sh
+# (connection settings: SHOPIZER_DB_URL / SHOPIZER_DB_USER / SHOPIZER_DB_PASSWORD).
 set -u
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 JAR="$(ls "$ROOT"/sm-shop/target/shopizer.jar "$ROOT"/sm-shop/target/sm-shop-*.jar 2>/dev/null | grep -v original | head -1)"
@@ -25,6 +27,7 @@ for i in $(seq 1 180); do
 done
 
 FAIL=0
+EMAIL="smoke-$(date +%s)-$RANDOM@test.com"
 check() { # path expected_code
   code=$(curl -s -o "$WORK/body" -w '%{http_code}' "http://localhost:$PORT$1")
   if [ "$code" = "$2" ]; then echo "OK   $code $1"; else echo "FAIL $code $1 (expected $2)"; head -c 300 "$WORK/body"; echo; FAIL=1; fi
@@ -56,11 +59,11 @@ code=$(curl -s -o /dev/null -w '%{http_code}' -X POST -H 'Content-Type: applicat
 
 # customer: register, login (JWT), authenticated profile call
 code=$(curl -s -o "$WORK/body" -w '%{http_code}' -X POST -H 'Content-Type: application/json' \
-  -d '{"emailAddress":"smoke@test.com","password":"Smoke123!","gender":"M","language":"en","storeCode":"DEFAULT","billing":{"firstName":"Smoke","lastName":"Test","country":"CA"}}' \
+  -d '{"emailAddress":"'"$EMAIL"'","password":"Smoke123!","gender":"M","language":"en","storeCode":"DEFAULT","billing":{"firstName":"Smoke","lastName":"Test","country":"CA"}}' \
   "http://localhost:$PORT/api/v1/customer/register")
 [ "$code" = 200 ] && echo "OK   $code customer register" || { echo "FAIL $code customer register"; head -c 300 "$WORK/body"; echo; FAIL=1; }
 CTOKEN=$(curl -s -X POST -H 'Content-Type: application/json' \
-  -d '{"username":"smoke@test.com","password":"Smoke123!"}' \
+  -d '{"username":"'"$EMAIL"'","password":"Smoke123!"}' \
   "http://localhost:$PORT/api/v1/customer/login" | sed -n 's/.*"token":"\([^"]*\)".*/\1/p')
 if [ -n "$CTOKEN" ]; then
   echo "OK   customer login"

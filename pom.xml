@@ -395,6 +395,12 @@
 			<artifactId>mysql-connector-j</artifactId>
 		</dependency>
 
+		<!-- PostgreSQL (spring profile "postgresql") -->
+		<dependency>
+			<groupId>org.postgresql</groupId>
+			<artifactId>postgresql</artifactId>
+		</dependency>
+
 
 	</dependencies>
 

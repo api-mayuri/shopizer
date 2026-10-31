@@ -43,3 +43,11 @@ Each step lives on its own branch (`migration/stepN-*`) and is done only when:
 - Main manual changes: Ehcache 3/JCache (D-21), text columns (D-22), Hibernate 6.6 mappings & JPQL (D-23),
   id=0 merge listener (D-24), validation kept off (D-26), trailing slash filter (D-27),
   third party leftovers (D-28: shopizer starters, Infinispan + Caffeine 2, jjwt + jaxb-api).
+
+## Step 3 — PostgreSQL 18 (`migration/step3-postgresql`)
+
+- New spring profile `postgresql` (env based configuration), Flyway (`V1__baseline.sql`) + Hibernate `validate`.
+- Tests on H2 (default `mvn install`): sm-core 21 / 0 failures / 6 skipped; sm-shop 31 / 0 failures / 6 skipped.
+- **Tests on PostgreSQL 18.6** (`scripts/test-postgres.sh`): same numbers, all green.
+- Smoke: OK on H2 and on PostgreSQL 18 (fresh DB and restart on a populated DB).
+- See `docs/POSTGRESQL.md` (running, data migration from MySQL) and DECISIONS D-31..D-36.

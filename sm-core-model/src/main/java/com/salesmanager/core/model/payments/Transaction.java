@@ -1,7 +1,6 @@
 package com.salesmanager.core.model.payments;
 
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import org.hibernate.Length;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -83,8 +82,7 @@ public class Transaction extends SalesManagerEntity<Long, Transaction> implement
 	@Enumerated(value = EnumType.STRING)
 	private PaymentType paymentType;
 	
-	@Column(name="DETAILS")
-	@JdbcTypeCode(SqlTypes.LONG32VARCHAR)
+	@Column(name="DETAILS", length = Length.LONG32)
 	private String details;
 	
 	@Transient

@@ -1,7 +1,6 @@
 package com.salesmanager.core.model.system;
 
-import org.hibernate.annotations.JdbcTypeCode;
-import org.hibernate.type.SqlTypes;
+import org.hibernate.Length;
 
 import java.io.Serial;
 import java.io.Serializable;
@@ -49,8 +48,7 @@ public class MerchantLog extends SalesManagerEntity<Long, MerchantLog> implement
 	private String module;
 	
 
-	@Column(name="LOG")
-	@JdbcTypeCode(SqlTypes.LONG32VARCHAR)
+	@Column(name="LOG", length = Length.LONG32)
 	private String log;
 	
 	public MerchantLog(MerchantStore store, String log) {

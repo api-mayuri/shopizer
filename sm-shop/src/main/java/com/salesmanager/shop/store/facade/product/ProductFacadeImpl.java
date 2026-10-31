@@ -38,7 +38,7 @@ import com.salesmanager.shop.utils.ImageFilePath;
 import com.salesmanager.shop.utils.LocaleUtils;
 
 @Service("productFacade")
-@Profile({ "default", "cloud", "gcp", "aws", "mysql" , "local" })
+@Profile({ "default", "cloud", "gcp", "aws", "mysql", "local", "postgresql" })
 public class ProductFacadeImpl implements ProductFacade {
 
 	@Inject
