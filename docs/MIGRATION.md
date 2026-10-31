@@ -26,8 +26,7 @@ mvn -DskipTests install && docker compose up --build   # PostgreSQL 18 + Shopize
 
 ## Техдолг и что стоит сделать дальше (по приоритету)
 
-1. **JWT-секрет и jjwt** (D-28): секрет по умолчанию `aSecret` небезопасен. Заменить секрет (≥ 64 байт) и обновить jjwt 0.8 → 0.12
-   (это уберёт и `javax.xml.bind:jaxb-api`).
+1. ~~**JWT-секрет и jjwt**~~ — сделано (D-50): jjwt 0.13, `SHOPIZER_JWT_SECRET` (Base64, ≥ 64 байт).
 2. **Spring Boot 4.1** (D-45): переписать запросы с фильтром по алиасам `join fetch`-коллекций, затем поднять Boot.
 3. **Bean Validation** (D-26): в исходном проекте валидация не работала. Включать отдельной задачей, проверив клиентов.
 4. **Циклические зависимости бинов** (D-10): убрать `spring.main.allow-circular-references=true`.

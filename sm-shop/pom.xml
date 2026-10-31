@@ -107,17 +107,20 @@
 			<artifactId>h2</artifactId>
 		</dependency>
 
+		<!-- JWT (jjwt 0.13): api at compile time, implementation and JSON support at runtime -->
 		<dependency>
 			<groupId>io.jsonwebtoken</groupId>
-			<artifactId>jjwt</artifactId>
+			<artifactId>jjwt-api</artifactId>
 		</dependency>
-
-		<!-- jjwt 0.8 uses javax.xml.bind.DatatypeConverter (JAXB is no longer on the classpath with Spring Boot 3).
-		     TODO: upgrade jjwt to 0.12+ together with a >= 64 bytes jwt.secret (see docs/DECISIONS.md) -->
 		<dependency>
-			<groupId>javax.xml.bind</groupId>
-			<artifactId>jaxb-api</artifactId>
-			<version>2.3.1</version>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-impl</artifactId>
+			<scope>runtime</scope>
+		</dependency>
+		<dependency>
+			<groupId>io.jsonwebtoken</groupId>
+			<artifactId>jjwt-jackson</artifactId>
+			<scope>runtime</scope>
 		</dependency>
 
 		<!-- OpenAPI 3 documentation (replaces springfox) -->

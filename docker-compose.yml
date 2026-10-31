@@ -26,6 +26,8 @@ services:
       SHOPIZER_DB_URL: jdbc:postgresql://db:5432/SALESMANAGER
       SHOPIZER_DB_USER: shopizer
       SHOPIZER_DB_PASSWORD: password
+      # Base64 HMAC key, >= 64 bytes (openssl rand -base64 64). Empty: random key, tokens lost on restart.
+      SHOPIZER_JWT_SECRET: ${SHOPIZER_JWT_SECRET:-}
     ports:
       - "8080:8080"
 
