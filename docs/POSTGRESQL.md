@@ -22,6 +22,7 @@ java -jar sm-shop/target/shopizer.jar
 | `SHOPIZER_DB_URL` | `jdbc:postgresql://localhost:5432/SALESMANAGER` | JDBC URL |
 | `SHOPIZER_DB_USER` / `SHOPIZER_DB_PASSWORD` | `shopizer` / `password` | |
 | `SHOPIZER_DB_POOL_SIZE` | `10` | размер пула Hikari |
+| `SHOPIZER_JWT_SECRET` | пусто (случайный ключ) | ключ JWT, Base64, ≥ 64 байт: `openssl rand -base64 64` |
 | `SHOPIZER_DDL_AUTO` | `validate` | режим Hibernate. Не менять: схемой управляет Flyway |
 
 Настройки лежат в `sm-core/src/main/resources/profiles/postgresql/database.properties` и
