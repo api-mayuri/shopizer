@@ -757,6 +757,10 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 		qs.append("left join fetch p.descriptions pd ");
 		qs.append("left join fetch p.categories categs ");
 		qs.append("left join fetch categs.descriptions cd ");
+		if (!CollectionUtils.isEmpty(criteria.getCategoryIds())) {
+			// filter on a plain join, not on the fetched collection (not allowed by JPA, broken SQL with Hibernate 7.2)
+			qs.append("join p.categories categFilter ");
+		}
 		
 
 		// images
@@ -829,7 +833,7 @@ public class ProductRepositoryImpl implements ProductRepositoryCustom {
 		}
 
 		if (!CollectionUtils.isEmpty(criteria.getCategoryIds())) {
-			qs.append(" and categs.id in (:cid)");
+			qs.append(" and categFilter.id in (:cid)");
 		}
 
 

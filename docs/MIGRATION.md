@@ -59,4 +59,4 @@ Each step lives on its own branch (`migration/stepN-*`) and is done only when:
 - Tests on PostgreSQL 18: same numbers, all green.
 - Smoke: OK on H2 and PostgreSQL.
 - REST API JSON compared with step 3 on 17 endpoints: identical (D-42).
-- See DECISIONS D-40..D-44 (Infinispan removed, CMS on file system, Jackson 3, Spring 7 pitfalls).
+- See DECISIONS D-40..D-45 (Infinispan removed, CMS on file system, Jackson 3, Spring 7 pitfalls, why not 4.1 yet).
