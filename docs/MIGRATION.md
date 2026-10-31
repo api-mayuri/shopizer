@@ -1,5 +1,45 @@
 # Migration log
 
+> **Итог:** Java 11 → **25**, Spring Boot 2.5.12 → **4.0.9**, MySQL/H2 → **PostgreSQL 18**.
+> Все шаги в отдельных ветках, ни одна (кроме `migration/step0-baseline`) не запушена.
+> Решения с альтернативами — в [`DECISIONS.md`](DECISIONS.md), PostgreSQL — в [`POSTGRESQL.md`](POSTGRESQL.md).
+
+| Шаг | Ветка | Версии | Тесты H2 (core / shop) | Тесты PostgreSQL | Smoke |
+|---|---|---|---|---|---|
+| 0 | `migration/step0-baseline` | Boot 2.5.12, Java 11 | 15 / 25 выполнено, 0 падений | — | ✅ |
+| 1 | `migration/step1-boot27-java17` | Boot 2.7.18, Java 17 | 15 / 25, 0 | — | ✅ |
+| 2 | `migration/step2-boot35-java21` | Boot 3.5.16, Java 21 | 15 / 25, 0 | — | ✅ |
+| 3 | `migration/step3-postgresql` | + PostgreSQL 18, Flyway | 15 / 25, 0 | 15 / 25, 0 | ✅ H2 + PG |
+| 4 | `migration/step4-boot4-java25` | **Boot 4.0.9, Java 25** | 17 / 25, 0 (+2 новых) | 17 / 25, 0 | ✅ H2 + PG + Docker |
+
+(«выполнено» = запущено минус пропущенные: в проекте 17 файлов тестов с `@Ignore`/`@Disabled` ещё до миграции.)
+
+## Как проверить самому
+
+```bash
+git checkout migration/step4-boot4-java25
+mvn clean install                   # сборка + тесты на H2 (нужен JDK 25)
+./scripts/smoke.sh                  # запуск приложения и проверка ключевых эндпоинтов
+./scripts/test-postgres.sh          # все тесты на PostgreSQL 18 (нужен Docker)
+mvn -DskipTests install && docker compose up --build   # PostgreSQL 18 + Shopizer в Docker
+```
+
+## Техдолг и что стоит сделать дальше (по приоритету)
+
+1. **JWT-секрет и jjwt** (D-28): секрет по умолчанию `aSecret` небезопасен. Заменить секрет (≥ 64 байт) и обновить jjwt 0.8 → 0.12
+   (это уберёт и `javax.xml.bind:jaxb-api`).
+2. **Spring Boot 4.1** (D-45): переписать запросы с фильтром по алиасам `join fetch`-коллекций, затем поднять Boot.
+3. **Bean Validation** (D-26): в исходном проекте валидация не работала. Включать отдельной задачей, проверив клиентов.
+4. **Циклические зависимости бинов** (D-10): убрать `spring.main.allow-circular-references=true`.
+   Логично делать на этапе плагинной архитектуры.
+5. **DTO с `id = 0`** (D-24): перейти на `Long id = null` и убрать `ZeroIdMergeEventListener`.
+6. **CMS по умолчанию** (D-41): для продакшена использовать `aws`/`gcp`. Файловое хранилище годится для dev и одиночного сервера.
+7. Мёртвый код: `ProductQueryBuilder`, профили MySQL/GCP (не тестировались), XML-конфигурация ядра → Java config.
+8. Включить отключённые тесты (`@Disabled`) и расширить покрытие: сейчас реально выполняется около 40 тестов.
+
+---
+
+
 Target: Java 25, Spring Boot 4, PostgreSQL (latest).
 Path: 2.5 → 2.7 / Java 17 → 3.x / Java 21 → PostgreSQL → 4.x / Java 25.
 

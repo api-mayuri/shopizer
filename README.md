@@ -1,3 +1,7 @@
+> **This fork:** Java 25, Spring Boot 4.0, PostgreSQL 18. See [docs/MIGRATION.md](docs/MIGRATION.md),
+> [docs/DECISIONS.md](docs/DECISIONS.md) and [docs/POSTGRESQL.md](docs/POSTGRESQL.md).
+> Quick start: `mvn clean install -DskipTests && docker compose up --build`.
+
 # Shopizer 3 (for java 17 +) (tested with Java 11, 17)
 
 3.2.7

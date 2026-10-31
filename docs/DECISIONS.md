@@ -234,8 +234,9 @@
   Из образа убрано копирование `SALESMANAGER.h2.db`. Этот файл (H2 1.x) и `SALESMANAGER.trace.db` удалены из репозитория:
   H2 2 их не открывает.
 - Добавлен `docker-compose.yml` (PostgreSQL 18 + Shopizer).
-- ⚠️ **Сборку образа проверить не удалось:** Docker Hub ответил 429 (rate limit) на `eclipse-temurin`. Сам PostgreSQL 18
-  из Docker Hub скачался и работал. Приложение с этим профилем проверено напрямую (`java -jar`), но не в контейнере.
+- На шаге 3 собрать образ сразу не удалось: Docker Hub ответил 429. **Проверено позже, на шаге 4:**
+  `docker compose up --build` поднимает PostgreSQL 18 и Shopizer на `eclipse-temurin:25-jre` (Java 25.0.5), Flyway
+  применяет миграцию, эндпоинты (публичные, приватные с JWT, OpenAPI) отвечают 200.
 
 ---
 
