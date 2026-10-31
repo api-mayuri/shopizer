@@ -5,11 +5,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.inject.Inject;
-
+import jakarta.inject.Inject;
+import tools.jackson.databind.json.JsonMapper;
 import org.apache.commons.lang3.StringUtils;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.salesmanager.core.business.exception.ServiceException;
 import com.salesmanager.core.business.services.system.MerchantConfigurationService;
 import com.salesmanager.core.business.utils.ProductPriceUtils;
@@ -65,7 +65,7 @@ public class CustomWeightBasedShippingQuote implements ShippingQuoteModule {
 	
 			if(configuration!=null) {
 				String value = configuration.getValue();
-				ObjectMapper mapper = new ObjectMapper();
+				ObjectMapper mapper = JsonMapper.builderWithJackson2Defaults().build();
 				try {
 					return mapper.readValue(value, CustomShippingQuotesConfiguration.class);
 				} catch(Exception e) {

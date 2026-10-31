@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.commons.lang3.Validate;
 import org.springframework.data.domain.Page;
@@ -73,7 +73,7 @@ public class ProductAvailabilityServiceImpl extends SalesManagerEntityServiceImp
 	@Override
 	public Optional<ProductAvailability> getById(Long availabilityId, MerchantStore store) {
 		Validate.notNull(store, "Merchant must not be null");
-		return Optional.ofNullable(productAvailabilityRepository.getById(availabilityId));
+		return Optional.ofNullable(productAvailabilityRepository.getReferenceById(availabilityId));
 	}
 
 	@Override

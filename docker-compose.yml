@@ -1,0 +1,33 @@
+# Shopizer + PostgreSQL 18
+#   mvn clean install -DskipTests && docker compose up --build
+services:
+  db:
+    image: postgres:18
+    environment:
+      POSTGRES_DB: SALESMANAGER
+      POSTGRES_USER: shopizer
+      POSTGRES_PASSWORD: password
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U shopizer -d SALESMANAGER"]
+      interval: 5s
+      retries: 20
+
+  shopizer:
+    build: ./sm-shop
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      SPRING_PROFILES_ACTIVE: postgresql
+      SHOPIZER_DB_URL: jdbc:postgresql://db:5432/SALESMANAGER
+      SHOPIZER_DB_USER: shopizer
+      SHOPIZER_DB_PASSWORD: password
+    ports:
+      - "8080:8080"
+
+volumes:
+  pgdata:

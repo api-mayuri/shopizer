@@ -156,4 +156,19 @@
 			</beans:property>
 		</beans:bean>
 	</beans:beans>
+	<beans:beans profile="postgresql">
+		<beans:bean
+			class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+			<beans:property name="ignoreUnresolvablePlaceholders"
+				value="false" />
+			<beans:property name="locations">
+				<beans:list>
+					<beans:value>classpath:profiles/postgresql/database.properties</beans:value>
+					<beans:value>classpath:email.properties</beans:value>
+					<beans:value>classpath:shopizer-core.properties</beans:value>
+					<beans:value>classpath:authentication.properties</beans:value>
+				</beans:list>
+			</beans:property>
+		</beans:bean>
+	</beans:beans>
 </beans:beans>

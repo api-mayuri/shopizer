@@ -1,14 +1,14 @@
 package com.salesmanager.test.shop.integration.order;
 
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.resttestclient.TestRestTemplate;
 
 import com.salesmanager.shop.model.shoppingcart.ReadableShoppingCart;
 import com.salesmanager.test.shop.common.ServicesTestSupport;
 
 
-@Ignore
+@Disabled
 public class OrderApiIntegrationTest extends ServicesTestSupport {
 	
     @Autowired

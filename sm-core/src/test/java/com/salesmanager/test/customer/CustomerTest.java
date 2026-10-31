@@ -5,8 +5,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import com.salesmanager.core.business.exception.ServiceException;
 import com.salesmanager.core.model.common.Billing;
@@ -25,8 +25,7 @@ import com.salesmanager.core.model.reference.language.Language;
 import com.salesmanager.core.model.reference.zone.Zone;
 
 
-
-@Ignore
+@Disabled
 public class CustomerTest extends com.salesmanager.test.common.AbstractSalesManagerCoreTestCase {
 	
 	@Test
@@ -193,9 +192,9 @@ public class CustomerTest extends com.salesmanager.test.common.AbstractSalesMana
 		customerOptionService.update(option);
 		
 		List<CustomerOptionSet> optionSetList = customerOptionSetService.listByStore(store, en);
-		
+
 		//Assert.assertEquals(3, optionSetList.size());
-		System.out.println("Size of options : " + optionSetList.size());
+		IO.println("Size of options : " + optionSetList.size());
 		
 		/**
 		 * Now create a customer option attribute

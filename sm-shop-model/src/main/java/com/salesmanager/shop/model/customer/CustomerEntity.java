@@ -1,36 +1,38 @@
 package com.salesmanager.shop.model.customer;
 
+import java.io.Serial;
 import java.io.Serializable;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
 
 import org.springframework.validation.annotation.Validated;
 
 import com.salesmanager.shop.model.customer.address.Address;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 public class CustomerEntity extends Customer implements Serializable {
 
 	/**
 	 *
 	 */
+	@Serial
 	private static final long serialVersionUID = 1L;
 
-	@ApiModelProperty(notes = "Customer email address. Required for registration")
+	@Schema
 	@Email (message="{messages.invalid.email}")
     @NotEmpty(message="{NotEmpty.customer.emailAddress}")
 	private String emailAddress;
 	@Valid
-	@ApiModelProperty(notes = "Customer billing address")
+	@Schema
 	private Address billing;
 	private Address delivery;
-	@ApiModelProperty(notes = "Customer gender M | F")
+	@Schema
 	private String gender;
 
-	@ApiModelProperty(notes = "2 letters language code en | fr | ...")
+	@Schema
 	private String language;
 	private String firstName;
 	private String lastName;

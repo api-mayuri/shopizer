@@ -5,7 +5,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.Validate;
@@ -44,7 +44,7 @@ import com.salesmanager.shop.utils.LocaleUtils;
 
 
 @Service("productFacadeV2")
-@Profile({ "default", "cloud", "gcp", "aws", "mysql" , "local" })
+@Profile({ "default", "cloud", "gcp", "aws", "mysql", "local", "postgresql" })
 public class ProductFacadeV2Impl implements ProductFacade {
 	
 
@@ -162,7 +162,7 @@ public class ProductFacadeV2Impl implements ProductFacade {
 			if (criterias.getCategoryIds().size() == 1) {
 
 				com.salesmanager.core.model.catalog.category.Category category = categoryService
-						.getById(criterias.getCategoryIds().get(0));
+						.getById(criterias.getCategoryIds().getFirst());
 
 				if (category != null) {
 					String lineage = new StringBuilder().append(category.getLineage())

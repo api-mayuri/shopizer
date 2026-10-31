@@ -57,36 +57,36 @@ public class IndexProductEventListener implements ApplicationListener<ProductEve
 		
 		if(!noIndex) {
 
-			if (event instanceof SaveProductEvent) {
-				saveProduct((SaveProductEvent) event);
+			if (event instanceof SaveProductEvent productEvent) {
+				saveProduct(productEvent);
 			}
 	
-			if (event instanceof DeleteProductEvent) {
-				deleteProduct((DeleteProductEvent) event);
+			if (event instanceof DeleteProductEvent productEvent1) {
+				deleteProduct(productEvent1);
 			}
 	
-			if (event instanceof SaveProductVariantEvent) {
-				saveProductVariant((SaveProductVariantEvent) event);
+			if (event instanceof SaveProductVariantEvent variantEvent) {
+				saveProductVariant(variantEvent);
 			}
 	
-			if (event instanceof DeleteProductVariantEvent) {
-				deleteProductVariant((DeleteProductVariantEvent) event);
+			if (event instanceof DeleteProductVariantEvent variantEvent1) {
+				deleteProductVariant(variantEvent1);
 			}
 			
-			if (event instanceof SaveProductImageEvent) {
-				saveProductImage((SaveProductImageEvent) event);
+			if (event instanceof SaveProductImageEvent imageEvent) {
+				saveProductImage(imageEvent);
 			}
 	
-			if (event instanceof DeleteProductImageEvent) {
-				deleteProductImage((DeleteProductImageEvent) event);
+			if (event instanceof DeleteProductImageEvent imageEvent1) {
+				deleteProductImage(imageEvent1);
 			}
 			
-			if (event instanceof SaveProductAttributeEvent) {
-				saveProductAttribute((SaveProductAttributeEvent) event);
+			if (event instanceof SaveProductAttributeEvent attributeEvent) {
+				saveProductAttribute(attributeEvent);
 			}
 	
-			if (event instanceof DeleteProductAttributeEvent) {
-				deleteProductAttribute((DeleteProductAttributeEvent) event);
+			if (event instanceof DeleteProductAttributeEvent attributeEvent1) {
+				deleteProductAttribute(attributeEvent1);
 			}
 			
 			
@@ -110,7 +110,7 @@ public class IndexProductEventListener implements ApplicationListener<ProductEve
 			if(fullProduct != null) {
 				product = fullProduct;
 			} else {
-				System.out.println("Product not loaded");
+				IO.println("Product not loaded");
 			}
 			
 		return product;

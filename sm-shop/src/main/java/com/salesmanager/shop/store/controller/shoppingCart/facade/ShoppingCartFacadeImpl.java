@@ -16,17 +16,17 @@ import java.util.Set;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-import javax.persistence.NoResultException;
+import jakarta.inject.Inject;
+import jakarta.persistence.NoResultException;
 
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
+import org.jspecify.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.lang.Nullable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
@@ -371,7 +371,7 @@ public class ShoppingCartFacadeImpl implements ShoppingCartFacade {
 					.populateShoppingCartItem(p, store);
 			Optional<PersistableShoppingCartItem> oShoppingCartItem = shoppingCartItems.stream()
 					.filter(i -> i.getProduct().equals(p.getSku())).findFirst();
-			if (!oShoppingCartItem.isPresent()) {
+			if (oShoppingCartItem.isEmpty()) {
 				// Should never happen if not something is updated in realtime or user has item
 				// in local storage and add it long time after to cart!
 				LOG.warn("Missing shoppingCartItem for product " + p.getSku() + " ( " + p.getId() + " )");
@@ -771,8 +771,8 @@ public class ShoppingCartFacadeImpl implements ShoppingCartFacade {
 		try {
 			return readableShoppingCart(cartModel, item, store, language);
 		} catch (Exception e) {
-			if (e instanceof ResourceNotFoundException) {
-				throw (ResourceNotFoundException) e;
+			if (e instanceof ResourceNotFoundException exception) {
+				throw exception;
 			} else {
 				throw new ServiceRuntimeException(e.getMessage(),e);
 			}

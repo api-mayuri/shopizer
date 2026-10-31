@@ -2,16 +2,16 @@ package com.salesmanager.shop.store.api.v1.product;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletResponse;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -22,10 +22,10 @@ import com.salesmanager.core.model.reference.language.Language;
 import com.salesmanager.shop.model.catalog.product.ReadableProduct;
 import com.salesmanager.shop.store.controller.product.facade.ProductFacade;
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import io.swagger.annotations.ApiOperation;
-import springfox.documentation.annotations.ApiIgnore;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @Controller
 @RequestMapping("/api/v1")
@@ -38,24 +38,22 @@ public class ProductRelationshipApi {
   private static final Logger LOGGER = LoggerFactory.getLogger(ProductRelationshipApi.class);
 
 
-  @RequestMapping(value = "/product/{id}/related", method = RequestMethod.GET)
+  @GetMapping("/product/{id}/related")
   @ResponseStatus(HttpStatus.OK)
-  @ApiOperation(
-      httpMethod = "GET",
-      value =
+  @Operation(
+      method = "GET",
+      summary =
           "Get product related items. This is used for doing cross-sell and up-sell functionality on a product details page",
-      notes = "",
-      produces = "application/json",
-      response = List.class)
+      description = "")
   @ResponseBody
-  @ApiImplicitParams({
-      @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
-      @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")
+  @Parameters({
+			@Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
+			@Parameter(name = "lang", schema = @Schema(defaultValue = "en"))
   })
   public List<ReadableProduct> getAll(
       @PathVariable final Long id,
-      @ApiIgnore MerchantStore merchantStore,
-      @ApiIgnore Language language,
+      @Parameter(hidden = true) MerchantStore merchantStore,
+      @Parameter(hidden = true) Language language,
       HttpServletResponse response)
       throws Exception {
 

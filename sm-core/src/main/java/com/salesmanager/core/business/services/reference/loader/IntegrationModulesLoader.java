@@ -5,12 +5,12 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+import tools.jackson.databind.json.JsonMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.salesmanager.core.business.exception.ServiceException;
 import com.salesmanager.core.model.system.IntegrationModule;
 import com.salesmanager.core.model.system.ModuleConfig;
@@ -27,7 +27,7 @@ public class IntegrationModulesLoader {
 		
 		List<IntegrationModule> modules = new ArrayList<IntegrationModule>();
 		
-		ObjectMapper mapper = new ObjectMapper();
+		ObjectMapper mapper = JsonMapper.builderWithJackson2Defaults().build();
 		
 		try {
 			
@@ -60,7 +60,7 @@ public class IntegrationModulesLoader {
 	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public IntegrationModule loadModule(Map object) throws Exception {
 		
-			ObjectMapper mapper = new ObjectMapper();
+			ObjectMapper mapper = JsonMapper.builderWithJackson2Defaults().build();
 	    	IntegrationModule module = new IntegrationModule();
 	    	module.setModule((String)object.get("module"));
 	    	module.setCode((String)object.get("code"));

@@ -1,17 +1,18 @@
 package com.salesmanager.core.model.order.orderproduct;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.TableGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.salesmanager.core.constants.SchemaConstant;
@@ -19,6 +20,7 @@ import com.salesmanager.core.constants.SchemaConstant;
 @Entity
 @Table (name="ORDER_PRODUCT_ATTRIBUTE" )
 public class OrderProductAttribute implements Serializable {
+	@Serial
 	private static final long serialVersionUID = 6037571119918073015L;
 
 	@Id

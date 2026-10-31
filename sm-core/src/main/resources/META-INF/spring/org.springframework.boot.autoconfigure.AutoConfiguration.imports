@@ -1,0 +1,5 @@
+# Spring Boot 3 no longer reads META-INF/spring.factories for auto-configurations.
+# These third party Shopizer starters still register their auto-configuration there,
+# so they are listed here to keep them active (see docs/DECISIONS.md).
+com.shopizer.modules.shipping.canadapost.autoconfigure.CanadaPostAutoConfiguration
+com.shopizer.search.autoconfigure.SearchAutoConfiguration

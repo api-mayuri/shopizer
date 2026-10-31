@@ -1,16 +1,15 @@
 package com.salesmanager.core.model.customer.connection;
 
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
-import javax.persistence.Table;
-import javax.persistence.UniqueConstraint;
+import java.io.Serial;
+
+import jakarta.persistence.Id;
+import jakarta.persistence.MappedSuperclass;
 
 import com.salesmanager.core.constants.SchemaConstant;
 
 @Deprecated
 @MappedSuperclass
-@Table(name="USERCONNECTION", uniqueConstraints = { @UniqueConstraint(columnNames = { "userId",
-		"providerId", "userRank" }) })
+// note: @Table on a @MappedSuperclass was always ignored by JPA/Hibernate 5 and is rejected by Hibernate 6
 public abstract class AbstractUserConnectionWithCompositeKey extends
 		AbstractUserConnection<UserConnectionPK> {
 
@@ -20,6 +19,7 @@ public abstract class AbstractUserConnectionWithCompositeKey extends
 	/**
 	 * 
 	 */
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	@Override

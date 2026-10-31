@@ -1,23 +1,23 @@
 package com.salesmanager.test.shipping;
 
-import javax.inject.Inject;
-
-import org.junit.Ignore;
+import jakarta.inject.Inject;
 
 import com.salesmanager.core.model.common.Delivery;
+
+import org.junit.jupiter.api.Disabled;
 import com.salesmanager.core.model.reference.country.Country;
 import com.salesmanager.core.model.reference.zone.Zone;
 import com.salesmanager.core.model.shipping.ShippingOrigin;
 import com.salesmanager.core.model.shipping.ShippingQuote;
 import com.salesmanager.core.modules.integration.shipping.model.ShippingQuotePrePostProcessModule;
 
-@Ignore
+@Disabled
 public class ShippingDistanceProcessorTest {
 	
 	@Inject
 	ShippingQuotePrePostProcessModule shippingDecisionTablePreProcessor;
 
-	@Ignore
+	@Disabled
 	public void testDistance() throws Exception {
 		
 		ShippingQuote shippingQuote = new ShippingQuote();
@@ -44,11 +44,11 @@ public class ShippingDistanceProcessorTest {
 		origin.setPostalCode("H2S 3S3");
 		origin.setZone(zone);
 		origin.setCountry(country);
-		
+
 		//shippingDecisionTablePreProcessor.prePostProcessShippingQuotes(shippingQuote, null, null, delivery, origin, null, null, null, null, null, Locale.CANADA);
 		
-		System.out.println(delivery.getLatitude());
-		System.out.println(delivery.getLongitude());
+		IO.println(delivery.getLatitude());
+		IO.println(delivery.getLongitude());
 		//System.out.println(shippingQuote.getQuoteInformations().get(Constants.DISTANCE_KEY));
 
 	}

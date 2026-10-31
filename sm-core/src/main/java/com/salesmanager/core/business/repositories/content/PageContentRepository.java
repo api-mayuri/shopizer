@@ -3,13 +3,14 @@ package com.salesmanager.core.business.repositories.content;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.PagingAndSortingRepository;
 
 import com.salesmanager.core.model.content.Content;
 import com.salesmanager.core.model.content.ContentType;
 import com.salesmanager.core.model.merchant.MerchantStore;
 
-public interface PageContentRepository extends PagingAndSortingRepository<MerchantStore, Long> {
+public interface PageContentRepository extends PagingAndSortingRepository<MerchantStore, Long>, CrudRepository<MerchantStore, Long> {
 	
 	
 

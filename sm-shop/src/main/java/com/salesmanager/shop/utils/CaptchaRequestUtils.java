@@ -1,24 +1,27 @@
 package com.salesmanager.shop.utils;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.core.type.TypeReference;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+
 import com.salesmanager.core.business.utils.CoreConfiguration;
 import com.salesmanager.shop.constants.ApplicationConstants;
 import org.apache.commons.lang3.StringUtils;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpResponse;
-import org.apache.http.HttpStatus;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.entity.UrlEncodedFormEntity;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.impl.client.HttpClientBuilder;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.core5.http.message.StatusLine;
+import org.apache.hc.core5.http.HttpEntity;
+import org.apache.hc.core5.http.HttpStatus;
+import org.apache.hc.core5.http.NameValuePair;
+import org.apache.hc.client5.http.entity.UrlEncodedFormEntity;
+import org.apache.hc.client5.http.classic.methods.HttpPost;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.core5.http.ClassicHttpResponse;
+import org.apache.hc.core5.http.io.entity.EntityUtils;
+import org.apache.hc.core5.http.message.BasicNameValuePair;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,9 +49,9 @@ public class CaptchaRequestUtils {
 	
 	public boolean checkCaptcha(String gRecaptchaResponse) throws Exception {
 
-		HttpClient client = HttpClientBuilder.create().build();
+		CloseableHttpClient client = HttpClientBuilder.create().build();
 	    
-	    String url = configuration.getProperty(ApplicationConstants.RECAPTCHA_URL);;
+	    String url = configuration.getProperty(ApplicationConstants.RECAPTCHA_URL);
 
         List<NameValuePair> data = new ArrayList<NameValuePair>();
         data.add(new BasicNameValuePair("secret",  secretKey));
@@ -64,11 +67,11 @@ public class CaptchaRequestUtils {
 
 	    try {
 	      // Execute the method.
-            HttpResponse httpResponse = client.execute(post);
-            int statusCode = httpResponse.getStatusLine().getStatusCode();
+            ClassicHttpResponse httpResponse = client.executeOpen(null, post, null);
+            int statusCode = httpResponse.getCode();
 
 	      if (statusCode != HttpStatus.SC_OK) {
-	    	throw new Exception("Got an invalid response from reCaptcha " + url + " [" + httpResponse.getStatusLine() + "]");
+	    	throw new Exception("Got an invalid response from reCaptcha " + url + " [" + new StatusLine(httpResponse) + "]");
 	      }
 
 	      // Read the response body.
@@ -83,7 +86,7 @@ public class CaptchaRequestUtils {
 	      String json = new String(responseBody);
 	      
 	      Map<String,String> map = new HashMap<String,String>();
-	  	  ObjectMapper mapper = new ObjectMapper();
+	  	  ObjectMapper mapper = JsonMapper.builderWithJackson2Defaults().build();
 	  	  
 	  	  map = mapper.readValue(json, 
 			    new TypeReference<HashMap<String,String>>(){});
@@ -104,7 +107,7 @@ public class CaptchaRequestUtils {
 
 	    } finally {
 	      // Release the connection.
-	      post.releaseConnection();
+	      post.reset();
 	    }  
 	  }
 

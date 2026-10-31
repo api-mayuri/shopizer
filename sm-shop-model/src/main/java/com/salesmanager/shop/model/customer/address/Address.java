@@ -1,8 +1,9 @@
 package com.salesmanager.shop.model.customer.address;
 
+import java.io.Serial;
 import java.io.Serializable;
 
-import io.swagger.annotations.ApiModelProperty;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 
 /**
@@ -11,17 +12,18 @@ import io.swagger.annotations.ApiModelProperty;
  *
  */
 public class Address extends AddressLocation implements Serializable {
-	
+
 	/**
 	 * 
 	 */
+	@Serial
 	private static final long serialVersionUID = 1L;
 
-	@ApiModelProperty(notes = "Customer billing first name")
+	@Schema
 	//@NotEmpty(message="{NotEmpty.customer.firstName}")
 	private String firstName;
 	
-	@ApiModelProperty(notes = "Customer billing last name")
+	@Schema
 	//@NotEmpty(message="{NotEmpty.customer.lastName}")
 	private String lastName;
 	
@@ -30,24 +32,24 @@ public class Address extends AddressLocation implements Serializable {
 	private String company;
 
 	private String phone;
-	@ApiModelProperty(notes = "Customer billing or shipping address")
+	@Schema
 	private String address;
-	@ApiModelProperty(notes = "Customer billing or shipping city")
+	@Schema
 	private String city;
 	
 
 	
-	@ApiModelProperty(notes = "Customer billing or shipping state / province (if no 2 letter codes, example: North estate)")
+	@Schema
 	private String stateProvince;
 	private boolean billingAddress;
 	
 	private String latitude;
 	private String longitude;
 	
-	@ApiModelProperty(notes = "Customer billing or shipping state / province (2 letter code CA, ON...)")
+	@Schema
 	private String zone;//code
 	
-	@ApiModelProperty(notes = "Customer billing or shipping country code (2 letter code US, CA, UK, IT, IN, CN...)")
+	@Schema
 	//@NotEmpty(message="{NotEmpty.customer.billing.country}")
 	private String country;//code
 	

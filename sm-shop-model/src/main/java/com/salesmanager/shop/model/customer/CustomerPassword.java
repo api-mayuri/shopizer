@@ -1,18 +1,20 @@
 package com.salesmanager.shop.model.customer;
 
+import java.io.Serial;
 import java.io.Serializable;
-import javax.validation.constraints.Size;
-import javax.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.NotEmpty;
 import com.salesmanager.shop.validation.FieldMatch;
 
 @FieldMatch.List({
     @FieldMatch(first="password",second="checkPassword",message="password.notequal")
 })
 public class CustomerPassword implements Serializable {
-	
+
 	/**
 	 * 
 	 */
+	@Serial
 	private static final long serialVersionUID = 1L;
 	@NotEmpty( message="{currentpassword.not.empty}")
 	private String currentPassword;

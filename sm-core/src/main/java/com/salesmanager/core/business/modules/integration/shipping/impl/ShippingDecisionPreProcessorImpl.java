@@ -6,7 +6,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
@@ -133,7 +133,7 @@ public class ShippingDecisionPreProcessorImpl implements ShippingQuotePrePostPro
 		}
 		
 		LOGGER.debug("Setting input parameters " + inputParameters.toString());
-		System.out.println(inputParameters.toString());
+		IO.println(inputParameters.toString());
 		
 		
 		/**

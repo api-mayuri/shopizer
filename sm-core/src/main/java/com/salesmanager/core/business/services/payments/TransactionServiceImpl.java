@@ -1,6 +1,8 @@
 package com.salesmanager.core.business.services.payments;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
+import tools.jackson.databind.json.JsonMapper;
+
 import com.salesmanager.core.business.exception.ServiceException;
 import com.salesmanager.core.business.repositories.payments.TransactionRepository;
 import com.salesmanager.core.business.services.common.generic.SalesManagerEntityServiceImpl;
@@ -11,7 +13,7 @@ import com.salesmanager.core.model.payments.TransactionType;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +21,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 import java.util.stream.Collectors;
-
 
 
 @Service("transactionService")
@@ -52,7 +53,7 @@ public class TransactionServiceImpl  extends SalesManagerEntityServiceImpl<Long,
 	public List<Transaction> listTransactions(Order order) throws ServiceException {
 		
 		List<Transaction> transactions = transactionRepository.findByOrder(order.getId());
-		ObjectMapper mapper = new ObjectMapper();
+		ObjectMapper mapper = JsonMapper.builderWithJackson2Defaults().build();
 		for(Transaction transaction : transactions) {
 				if(!StringUtils.isBlank(transaction.getDetails())) {
 					try {
@@ -104,8 +105,8 @@ public class TransactionServiceImpl  extends SalesManagerEntityServiceImpl<Long,
 	    Entry<String,Transaction> last = map.lastEntry();
 	    
 	    String currentStep = last.getKey();
-	    
-	    System.out.println("Current step " + currentStep);
+
+		IO.println("Current step " + currentStep);
 	    
 	    //find next step
 	    
@@ -119,7 +120,7 @@ public class TransactionServiceImpl  extends SalesManagerEntityServiceImpl<Long,
 	public Transaction getCapturableTransaction(Order order)
 			throws ServiceException {
 		List<Transaction> transactions = transactionRepository.findByOrder(order.getId());
-		ObjectMapper mapper = new ObjectMapper();
+		ObjectMapper mapper = JsonMapper.builderWithJackson2Defaults().build();
 		Transaction capturable = null;
 		for(Transaction transaction : transactions) {
 			if(transaction.getTransactionType().name().equals(TransactionType.AUTHORIZE.name())) {
@@ -187,7 +188,7 @@ public class TransactionServiceImpl  extends SalesManagerEntityServiceImpl<Long,
 
 		if(finalTransaction!=null && !StringUtils.isBlank(finalTransaction.getDetails())) {
 			try {
-				ObjectMapper mapper = new ObjectMapper();
+				ObjectMapper mapper = JsonMapper.builderWithJackson2Defaults().build();
 				@SuppressWarnings("unchecked")
 				Map<String,String> objects = mapper.readValue(finalTransaction.getDetails(), Map.class);
 				finalTransaction.setTransactionDetails(objects);

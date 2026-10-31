@@ -1,16 +1,16 @@
 package com.salesmanager.shop.store.api.v0.system;
 
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.ws.rs.core.MediaType;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.salesmanager.core.business.services.system.ModuleConfigurationService;
@@ -55,7 +55,7 @@ public class SystemRESTController {
 	 * @param response
 	 * @throws Exception
 	 */
-	@RequestMapping( value="/private/system/module", method=RequestMethod.POST, consumes = "text/plain;charset=UTF-8")
+	@PostMapping( value="/private/system/module", consumes = "text/plain;charset=UTF-8")
 	@ResponseBody
 	public AjaxResponse createOrUpdateModule(@RequestBody final String json, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
@@ -84,7 +84,7 @@ public class SystemRESTController {
 
 	}
 	
-	@RequestMapping( value="/private/system/optin", method=RequestMethod.POST)
+	@PostMapping("/private/system/optin")
 	@ResponseBody
 	public AjaxResponse createOptin(@RequestBody final String json, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
@@ -107,7 +107,7 @@ public class SystemRESTController {
 
 	}
 	
-	@RequestMapping( value="/private/system/optin/{code}", method=RequestMethod.DELETE)
+	@DeleteMapping("/private/system/optin/{code}")
 	@ResponseBody
 	public AjaxResponse deleteOptin(@RequestBody final String code, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
@@ -130,7 +130,7 @@ public class SystemRESTController {
 
 	}
 	
-	@RequestMapping( value="/private/system/optin/{code}/customer", method=RequestMethod.POST, consumes = "application/json")
+	@PostMapping( value="/private/system/optin/{code}/customer", consumes = "application/json")
 	@ResponseBody
 	public AjaxResponse createOptinCustomer(@RequestBody final String code, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		

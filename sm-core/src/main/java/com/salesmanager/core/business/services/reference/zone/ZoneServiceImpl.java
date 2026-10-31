@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.apache.commons.lang3.Validate;
 import org.slf4j.Logger;
@@ -90,7 +90,7 @@ public class ZoneServiceImpl extends SalesManagerEntityServiceImpl<Long, Zone> i
 			
 				//set names
 				for(Zone zone : zones) {
-					ZoneDescription description = zone.getDescriptions().get(0);
+					ZoneDescription description = zone.getDescriptions().getFirst();
 					zone.setName(description.getName());
 					
 				}
@@ -128,7 +128,7 @@ public class ZoneServiceImpl extends SalesManagerEntityServiceImpl<Long, Zone> i
 			
 				//set names
 				for(Zone zone : zones) {
-					ZoneDescription description = zone.getDescriptions().get(0);
+					ZoneDescription description = zone.getDescriptions().getFirst();
 					zone.setName(description.getName());
 					
 				}
@@ -162,7 +162,7 @@ public class ZoneServiceImpl extends SalesManagerEntityServiceImpl<Long, Zone> i
 			
 				//set names
 				for(Zone zone : zns) {
-					ZoneDescription description = zone.getDescriptions().get(0);
+					ZoneDescription description = zone.getDescriptions().getFirst();
 					zone.setName(description.getName());
 					zones.put(zone.getCode(), zone);
 					

@@ -1,21 +1,25 @@
 package com.salesmanager.shop.application.config;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.authentication.DefaultAuthenticationEventPublisher;
+import org.springframework.security.authentication.ProviderManager;
+import org.springframework.security.authentication.ProviderNotFoundException;
+import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.www.BasicAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
 
@@ -31,10 +35,14 @@ import com.salesmanager.shop.store.security.services.CredentialsService;
 import com.salesmanager.shop.store.security.services.CredentialsServiceImpl;
 
 /**
- * Main entry point for security - admin - customer - auth - private - services
- * 
- * @author dur9213
+ * Main entry point for security - shop/customer - services - api private (admin) - api auth (customer).
  *
+ * Component based configuration (SecurityFilterChain beans), replaces the former
+ * WebSecurityConfigurerAdapter based configuration. Each chain keeps its own
+ * AuthenticationManager, built the same way the adapters used to build them:
+ * a ProviderManager with a DaoAuthenticationProvider (chain specific UserDetailsService + BCrypt).
+ *
+ * @author dur9213
  */
 @Configuration
 @EnableWebSecurity
@@ -46,7 +54,7 @@ public class MultipleEntryPointsSecurityConfig {
 	public AuthenticationTokenFilter authenticationTokenFilter() {
 		return new AuthenticationTokenFilter();
 	}
-	
+
 	@Bean
 	public CredentialsService credentialsService() {
 		return new CredentialsServiceImpl();
@@ -72,357 +80,222 @@ public class MultipleEntryPointsSecurityConfig {
 		return new com.salesmanager.shop.store.controller.customer.facade.CustomerFacadeImpl();
 	}
 
-	
-	
+	/**
+	 * Spring Security needs a single (primary) AuthenticationManager for its global configuration.
+	 * Every SecurityFilterChain below sets its own manager, and injection points use explicit
+	 * qualifiers, so this one only acts as a fail-safe: it authenticates nobody.
+	 */
+	@Bean
+	@Primary
+	public AuthenticationManager globalAuthenticationManager() {
+		return authentication -> {
+			throw new ProviderNotFoundException("No global authentication manager, use a chain specific one");
+		};
+	}
+
+	@Bean
+	public WebSecurityCustomizer webSecurityCustomizer() {
+		return web -> web.ignoring().requestMatchers("/", "/error", "/resources/**", "/static/**", "/services/public/**", "/swagger-ui.html", "/swagger-ui/**");
+	}
+
+	private static ProviderManager providerManager(AuthenticationProvider... providers) {
+		ProviderManager manager = new ProviderManager(providers);
+		manager.setAuthenticationEventPublisher(new DefaultAuthenticationEventPublisher());
+		return manager;
+	}
+
+	private static DaoAuthenticationProvider daoProvider(UserDetailsService userDetailsService,
+			PasswordEncoder passwordEncoder) {
+		DaoAuthenticationProvider provider = new DaoAuthenticationProvider(userDetailsService);
+		provider.setPasswordEncoder(passwordEncoder);
+		return provider;
+	}
+
+	private static BasicAuthenticationEntryPoint entryPoint(String realm) {
+		BasicAuthenticationEntryPoint entryPoint = new BasicAuthenticationEntryPoint();
+		entryPoint.setRealmName(realm);
+		return entryPoint;
+	}
+
 	/**
 	 * shop / customer
-	 * 
-	 * @author dur9213
-	 *
 	 */
 	@Configuration
-	@Order(1)
-	public static class CustomerConfigurationAdapter extends WebSecurityConfigurerAdapter {
+	public static class CustomerConfiguration {
 
 		@Bean("customerAuthenticationManager")
-		@Override
-		public AuthenticationManager authenticationManagerBean() throws Exception {
-			return super.authenticationManagerBean();
-		}
-
-		@Autowired
-		private UserDetailsService customerDetailsService;
-
-		public CustomerConfigurationAdapter() {
-			super();
-		}
-		
-		@Override
-		public void configure(WebSecurity web) {
-			web.ignoring().antMatchers("/");
-			web.ignoring().antMatchers("/error");
-			web.ignoring().antMatchers("/resources/**");
-			web.ignoring().antMatchers("/static/**");
-			web.ignoring().antMatchers("/services/public/**");
-		}
-
-
-		@Override
-		public void configure(AuthenticationManagerBuilder auth) throws Exception {
-			auth.userDetailsService(customerDetailsService);
-		}
-
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			http
-			.antMatcher("/shop/**")
-			.csrf().disable()			
-			.authorizeRequests()
-					.antMatchers("/shop/").permitAll()
-					.antMatchers("/shop/**").permitAll()
-					.antMatchers("/shop/customer/logon*").permitAll()
-					.antMatchers("/shop/customer/registration*").permitAll()
-					.antMatchers("/shop/customer/logout*").permitAll()
-					.antMatchers("/shop/customer/customLogon*").permitAll()
-					.antMatchers("/shop/customer/denied*").permitAll()
-					.antMatchers("/shop/customer/**").hasRole("AUTH_CUSTOMER")
-					.anyRequest().authenticated()
-					.and()
-					.httpBasic()
-					.authenticationEntryPoint(shopAuthenticationEntryPoint())
-					.and()
-					.logout()
-					.logoutUrl("/shop/customer/logout")
-					.logoutSuccessUrl("/shop/")
-					.invalidateHttpSession(true)
-					.deleteCookies("JSESSIONID")
-
-					.invalidateHttpSession(false)
-					.and()
-					.exceptionHandling().accessDeniedPage("/shop/");
-
+		public AuthenticationManager customerAuthenticationManager(
+				@Qualifier("customerDetailsService") UserDetailsService customerDetailsService,
+				PasswordEncoder passwordEncoder) {
+			return providerManager(daoProvider(customerDetailsService, passwordEncoder));
 		}
 
 		@Bean
 		public AuthenticationEntryPoint shopAuthenticationEntryPoint() {
-			BasicAuthenticationEntryPoint entryPoint = new BasicAuthenticationEntryPoint();
-			entryPoint.setRealmName("shop-realm");
-			return entryPoint;
+			return entryPoint("shop-realm");
 		}
 
+		@Bean
+		@Order(1)
+		public SecurityFilterChain customerFilterChain(HttpSecurity http,
+				@Qualifier("customerAuthenticationManager") AuthenticationManager customerAuthenticationManager)
+				throws Exception {
+			http
+					.securityMatcher("/shop/**")
+					.authenticationManager(customerAuthenticationManager)
+					.csrf(csrf -> csrf.disable())
+					.authorizeHttpRequests(requests -> requests
+							.requestMatchers("/shop/").permitAll()
+							.requestMatchers("/shop/**").permitAll()
+							.requestMatchers("/shop/customer/logon*").permitAll()
+							.requestMatchers("/shop/customer/registration*").permitAll()
+							.requestMatchers("/shop/customer/logout*").permitAll()
+							.requestMatchers("/shop/customer/customLogon*").permitAll()
+							.requestMatchers("/shop/customer/denied*").permitAll()
+							.requestMatchers("/shop/customer/**").hasRole("AUTH_CUSTOMER")
+							.anyRequest().authenticated())
+					.httpBasic(basic -> basic
+							.authenticationEntryPoint(shopAuthenticationEntryPoint()))
+					.logout(logout -> logout
+							.logoutUrl("/shop/customer/logout")
+							.logoutSuccessUrl("/shop/")
+							.invalidateHttpSession(true)
+							.deleteCookies("JSESSIONID")
+							.invalidateHttpSession(false))
+					.exceptionHandling(handling -> handling.accessDeniedPage("/shop/"));
+			return http.build();
+		}
 	}
-	
+
 	/**
 	 * services api v0
-	 * 
-	 * @author dur9213
-	 * @deprecated
 	 *
+	 * @deprecated
 	 */
 	@Configuration
-	@Order(2)
-	public static class ServicesApiConfigurationAdapter extends WebSecurityConfigurerAdapter {
+	public static class ServicesApiConfiguration {
 
-		@Autowired
-		private WebUserServices userDetailsService;
-
-		@Autowired
-		private ServicesAuthenticationSuccessHandler servicesAuthenticationSuccessHandler;
-
-		public ServicesApiConfigurationAdapter() {
-			super();
-		}
-
-		@Override
-		public void configure(AuthenticationManagerBuilder auth) throws Exception {
-			auth.userDetailsService(userDetailsService);
-		}
-
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			http
-			.antMatcher("/services/**")
-			.csrf().disable()
-					.authorizeRequests()
-					.antMatchers("/services/public/**").permitAll()
-					.antMatchers("/services/private/**").hasRole("AUTH")
-					.anyRequest().authenticated()
-					.and().httpBasic().authenticationEntryPoint(servicesAuthenticationEntryPoint())
-					.and().formLogin()
-					.successHandler(servicesAuthenticationSuccessHandler);
-
+		@Bean("servicesAuthenticationManager")
+		public AuthenticationManager servicesAuthenticationManager(
+				@Qualifier("userDetailsService") WebUserServices userDetailsService, PasswordEncoder passwordEncoder) {
+			return providerManager(daoProvider(userDetailsService, passwordEncoder));
 		}
 
 		@Bean
 		public AuthenticationEntryPoint servicesAuthenticationEntryPoint() {
-			BasicAuthenticationEntryPoint entryPoint = new BasicAuthenticationEntryPoint();
-			entryPoint.setRealmName("rest-customer-realm");
-			return entryPoint;
-		}
-
-	}
-
-	/**
-	 * admin
-	 * 
-	 * @author dur9213
-	 *
-	 */
-	/**
-	@Configuration
-	@Order(3)
-	public static class AdminConfigurationAdapter extends WebSecurityConfigurerAdapter {
-
-		@Autowired
-		private WebUserServices userDetailsService;
-
-		@Autowired
-		private UserAuthenticationSuccessHandler userAuthenticationSuccessHandler;
-
-		public AdminConfigurationAdapter() {
-			super();
-		}
-
-		@Override
-		public void configure(AuthenticationManagerBuilder auth) throws Exception {
-			auth.userDetailsService(userDetailsService);
-		}
-		
-		@Override
-		public void configure(WebSecurity web) {
-		}
-
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			http
-			.antMatcher("/admin/**")
-					.authorizeRequests()
-					.antMatchers("/admin/logon*").permitAll()
-					.antMatchers("/admin/resources/**").permitAll()
-					.antMatchers("/admin/layout/**").permitAll()
-					.antMatchers("/admin/denied*").permitAll()
-					.antMatchers("/admin/unauthorized*").permitAll()
-					.antMatchers("/admin/users/resetPassword*").permitAll()
-					.antMatchers("/admin/").hasRole("AUTH")
-					.antMatchers("/admin/**").hasRole("AUTH")
-					.antMatchers("/admin/**").hasRole("AUTH")
-					.antMatchers("/admin/users/resetPasswordSecurityQtn*").permitAll()
-					.anyRequest()
-					.authenticated()
-					.and()
-					.httpBasic()
-					.authenticationEntryPoint(adminAuthenticationEntryPoint())
-					.and()
-					.formLogin().usernameParameter("username").passwordParameter("password")
-					.loginPage("/admin/logon.html")
-					.loginProcessingUrl("/admin/performUserLogin")
-					.successHandler(userAuthenticationSuccessHandler)
-					.failureUrl("/admin/logon.html?login_error=true")
-					.and()
-					.csrf().disable()
-					.logout().logoutUrl("/admin/logout").logoutSuccessUrl("/admin/home.html")
-					.invalidateHttpSession(true).and().exceptionHandling().accessDeniedPage("/admin/denied.html");
-			
-
+			return entryPoint("rest-customer-realm");
 		}
 
 		@Bean
-		public AuthenticationEntryPoint adminAuthenticationEntryPoint() {
-			BasicAuthenticationEntryPoint entryPoint = new BasicAuthenticationEntryPoint();
-			entryPoint.setRealmName("admin-realm");
-			return entryPoint;
+		@Order(2)
+		public SecurityFilterChain servicesFilterChain(HttpSecurity http,
+				@Qualifier("servicesAuthenticationManager") AuthenticationManager servicesAuthenticationManager,
+				ServicesAuthenticationSuccessHandler servicesAuthenticationSuccessHandler) throws Exception {
+			http
+					.securityMatcher("/services/**")
+					.authenticationManager(servicesAuthenticationManager)
+					.csrf(csrf -> csrf.disable())
+					.authorizeHttpRequests(requests -> requests
+							.requestMatchers("/services/public/**").permitAll()
+							.requestMatchers("/services/private/**").hasRole("AUTH")
+							.anyRequest().authenticated())
+					.httpBasic(basic -> basic.authenticationEntryPoint(servicesAuthenticationEntryPoint()))
+					.formLogin(login -> login
+							.successHandler(servicesAuthenticationSuccessHandler));
+			return http.build();
 		}
-
 	}
-	**/
 
 	/**
-	 * api - private
-	 * 
-	 * @author dur9213
-	 *
+	 * api - private (admin users, JWT)
 	 */
 	@Configuration
-	@Order(5)
-	public static class UserApiConfigurationAdapter extends WebSecurityConfigurerAdapter {
+	public static class UserApiConfiguration {
 
-		@Autowired
-		private AuthenticationTokenFilter authenticationTokenFilter;
-
-		@Autowired
-		JWTAdminServicesImpl jwtUserDetailsService;
+		@Bean
+		public JWTAdminAuthenticationProvider jwtAdminAuthenticationProvider(
+				JWTAdminServicesImpl jwtUserDetailsService) {
+			return new JWTAdminAuthenticationProvider(jwtUserDetailsService);
+		}
 
 		@Bean("jwtAdminAuthenticationManager")
-		@Override
-		public AuthenticationManager authenticationManagerBean() throws Exception {
-			AuthenticationManager mgr = super.authenticationManagerBean();
-			return mgr;
+		public AuthenticationManager jwtAdminAuthenticationManager(JWTAdminServicesImpl jwtUserDetailsService,
+				JWTAdminAuthenticationProvider jwtAdminAuthenticationProvider, PasswordEncoder passwordEncoder) {
+			return providerManager(daoProvider(jwtUserDetailsService, passwordEncoder),
+					jwtAdminAuthenticationProvider);
 		}
-		
-		
-
-		public UserApiConfigurationAdapter() {
-			super();
-		}
-
-		@Override
-		public void configure(AuthenticationManagerBuilder auth) throws Exception {
-		       auth.userDetailsService(jwtUserDetailsService)
-	            .and()
-	            .authenticationProvider(authenticationProvider());
-		}
-		
-		@Override
-		public void configure(WebSecurity web) {
-			web.ignoring().antMatchers("/swagger-ui.html");
-		}
-
-		
-		/**
-		 * Admin user api
-		 */
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			http
-					.antMatcher(API_VERSION + "/private/**")
-					.authorizeRequests()
-					.antMatchers(API_VERSION + "/private/login*").permitAll()
-					.antMatchers(API_VERSION + "/private/refresh").permitAll()
-					.antMatchers(HttpMethod.OPTIONS, API_VERSION + "/private/**").permitAll()
-					.antMatchers(API_VERSION + "/private/**").hasRole("AUTH")
-					.anyRequest().authenticated()
-					.and()
-					.httpBasic().authenticationEntryPoint(apiAdminAuthenticationEntryPoint())
-					.and()
-					.addFilterAfter(authenticationTokenFilter, BasicAuthenticationFilter.class)
-					.csrf().disable();
-
-		}
-		
-	    @Bean
-	    public AuthenticationProvider authenticationProvider() {
-	    	JWTAdminAuthenticationProvider provider = new JWTAdminAuthenticationProvider();
-	        provider.setUserDetailsService(jwtUserDetailsService);
-	        return provider;
-	    }
 
 		@Bean
 		public AuthenticationEntryPoint apiAdminAuthenticationEntryPoint() {
-			BasicAuthenticationEntryPoint entryPoint = new BasicAuthenticationEntryPoint();
-			entryPoint.setRealmName("api-admin-realm");
-			return entryPoint;
+			return entryPoint("api-admin-realm");
 		}
 
+		@Bean
+		@Order(5)
+		public SecurityFilterChain userApiFilterChain(HttpSecurity http,
+				@Qualifier("jwtAdminAuthenticationManager") AuthenticationManager jwtAdminAuthenticationManager,
+				AuthenticationTokenFilter authenticationTokenFilter) throws Exception {
+			http
+					.securityMatcher(API_VERSION + "/private/**")
+					.authenticationManager(jwtAdminAuthenticationManager)
+					.authorizeHttpRequests(requests -> requests
+							.requestMatchers(API_VERSION + "/private/login*").permitAll()
+							.requestMatchers(API_VERSION + "/private/refresh").permitAll()
+							.requestMatchers(HttpMethod.OPTIONS, API_VERSION + "/private/**").permitAll()
+							.requestMatchers(API_VERSION + "/private/**").hasRole("AUTH")
+							.anyRequest().authenticated())
+					.httpBasic(basic -> basic.authenticationEntryPoint(apiAdminAuthenticationEntryPoint()))
+					.addFilterAfter(authenticationTokenFilter, BasicAuthenticationFilter.class)
+					.csrf(csrf -> csrf.disable());
+			return http.build();
+		}
 	}
 
-
-
 	/**
-	 * customer api
-	 * 
-	 * @author dur9213
-	 *
+	 * customer api (JWT)
 	 */
 	@Configuration
-	@Order(6)
-	public static class CustomeApiConfigurationAdapter extends WebSecurityConfigurerAdapter {
+	public static class CustomerApiConfiguration {
 
-		@Autowired
-		private AuthenticationTokenFilter authenticationTokenFilter;
-
-		@Autowired
-		private UserDetailsService jwtCustomerDetailsService;
-
-		public CustomeApiConfigurationAdapter() {
-			super();
+		@Bean
+		public JWTCustomerAuthenticationProvider jwtCustomerAuthenticationProvider(
+				@Qualifier("jwtCustomerDetailsService") UserDetailsService jwtCustomerDetailsService) {
+			return new JWTCustomerAuthenticationProvider(jwtCustomerDetailsService);
 		}
-		
+
 		@Bean("jwtCustomerAuthenticationManager")
-		@Override
-		public AuthenticationManager authenticationManagerBean() throws Exception {
-			return super.authenticationManagerBean();
+		public AuthenticationManager jwtCustomerAuthenticationManager(
+				@Qualifier("jwtCustomerDetailsService") UserDetailsService jwtCustomerDetailsService,
+				PasswordEncoder passwordEncoder) {
+			return providerManager(daoProvider(jwtCustomerDetailsService, passwordEncoder));
 		}
-
-		@Override
-		public void configure(AuthenticationManagerBuilder auth) throws Exception {
-			auth.userDetailsService(jwtCustomerDetailsService);
-		}
-
-		@Override
-		protected void configure(HttpSecurity http) throws Exception {
-			http
-			
-				.antMatcher(API_VERSION + "/auth/**")
-				.authorizeRequests()
-					.antMatchers(API_VERSION + "/auth/refresh").permitAll()
-					.antMatchers(API_VERSION + "/auth/login").permitAll()
-					.antMatchers(API_VERSION + "/auth/register").permitAll()
-					.antMatchers(HttpMethod.OPTIONS, API_VERSION + "/auth/**").permitAll()
-					.antMatchers(API_VERSION + "/auth/**")
-					.hasRole("AUTH_CUSTOMER").anyRequest().authenticated()
-					.and()
-					.httpBasic()
-					.authenticationEntryPoint(apiCustomerAuthenticationEntryPoint()).and().csrf().disable()
-					.addFilterAfter(authenticationTokenFilter, BasicAuthenticationFilter.class);
-
-		}
-		
-	    @Bean
-	    public AuthenticationProvider authenticationProvider() {
-	    	JWTCustomerAuthenticationProvider provider = new JWTCustomerAuthenticationProvider();
-	        provider.setUserDetailsService(jwtCustomerDetailsService);
-	        return provider;
-	    }
 
 		@Bean
 		public AuthenticationEntryPoint apiCustomerAuthenticationEntryPoint() {
-			BasicAuthenticationEntryPoint entryPoint = new BasicAuthenticationEntryPoint();
-			entryPoint.setRealmName("api-customer-realm");
-			return entryPoint;
+			return entryPoint("api-customer-realm");
 		}
 
+		@Bean
+		@Order(6)
+		public SecurityFilterChain customerApiFilterChain(HttpSecurity http,
+				@Qualifier("jwtCustomerAuthenticationManager") AuthenticationManager jwtCustomerAuthenticationManager,
+				AuthenticationTokenFilter authenticationTokenFilter) throws Exception {
+			http
+					.securityMatcher(API_VERSION + "/auth/**")
+					.authenticationManager(jwtCustomerAuthenticationManager)
+					.authorizeHttpRequests(requests -> requests
+							.requestMatchers(API_VERSION + "/auth/refresh").permitAll()
+							.requestMatchers(API_VERSION + "/auth/login").permitAll()
+							.requestMatchers(API_VERSION + "/auth/register").permitAll()
+							.requestMatchers(HttpMethod.OPTIONS, API_VERSION + "/auth/**").permitAll()
+							.requestMatchers(API_VERSION + "/auth/**").hasRole("AUTH_CUSTOMER")
+							.anyRequest().authenticated())
+					.httpBasic(basic -> basic
+							.authenticationEntryPoint(apiCustomerAuthenticationEntryPoint()))
+					.csrf(csrf -> csrf.disable())
+					.addFilterAfter(authenticationTokenFilter, BasicAuthenticationFilter.class);
+			return http.build();
+		}
 	}
-
-
 
 }

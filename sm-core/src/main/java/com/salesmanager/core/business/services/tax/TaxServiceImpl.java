@@ -9,12 +9,12 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
-import javax.inject.Inject;
-
+import jakarta.inject.Inject;
+import tools.jackson.databind.json.JsonMapper;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.salesmanager.core.business.exception.ServiceException;
 import com.salesmanager.core.business.services.system.MerchantConfigurationService;
 import com.salesmanager.core.model.common.Billing;
@@ -60,7 +60,7 @@ public class TaxServiceImpl
 		if(configuration!=null) {
 			String value = configuration.getValue();
 			
-			ObjectMapper mapper = new ObjectMapper();
+			ObjectMapper mapper = JsonMapper.builderWithJackson2Defaults().build();
 			try {
 				taxConfiguration = mapper.readValue(value, TaxConfiguration.class);
 			} catch(Exception e) {
@@ -258,7 +258,7 @@ public class TaxServiceImpl
 				
 				TaxItem taxItem = new TaxItem();
 				taxItem.setItemPrice(taxedItemValue);
-				taxItem.setLabel(taxRate.getDescriptions().get(0).getName());
+				taxItem.setLabel(taxRate.getDescriptions().getFirst().getName());
 				taxItem.setTaxRate(taxRate);
 				taxItems.add(taxItem);
 				

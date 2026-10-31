@@ -6,6 +6,7 @@ package com.salesmanager.core.business.modules.cms.content.infinispan;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
+import java.io.Serial;
 import java.net.FileNameMap;
 import java.net.URLConnection;
 import java.util.ArrayList;
@@ -13,10 +14,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
-import javax.annotation.PostConstruct;
+import jakarta.annotation.PostConstruct;
 import org.apache.commons.io.IOUtils;
-import org.infinispan.tree.Fqn;
-import org.infinispan.tree.Node;
+import com.salesmanager.core.business.modules.cms.impl.tree.Fqn;
+import com.salesmanager.core.business.modules.cms.impl.tree.Node;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -43,6 +44,7 @@ public class CmsStaticContentFileManagerImpl
 	/**
 	 * 
 	 */
+	@Serial
 	private static final long serialVersionUID = 1L;
 	private static final Logger LOGGER = LoggerFactory.getLogger(CmsStaticContentFileManagerImpl.class);
 	private static CmsStaticContentFileManagerImpl fileManager = null;
@@ -55,7 +57,7 @@ public class CmsStaticContentFileManagerImpl
 	public void stopFileManager() {
 
 		try {
-			cacheManager.getManager().stop();
+			cacheManager.stop();
 			LOGGER.info("Stopping CMS");
 		} catch (final Exception e) {
 			LOGGER.error("Error while stopping CmsStaticContentFileManager", e);

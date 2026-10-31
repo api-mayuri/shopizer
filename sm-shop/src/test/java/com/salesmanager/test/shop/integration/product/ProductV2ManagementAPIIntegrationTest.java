@@ -1,20 +1,19 @@
 package com.salesmanager.test.shop.integration.product;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.springframework.http.HttpStatus.CREATED;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.salesmanager.core.business.constants.Constants;
 import com.salesmanager.shop.application.ShopApplication;
@@ -31,11 +30,11 @@ import com.salesmanager.shop.model.catalog.product.variation.PersistableProductV
 import com.salesmanager.test.shop.common.ServicesTestSupport;
 
 
+@AutoConfigureTestRestTemplate
 @SpringBootTest(classes = ShopApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-@RunWith(SpringRunner.class)
 public class ProductV2ManagementAPIIntegrationTest extends ServicesTestSupport {
-	
-	
+
+
 	@Test
 	public void createProductWithCategory() throws Exception {
 
@@ -99,9 +98,9 @@ public class ProductV2ManagementAPIIntegrationTest extends ServicesTestSupport {
 		final ResponseEntity<PersistableProductOption> colorResponse = testRestTemplate.postForEntity(
 				"/api/v1/private/product/option?store=" + Constants.DEFAULT_STORE, colorEntity, PersistableProductOption.class);
 		assertTrue(colorResponse.getStatusCode()== CREATED);
-		System.out.println(colorResponse.getBody().getId());
-		
-		
+		IO.println(colorResponse.getBody().getId());
+
+
 		PersistableProductOption size = new PersistableProductOption();
 		size.setCode("size");
 		ProductOptionDescription sizeEn = new ProductOptionDescription();
@@ -113,7 +112,7 @@ public class ProductV2ManagementAPIIntegrationTest extends ServicesTestSupport {
 		final ResponseEntity<PersistableProductOption> sizeResponse = testRestTemplate.postForEntity(
 				"/api/v1/private/product/option?store=" + Constants.DEFAULT_STORE, sizeEntity, PersistableProductOption.class);
 		assertTrue(sizeResponse.getStatusCode()== CREATED);
-		System.out.println(colorResponse.getBody().getId());
+		IO.println(colorResponse.getBody().getId());
 		
 		//opions values
 		PersistableProductOptionValue white = new PersistableProductOptionValue();
@@ -127,7 +126,7 @@ public class ProductV2ManagementAPIIntegrationTest extends ServicesTestSupport {
 		final ResponseEntity<PersistableProductOptionValue> whiteResponse = testRestTemplate.postForEntity(
 				"/api/v1/private/product/option?store=" + Constants.DEFAULT_STORE, whiteEntity, PersistableProductOptionValue.class);
 		assertTrue(whiteResponse.getStatusCode()== CREATED);
-		System.out.println(whiteResponse.getBody().getId());
+		IO.println(whiteResponse.getBody().getId());
 		
 		PersistableProductOptionValue medium = new PersistableProductOptionValue();
 		medium.setCode("medium");

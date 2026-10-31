@@ -5,14 +5,12 @@ import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.Map;
 
-import javax.inject.Inject;
-
-import org.junit.Ignore;
-import org.junit.runner.RunWith;
+import jakarta.inject.Inject;
+import tools.jackson.databind.json.JsonMapper;
+import org.junit.jupiter.api.Disabled;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
+import tools.jackson.databind.ObjectMapper;
 import com.salesmanager.core.business.exception.ServiceException;
 import com.salesmanager.core.business.services.reference.loader.IntegrationModulesLoader;
 import com.salesmanager.core.business.services.system.ModuleConfigurationService;
@@ -20,19 +18,14 @@ import com.salesmanager.core.model.system.IntegrationModule;
 import com.salesmanager.test.configuration.ConfigurationTest;
 
 
-
-
-
-
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {ConfigurationTest.class})
-@Ignore
+@Disabled
 public class ImportIntegrationModule  {
 
 	@Inject
 	private IntegrationModulesLoader integrationModulesLoader;
-	
-	
+
+
 	@Inject
 	private ModuleConfigurationService moduleCongigurationService;
 	
@@ -41,12 +34,12 @@ public class ImportIntegrationModule  {
 	 * if it already exists 
 	 * @throws Exception
 	 */
-	@Ignore
+	@Disabled
 	//@Test
 	public void importSpecificIntegrationModule() throws Exception {
-		
 
-			ObjectMapper mapper = new ObjectMapper();
+
+			ObjectMapper mapper = JsonMapper.builderWithJackson2Defaults().build();
 			File file = new File(" /Users/carlsamson/Documents/dev/workspaces/shopizer-master/shopizer/sm-core/src/main/resources/reference/integrationmodules.json");
 
 
@@ -85,12 +78,12 @@ public class ImportIntegrationModule  {
 	 * Import all non existing modules
 	 * @throws Exception
 	 */
-	@Ignore
+	@Disabled
 	//@Test
 	public void importNonExistingIntegrationModule() throws Exception {
-		
 
-			ObjectMapper mapper = new ObjectMapper();
+
+			ObjectMapper mapper = JsonMapper.builderWithJackson2Defaults().build();
 			File file = new File("/Users/carlsamson/Documents/dev/workspaces/shopizer-master/shopizer/sm-core/src/main/resources/reference/integrationmodules.json");
 
 

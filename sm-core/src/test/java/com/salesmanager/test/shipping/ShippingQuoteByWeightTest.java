@@ -6,9 +6,9 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
-import org.junit.Ignore;
+import org.junit.jupiter.api.Disabled;
 import org.springframework.util.Assert;
 
 import com.salesmanager.core.business.exception.ServiceException;
@@ -41,7 +41,7 @@ import com.salesmanager.core.modules.integration.shipping.model.CustomShippingQu
 import com.salesmanager.core.modules.integration.shipping.model.CustomShippingQuotesConfiguration;
 import com.salesmanager.core.modules.integration.shipping.model.CustomShippingQuotesRegion;
 
-@Ignore
+@Disabled
 public class ShippingQuoteByWeightTest extends com.salesmanager.test.common.AbstractSalesManagerCoreTestCase {
 	
 	private static final Date date = new Date(System.currentTimeMillis());
@@ -55,7 +55,7 @@ public class ShippingQuoteByWeightTest extends com.salesmanager.test.common.Abst
 
 	
 	
-	@Ignore
+	@Disabled
 	//@Test
 	public void testGetCustomShippingQuotesByWeight() throws ServiceException {
 
@@ -127,14 +127,14 @@ public class ShippingQuoteByWeightTest extends com.salesmanager.test.common.Abst
 	    for(ProductAvailability as : avails) {
 		    Set<ProductPrice> availabilityPrices = as.getPrices();
 		    for(ProductPrice ps : availabilityPrices) {
-		    	System.out.println(ps.getProductPriceAmount().toString());
+					IO.println(ps.getProductPriceAmount().toString());
 		    }
 	    }
 	    
 	    //check availability
 	    Set<ProductPrice> availabilityPrices = availability.getPrices();
 	    for(ProductPrice ps : availabilityPrices) {
-	    	System.out.println(ps.getProductPriceAmount().toString());
+				IO.println(ps.getProductPriceAmount().toString());
 	    }
 	    
 
@@ -259,7 +259,7 @@ public class ShippingQuoteByWeightTest extends com.salesmanager.test.common.Abst
 	    
 	    ShippingQuote shippingQuote = shippingService.getShippingQuote(dummyCartId, store, delivery, shippingProducts, en);
 
-	    Assert.notNull(shippingQuote);
+	    Assert.notNull(shippingQuote, "must not be null");
 	    
 	}
 

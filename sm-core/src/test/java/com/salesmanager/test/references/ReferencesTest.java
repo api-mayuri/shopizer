@@ -2,12 +2,10 @@ package com.salesmanager.test.references;
 
 import java.util.List;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
-import org.junit.Ignore;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Disabled;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.salesmanager.core.business.exception.ServiceException;
 import com.salesmanager.core.business.services.reference.country.CountryService;
@@ -17,13 +15,11 @@ import com.salesmanager.core.model.reference.country.CountryDescription;
 import com.salesmanager.core.model.reference.language.Language;
 import com.salesmanager.test.configuration.ConfigurationTest;
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest	(classes = {ConfigurationTest.class})
-@Ignore
+@Disabled
 public class ReferencesTest {
-	
 
-	
+
 	@Inject
 	LanguageService languageService;
 	
@@ -31,7 +27,7 @@ public class ReferencesTest {
 	CountryService countryService;
 	
 	//@Test
-	@Ignore
+	@Disabled
 	public void testReferences() throws ServiceException {
 		
 		Language en = new Language();
@@ -45,11 +41,11 @@ public class ReferencesTest {
 		fr.setSortOrder(0);
 		
 		languageService.save(fr);
-		
-		
+
+
 		List<Language> langs = languageService.getLanguages();
-		
-		System.out.println("Language size " + langs.size());
+
+		IO.println("Language size " + langs.size());
 		
 		Country us = new Country();
 		us.setIsoCode("US");
@@ -71,15 +67,13 @@ public class ReferencesTest {
 		countryService.save(us);
 		
 		Country c = countryService.getByCode("US");
-		
-		System.out.println(c.getId());
-		
-		
-		
-		System.out.println("***********Done**************");
-		
-		
-		
+
+		IO.println(c.getId());
+
+
+		IO.println("***********Done**************");
+
+
 	}
 
 }

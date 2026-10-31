@@ -6,14 +6,12 @@ import java.text.NumberFormat;
 import java.util.List;
 import java.util.Locale;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 import com.salesmanager.core.business.services.reference.country.CountryService;
 import com.salesmanager.core.business.services.reference.currency.CurrencyService;
@@ -25,12 +23,11 @@ import com.salesmanager.core.modules.utils.GeoLocation;
 import com.salesmanager.test.configuration.ConfigurationTest;
 
 
-@RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = {ConfigurationTest.class})
-@Ignore
+@Disabled
 public class UtilsTestCase  {
-	
-	
+
+
 	@Inject
 	private CountryService countryService;
 	
@@ -45,15 +42,13 @@ public class UtilsTestCase  {
 	
 	@Inject
 	private GeoLocation geoLoaction;
-	
 
-	
+
 	//@Test
-	@Ignore
+	@Disabled
 	public void testCache() throws Exception {
-		
 
-		
+
 		@SuppressWarnings("rawtypes")
 		List countries = countryService.list();
 
@@ -63,12 +58,12 @@ public class UtilsTestCase  {
 		@SuppressWarnings("rawtypes")
 		List objects = (List) cache.getFromCache("COUNTRIES");
 		
-		Assert.assertNotNull(objects);
+		Assertions.assertNotNull(objects);
 		
 	}
 	
 	//@Test
-	@Ignore
+	@Disabled
 	public void testCurrency() throws Exception {
 		
 		Currency currency = currencyService.getByCode("BGN");
@@ -77,8 +72,8 @@ public class UtilsTestCase  {
 		
 		NumberFormat numberFormat = NumberFormat.getCurrencyInstance(Locale.US);
 		numberFormat.setCurrency(c);
-		
-		System.out.println("Done");
+
+		IO.println("Done");
 		
 	}
 	
@@ -87,10 +82,10 @@ public class UtilsTestCase  {
 		
 		Address address = geoLoaction.getAddress("96.21.132.0");
 		if(address!=null) {
-			System.out.println(address.getCountry());
+			IO.println(address.getCountry());
 		}
 		
 	}
-	
+
 
 }

@@ -2,7 +2,7 @@ package com.salesmanager.core.business.configuration;
 
 import java.util.Properties;
 
-import javax.persistence.EntityManagerFactory;
+import jakarta.persistence.EntityManagerFactory;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.jdbc.DataSourceBuilder;
@@ -83,7 +83,7 @@ public class DataConfiguration {
     }
 
 	@Bean
-	public LocalContainerEntityManagerFactoryBean entityManagerFactory() {
+	public LocalContainerEntityManagerFactoryBean entityManagerFactory(javax.cache.CacheManager jCacheManager) {
 
 		HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
 		vendorAdapter.setGenerateDdl(true);
@@ -91,7 +91,10 @@ public class DataConfiguration {
 		LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
 		factory.setJpaVendorAdapter(vendorAdapter);
 		factory.setPackagesToScan("com.salesmanager.core.model");
-		factory.setJpaProperties(additionalProperties());
+		Properties jpaProperties = additionalProperties();
+		// Hibernate second level cache shares the JCache (Ehcache 3) manager of the Spring cache
+		jpaProperties.put("hibernate.javax.cache.cache_manager", jCacheManager);
+		factory.setJpaProperties(jpaProperties);
 		factory.setDataSource(dataSource());
 		return factory;
 	}
@@ -101,16 +104,22 @@ public class DataConfiguration {
         
         hibernateProperties.setProperty("hibernate.hbm2ddl.auto", hbm2ddl);
         hibernateProperties.setProperty("hibernate.default_schema", schema);
+        // create the schema (namespace) when Hibernate creates/updates tables (not used with validate + Flyway)
+        hibernateProperties.setProperty("hibernate.hbm2ddl.create_namespaces", "true");
         hibernateProperties.setProperty("hibernate.dialect", dialect);
         hibernateProperties.setProperty("hibernate.show_sql", showSql);
         hibernateProperties.setProperty("hibernate.cache.use_second_level_cache", "true");
         hibernateProperties.setProperty("hibernate.cache.use_query_cache", "true");
-        hibernateProperties.setProperty("hibernate.cache.region.factory_class", "org.hibernate.cache.ehcache.EhCacheRegionFactory");
+        // second level cache through JCache (Ehcache 3), see CacheConfiguration and spring/ehcache3.xml
+        hibernateProperties.setProperty("hibernate.cache.region.factory_class", "jcache");
+        hibernateProperties.setProperty("hibernate.javax.cache.missing_cache_strategy", "create");
         hibernateProperties.setProperty("hibernate.connection.CharSet", "utf8");
         hibernateProperties.setProperty("hibernate.connection.characterEncoding", "utf8");
         hibernateProperties.setProperty("hibernate.connection.useUnicode", "true");
-        hibernateProperties.setProperty("hibernate.id.new_generator_mappings", "false"); //unless you run on a new schema
         hibernateProperties.setProperty("hibernate.generate_statistics", "false");
+        // Bean Validation was never active on entities (no provider on the classpath before Spring Boot 3).
+        // A provider is now present (needed by springdoc), keep entity validation off to preserve behaviour.
+        hibernateProperties.setProperty("jakarta.persistence.validation.mode", "none");
         // hibernateProperties.setProperty("hibernate.globally_quoted_identifiers", "true");
         return hibernateProperties;
     }

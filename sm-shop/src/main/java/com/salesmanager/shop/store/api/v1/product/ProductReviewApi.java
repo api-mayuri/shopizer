@@ -2,19 +2,22 @@ package com.salesmanager.shop.store.api.v1.product;
 
 import java.util.List;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import javax.validation.Valid;
+import jakarta.inject.Inject;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 
@@ -29,9 +32,9 @@ import com.salesmanager.shop.model.catalog.product.PersistableProductReview;
 import com.salesmanager.shop.model.catalog.product.ReadableProductReview;
 import com.salesmanager.shop.store.controller.product.facade.ProductCommonFacade;
 
-import io.swagger.annotations.ApiImplicitParam;
-import io.swagger.annotations.ApiImplicitParams;
-import springfox.documentation.annotations.ApiIgnore;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.Parameters;
+import io.swagger.v3.oas.annotations.media.Schema;
 
 @Controller
 @RequestMapping("/api/v1")
@@ -45,25 +48,23 @@ public class ProductReviewApi {
 
   private static final Logger LOGGER = LoggerFactory.getLogger(ProductReviewApi.class);
 
-  @RequestMapping(
-      value = {
+  @PostMapping({
         "/private/products/{id}/reviews",
         "/auth/products/{id}/reviews",
         "/auth/products/{id}/reviews",
         "/auth/products/{id}/reviews"
-      },
-      method = RequestMethod.POST)
+      })
   @ResponseStatus(HttpStatus.CREATED)
   @ResponseBody
-  @ApiImplicitParams({
-      @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
-      @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")
+  @Parameters({
+			@Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
+			@Parameter(name = "lang", schema = @Schema(defaultValue = "en"))
   })
   public PersistableProductReview create(
       @PathVariable final Long id,
       @Valid @RequestBody PersistableProductReview review,
-      @ApiIgnore MerchantStore merchantStore,
-      @ApiIgnore Language language,
+      @Parameter(hidden = true) MerchantStore merchantStore,
+      @Parameter(hidden = true) Language language,
       HttpServletRequest request,
       HttpServletResponse response) {
 
@@ -100,17 +101,17 @@ public class ProductReviewApi {
     }
   }
 
-  @RequestMapping(value = "/product/{id}/reviews", method = RequestMethod.GET)
+  @GetMapping("/product/{id}/reviews")
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  @ApiImplicitParams({
-      @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
-      @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")
+  @Parameters({
+			@Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
+			@Parameter(name = "lang", schema = @Schema(defaultValue = "en"))
   })
   public List<ReadableProductReview> getAll(
       @PathVariable final Long id,
-      @ApiIgnore MerchantStore merchantStore,
-      @ApiIgnore Language language,
+      @Parameter(hidden = true) MerchantStore merchantStore,
+      @Parameter(hidden = true) Language language,
       HttpServletResponse response) {
 
     try {
@@ -138,24 +139,22 @@ public class ProductReviewApi {
     }
   }
 
-  @RequestMapping(
-      value = {
+  @PutMapping({
         "/private/products/{id}/reviews/{reviewid}",
         "/auth/products/{id}/reviews/{reviewid}"
-      },
-      method = RequestMethod.PUT)
+      })
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  @ApiImplicitParams({
-      @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
-      @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")
+  @Parameters({
+			@Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
+			@Parameter(name = "lang", schema = @Schema(defaultValue = "en"))
   })
   public PersistableProductReview update(
       @PathVariable final Long id,
       @PathVariable final Long reviewId,
       @Valid @RequestBody PersistableProductReview review,
-      @ApiIgnore MerchantStore merchantStore,
-      @ApiIgnore Language language,
+      @Parameter(hidden = true) MerchantStore merchantStore,
+      @Parameter(hidden = true) Language language,
       HttpServletRequest request,
       HttpServletResponse response) {
 
@@ -194,23 +193,21 @@ public class ProductReviewApi {
     }
   }
 
-  @RequestMapping(
-      value = {
+  @DeleteMapping({
         "/private/products/{id}/reviews/{reviewid}",
         "/auth/products/{id}/reviews/{reviewid}"
-      },
-      method = RequestMethod.DELETE)
+      })
   @ResponseStatus(HttpStatus.OK)
   @ResponseBody
-  @ApiImplicitParams({
-      @ApiImplicitParam(name = "store", dataType = "String", defaultValue = "DEFAULT"),
-      @ApiImplicitParam(name = "lang", dataType = "String", defaultValue = "en")
+  @Parameters({
+			@Parameter(name = "store", schema = @Schema(defaultValue = "DEFAULT")),
+			@Parameter(name = "lang", schema = @Schema(defaultValue = "en"))
   })
   public void delete(
       @PathVariable final Long id,
       @PathVariable final Long reviewId,
-      @ApiIgnore MerchantStore merchantStore,
-      @ApiIgnore Language language,
+      @Parameter(hidden = true) MerchantStore merchantStore,
+      @Parameter(hidden = true) Language language,
       HttpServletResponse response) {
 
     try {

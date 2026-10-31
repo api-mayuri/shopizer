@@ -4,10 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import com.salesmanager.core.business.modules.integration.shipping.impl.ShippingDecisionPreProcessorImpl;
 import com.salesmanager.core.model.common.Delivery;
@@ -18,15 +18,14 @@ import com.salesmanager.core.model.shipping.ShippingQuote;
 import com.salesmanager.core.model.system.IntegrationModule;
 
 
-
-@Ignore
+@Disabled
 public class ShippingMethodDecisionTest extends com.salesmanager.test.common.AbstractSalesManagerCoreTestCase {
 	
 	@Inject
 	ShippingDecisionPreProcessorImpl shippingMethodDecisionProcess;
 
 	@Test
-	@Ignore
+	@Disabled
 	public void validateShippingMethod() throws Exception {
 		
 		ShippingQuote quote = new ShippingQuote();
@@ -81,8 +80,8 @@ public class ShippingMethodDecisionTest extends com.salesmanager.test.common.Abs
 		allModules.add(inhouse);
 
 		shippingMethodDecisionProcess.prePostProcessShippingQuotes(quote, details, null, delivery, null, null, null, currentModule, null, allModules, Locale.CANADA);
-		
-		System.out.println("Done : " + quote.getCurrentShippingModule()!=null ? quote.getCurrentShippingModule().getCode() : currentModule.getCode());
+
+		IO.println("Done : " + quote.getCurrentShippingModule() != null ? quote.getCurrentShippingModule().getCode() : currentModule.getCode());
 
 	}
 }

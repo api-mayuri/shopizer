@@ -11,11 +11,11 @@ import java.util.Locale;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 import org.apache.commons.collections4.CollectionUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
-import org.jgroups.util.UUID;
+import java.util.UUID;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,7 +150,8 @@ public class CustomerFacadeImpl implements CustomerFacade {
   private EmailTemplatesUtils emailTemplatesUtils;
 
   @Inject
-  private AuthenticationManager customerAuthenticationManager;
+  @Qualifier("customerAuthenticationManager")
+    private AuthenticationManager customerAuthenticationManager;
 
   @Inject
   private CustomerReviewService customerReviewService;
@@ -404,7 +405,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
         customer.setNick(userName);
       }
       if (StringUtils.isBlank(customer.getPassword())) {
-        String password = new String(UUID.generateRandomBytes());
+        String password = UUID.randomUUID().toString();
         String encodedPassword = passwordEncoder.encode(password);
         customer.setPassword(encodedPassword);
       }
@@ -646,7 +647,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
     String password = customer.getPassword();
     if (StringUtils.isBlank(password)) {
-      password = new String(UUID.generateRandomBytes());
+      password = UUID.randomUUID().toString();
       customer.setPassword(password);
     }
 
@@ -657,14 +658,14 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
   @Async
   private void notifyNewCustomer(PersistableCustomer customer, MerchantStore store, Language lang) {
-		System.out.println("Customer notification");
+		IO.println("Customer notification");
 		long startTime = System.nanoTime();
 	Locale customerLocale = LocaleUtils.getLocale(lang);
     String shopSchema = coreConfiguration.getProperty("SHOP_SCHEME");
     emailTemplatesUtils.sendRegistrationEmail(customer, store, customerLocale, shopSchema);
     long endTime = System.nanoTime();
     long duration = (endTime - startTime)/1000;
-    System.out.println("End Notification " + duration);
+		IO.println("End Notification " + duration);
   }
   
   
@@ -706,7 +707,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
 
     String password = customer.getPassword();
     if (StringUtils.isBlank(password)) {
-      password = new String(UUID.generateRandomBytes());
+      password = UUID.randomUUID().toString();
       customer.setPassword(password);
     }
 
@@ -861,7 +862,7 @@ public class CustomerFacadeImpl implements CustomerFacade {
   public void resetPassword(Customer customer, MerchantStore store, Language language) {
 
 
-    String password = new String(UUID.generateRandomBytes());
+    String password = UUID.randomUUID().toString();
     String encodedPassword = passwordEncoder.encode(password);
 
     customer.setPassword(encodedPassword);

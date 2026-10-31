@@ -31,3 +31,9 @@ sm-shop/src/main/resources/database.properties
 .DS_Store
 
 .mvnw/*.jar
+
+# CMS file store content (default CMS, see docs/DECISIONS.md)
+sm-shop/files/repos/*
+sm-shop/files/store/*
+!sm-shop/files/repos/.gitkeep
+!sm-shop/files/store/.gitkeep

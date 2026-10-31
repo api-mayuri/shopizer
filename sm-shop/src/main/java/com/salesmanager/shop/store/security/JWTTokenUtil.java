@@ -1,5 +1,6 @@
 package com.salesmanager.shop.store.security;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.util.Calendar;
 import java.util.Date;
@@ -29,6 +30,7 @@ public class JWTTokenUtil implements Serializable {
 	/**
 	 * 
 	 */
+	@Serial
 	private static final long serialVersionUID = 1L;
 	
 	
@@ -125,7 +127,7 @@ public class JWTTokenUtil implements Serializable {
 	        final Date createdDate = DateUtil.getDate();
 	        final Date expirationDate = calculateExpirationDate(createdDate);
 
-	        System.out.println("doGenerateToken " + createdDate);
+				IO.println("doGenerateToken " + createdDate);
 
 	        return Jwts.builder()
 	                .setClaims(claims)
@@ -142,9 +144,9 @@ public class JWTTokenUtil implements Serializable {
           boolean t = isCreatedBeforeLastPasswordResetWithGrace(created, lastPasswordReset);
           boolean u = isTokenExpiredWithGrace(token);
           boolean v =  ignoreTokenExpiration(token);
-          System.out.println(t + " " +  u + " " + v);
-          System.out.println(!isCreatedBeforeLastPasswordResetWithGrace(created, lastPasswordReset)
-                  && (!isTokenExpiredWithGrace(token) || ignoreTokenExpiration(token)));
+					IO.println(t + " " + u + " " + v);
+					IO.println(!isCreatedBeforeLastPasswordResetWithGrace(created, lastPasswordReset)
+							&& (!isTokenExpiredWithGrace(token) || ignoreTokenExpiration(token)));
           //return !isCreatedBeforeLastPasswordResetWithGrace(created, lastPasswordReset)
           //        && (!isTokenExpired(token) || ignoreTokenExpiration(token));
           return true;

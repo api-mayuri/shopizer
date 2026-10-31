@@ -23,8 +23,7 @@
   
    
 
-  <!-- cache -->
-  <beans:import resource="classpath:/spring/shopizer-core-ehcache.xml" />
+  <!-- cache: see com.salesmanager.core.business.configuration.CacheConfiguration (Ehcache 3 / JCache) -->
   <!-- DB, TX and properties -->
   <beans:import resource="classpath:/spring/shopizer-core-config.xml" />
   <!-- content -->

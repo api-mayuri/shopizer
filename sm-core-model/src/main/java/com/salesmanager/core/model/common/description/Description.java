@@ -1,21 +1,20 @@
 package com.salesmanager.core.model.common.description;
 
+import org.hibernate.Length;
+
+import java.io.Serial;
 import java.io.Serializable;
 
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.EntityListeners;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Inheritance;
-import javax.persistence.InheritanceType;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MappedSuperclass;
-import javax.validation.constraints.NotEmpty;
-
-import org.hibernate.annotations.Type;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.EntityListeners;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.MappedSuperclass;
+import jakarta.validation.constraints.NotEmpty;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.salesmanager.core.model.common.audit.AuditListener;
@@ -25,8 +24,8 @@ import com.salesmanager.core.model.reference.language.Language;
 
 @MappedSuperclass
 @EntityListeners(value = AuditListener.class)
-@Inheritance(strategy = InheritanceType.TABLE_PER_CLASS)
 public class Description implements Auditable, Serializable {
+	@Serial
 	private static final long serialVersionUID = 1L;
 	
 	@Id
@@ -49,8 +48,7 @@ public class Description implements Auditable, Serializable {
 	@Column(name="TITLE", length=100)
 	private String title;
 	
-	@Column(name="DESCRIPTION")
-	@Type(type = "org.hibernate.type.TextType")
+	@Column(name="DESCRIPTION", length = Length.LONG32)
 	private String description;
 	
 	public Description() {

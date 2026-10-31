@@ -1,10 +1,10 @@
 package com.salesmanager.test.shop.integration.cart;
 
+import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.springframework.http.HttpStatus.CREATED;
 import static org.springframework.http.HttpStatus.NOT_FOUND;
 import static org.springframework.http.HttpStatus.NO_CONTENT;
@@ -14,15 +14,14 @@ import org.junit.jupiter.api.MethodOrderer;
 import org.junit.jupiter.api.Order;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestMethodOrder;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import com.salesmanager.shop.application.ShopApplication;
 import com.salesmanager.shop.model.catalog.product.ReadableProduct;
@@ -30,8 +29,8 @@ import com.salesmanager.shop.model.shoppingcart.PersistableShoppingCartItem;
 import com.salesmanager.shop.model.shoppingcart.ReadableShoppingCart;
 import com.salesmanager.test.shop.common.ServicesTestSupport;
 
+@AutoConfigureTestRestTemplate
 @SpringBootTest(classes = ShopApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-@ExtendWith(SpringExtension.class)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 public class ShoppingCartAPIIntegrationTest extends ServicesTestSupport {
 
@@ -136,7 +135,7 @@ public class ShoppingCartAPIIntegrationTest extends ServicesTestSupport {
     public void updateMultiWCartId() throws Exception {
 
         PersistableShoppingCartItem cartItem1 = new PersistableShoppingCartItem();
-        cartItem1.setProduct(data.getProducts().get(0).getSku());
+        cartItem1.setProduct(data.getProducts().getFirst().getSku());
         cartItem1.setQuantity(2);
 
         PersistableShoppingCartItem cartItem2 = new PersistableShoppingCartItem();
@@ -169,7 +168,7 @@ public class ShoppingCartAPIIntegrationTest extends ServicesTestSupport {
     public void updateMultiWZeroOnOneProd() throws Exception {
 
         PersistableShoppingCartItem cartItem1 = new PersistableShoppingCartItem();
-        cartItem1.setProduct(data.getProducts().get(0).getSku());
+        cartItem1.setProduct(data.getProducts().getFirst().getSku());
         cartItem1.setQuantity(0);
 
         PersistableShoppingCartItem[] productsQtyUpdates = {cartItem1};

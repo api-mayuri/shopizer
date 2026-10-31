@@ -1,14 +1,16 @@
 package com.salesmanager.shop.application.config;
 
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
-import org.springframework.security.config.annotation.method.configuration.GlobalMethodSecurityConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 
+/**
+ * Method security: @PreAuthorize/@PostAuthorize (enabled by default), @Secured and JSR-250 annotations.
+ * Replaces @EnableGlobalMethodSecurity + GlobalMethodSecurityConfiguration (removed in Spring Security 6).
+ */
 @Configuration
-@EnableGlobalMethodSecurity(
-  prePostEnabled = true, 
-  securedEnabled = true, 
-  jsr250Enabled = true)
-public class MethodSecurityConfig extends GlobalMethodSecurityConfiguration {
+@EnableMethodSecurity(
+		securedEnabled = true,
+		jsr250Enabled = true)
+public class MethodSecurityConfig {
 
 }

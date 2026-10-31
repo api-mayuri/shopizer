@@ -3,9 +3,9 @@ package com.salesmanager.core.business.repositories.catalog.category;
 import java.util.Date;
 import java.util.List;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.persistence.Query;
 
 import com.salesmanager.core.model.catalog.category.Category;
 import com.salesmanager.core.model.merchant.MerchantStore;
@@ -72,7 +72,7 @@ public class CategoryRepositoryImpl implements CategoryRepositoryCustom {
 					//.orderBy(qCategory.sortOrder.asc(),qCategory.id.desc());
 			} else {
 				//query.from(qCategory)
-				queryBuilder.append(" join fetch c.parent cp where cp.id =:cId and cm.id=:mid ");
+				// duplicate fetch removed (rejected by Hibernate 6): queryBuilder.append(" join fetch c.parent cp where cp.id =:cId and cm.id=:mid ");
 					//.where(qCategory.parent.eq(category)
 					//	.and(qCategory.merchantStore.eq(store)))
 					//.orderBy(qCategory.sortOrder.asc(),qCategory.id.desc());

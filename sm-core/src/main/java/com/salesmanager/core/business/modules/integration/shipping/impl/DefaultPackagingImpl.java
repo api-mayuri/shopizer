@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import com.salesmanager.core.business.exception.ServiceException;
 import com.salesmanager.core.business.services.shipping.ShippingService;
@@ -291,9 +291,9 @@ public class DefaultPackagingImpl implements Packaging {
 
 		//Iterator ubIt = usedBoxesList.iterator();
 
-		System.out.println("###################################");
-		System.out.println("Number of boxes " + boxesList.size());
-		System.out.println("###################################");
+		IO.println("###################################");
+		IO.println("Number of boxes " + boxesList.size());
+		IO.println("###################################");
 
 		for(PackingBox pb : boxesList) {
 			PackageDetails details = new PackageDetails();

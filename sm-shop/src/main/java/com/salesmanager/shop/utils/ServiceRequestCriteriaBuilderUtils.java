@@ -2,7 +2,7 @@ package com.salesmanager.shop.utils;
 
 import java.util.Map;
 
-import javax.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletRequest;
 
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -58,7 +58,7 @@ public class ServiceRequestCriteriaBuilderUtils {
 			// set the property directly, bypassing the mutator (if any)
 			//String setterName = "set" + WordUtils.capitalize(setterValue);
 			String setterName = setterValue;
-			System.out.println("Trying to do this binding " + setterName + "('" + parameterValue + "') on " + criteria.getClass());
+			IO.println("Trying to do this binding " + setterName + "('" + parameterValue + "') on " + criteria.getClass());
 			criteriaAccessor.setPropertyValue(setterName, parameterValue);
 		
 		} catch(Exception e) {

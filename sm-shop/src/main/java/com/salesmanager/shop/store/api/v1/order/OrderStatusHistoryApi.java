@@ -4,13 +4,14 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import javax.inject.Inject;
+import jakarta.inject.Inject;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,17 +24,18 @@ import com.salesmanager.shop.model.order.history.ReadableOrderStatusHistory;
 import com.salesmanager.shop.store.controller.order.facade.OrderFacade;
 import com.salesmanager.shop.utils.AuthorizationUtils;
 
-import io.swagger.annotations.Api;
-import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.SwaggerDefinition;
-import io.swagger.annotations.Tag;
-import springfox.documentation.annotations.ApiIgnore;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 
 @RestController
 @RequestMapping("/api/v1")
-@Api(tags = { "Order status history api" })
-@SwaggerDefinition(tags = {
-		@Tag(name = "Order status history resource", description = "Related to OrderManagement api") })
+@OpenAPIDefinition(
+		tags = {
+				@Tag(name = "Order status history resource", description = "Related to OrderManagement api")}
+)
+@io.swagger.v3.oas.annotations.tags.Tag(name = "Order status history api")
 public class OrderStatusHistoryApi {
 
 	@Inject
@@ -42,11 +44,11 @@ public class OrderStatusHistoryApi {
 	@Inject
 	private AuthorizationUtils authorizationUtils;
 
-	@RequestMapping(value = { "private/orders/{id}/history" }, method = RequestMethod.GET)
+	@GetMapping({ "private/orders/{id}/history" })
 	@ResponseStatus(HttpStatus.OK)
 	@ResponseBody
-	public List<ReadableOrderStatusHistory> list(@PathVariable final Long id, @ApiIgnore MerchantStore merchantStore,
-			@ApiIgnore Language language) {
+	public List<ReadableOrderStatusHistory> list(@PathVariable final Long id, @Parameter(hidden = true) MerchantStore merchantStore,
+			@Parameter(hidden = true) Language language) {
 
 		String user = authorizationUtils.authenticatedUser();
 		authorizationUtils.authorizeUser(user, Stream.of(Constants.GROUP_SUPERADMIN, Constants.GROUP_ADMIN,
@@ -56,12 +58,12 @@ public class OrderStatusHistoryApi {
 
 	}
 
-	@RequestMapping(value = { "private/orders/{id}/history" }, method = RequestMethod.POST)
+	@PostMapping({ "private/orders/{id}/history" })
 	@ResponseStatus(HttpStatus.CREATED)
-	@ApiOperation(httpMethod = "POST", value = "Add order history", notes = "Adds a new status to an order", produces = "application/json", response = Void.class)
+	@Operation(method = "POST", summary = "Add order history", description = "Adds a new status to an order")
 	@ResponseBody
 	public void create(@PathVariable final Long id, @RequestBody PersistableOrderStatusHistory history,
-			@ApiIgnore MerchantStore merchantStore, @ApiIgnore Language language) {
+			@Parameter(hidden = true) MerchantStore merchantStore, @Parameter(hidden = true) Language language) {
 
 		String user = authorizationUtils.authenticatedUser();
 		authorizationUtils.authorizeUser(user, Stream.of(Constants.GROUP_SUPERADMIN, Constants.GROUP_ADMIN,

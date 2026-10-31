@@ -1,18 +1,17 @@
 package com.salesmanager.test.shop.integration.tax;
 
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertTrue;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import java.math.BigDecimal;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 
 import com.salesmanager.shop.application.ShopApplication;
 import com.salesmanager.shop.model.entity.Entity;
@@ -22,11 +21,11 @@ import com.salesmanager.shop.model.tax.PersistableTaxRate;
 import com.salesmanager.shop.model.tax.TaxRateDescription;
 import com.salesmanager.test.shop.common.ServicesTestSupport;
 
+@AutoConfigureTestRestTemplate
 @SpringBootTest(classes = ShopApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-@RunWith(SpringRunner.class)
 public class TaxRateIntegrationTest extends ServicesTestSupport {
-	
-	
+
+
     @Test
     public void manageTaxClass() throws Exception {
     	
@@ -42,8 +41,8 @@ public class TaxRateIntegrationTest extends ServicesTestSupport {
         
         assertNotNull(e.getId());
         assertTrue(e.getId() > 0);
-        
-        
+
+
         final HttpEntity<String> httpEntity = new HttpEntity<>(getHeader());
         
         //tax class exists
@@ -91,7 +90,7 @@ public class TaxRateIntegrationTest extends ServicesTestSupport {
     	taxRate.getDescriptions().add(en);
     	taxRate.getDescriptions().add(fr);
 
-    	
+
         final HttpEntity<PersistableTaxRate> taxClassEntity = new HttpEntity<>(taxRate, getHeader());
         final ResponseEntity<Entity> response = testRestTemplate.postForEntity(String.format("/api/v1/private/tax/rate/"), taxClassEntity, Entity.class);
         
@@ -99,8 +98,8 @@ public class TaxRateIntegrationTest extends ServicesTestSupport {
         
         assertNotNull(e.getId());
         assertTrue(e.getId() > 0);
-        
-        
+
+
         final HttpEntity<String> httpEntity = new HttpEntity<>(getHeader());
         
         //tax class exists
@@ -110,7 +109,6 @@ public class TaxRateIntegrationTest extends ServicesTestSupport {
         assertTrue(exists.getBody().isExists());
 
 
-	
     }
 
 }

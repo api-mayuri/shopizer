@@ -1,20 +1,21 @@
 package com.salesmanager.core.model.order;
 
+import org.hibernate.Length;
+
+import java.io.Serial;
 import java.math.BigDecimal;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.EnumType;
-import javax.persistence.Enumerated;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.Table;
-import javax.persistence.TableGenerator;
-
-import org.hibernate.annotations.Type;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.TableGenerator;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.salesmanager.core.constants.SchemaConstant;
@@ -30,6 +31,7 @@ import com.salesmanager.core.model.generic.SalesManagerEntity;
 @Entity
 @Table (name="ORDER_TOTAL" )
 public class OrderTotal extends SalesManagerEntity<Long, OrderTotal> {
+	@Serial
 	private static final long serialVersionUID = -5885315557404081674L;
 	
 	@Id
@@ -44,8 +46,7 @@ public class OrderTotal extends SalesManagerEntity<Long, OrderTotal> {
 	@Column (name ="TITLE", nullable=true)
 	private String title;
 	
-	@Column (name ="TEXT", nullable=true)
-	@Type(type = "org.hibernate.type.TextType")
+	@Column(name ="TEXT", nullable=true, length = Length.LONG32)
 	private String text;
 	
 	@Column (name ="VALUE", precision=15, scale=4, nullable=false )

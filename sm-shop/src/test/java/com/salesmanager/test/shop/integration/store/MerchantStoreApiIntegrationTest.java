@@ -2,21 +2,22 @@ package com.salesmanager.test.shop.integration.store;
 
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.is;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+
 import java.util.Arrays;
-import javax.inject.Inject;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import jakarta.inject.Inject;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.resttestclient.autoconfigure.AutoConfigureTestRestTemplate;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
-import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.resttestclient.TestRestTemplate;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.util.LinkedMultiValueMap;
 import com.salesmanager.core.model.merchant.MerchantStore;
 import com.salesmanager.shop.application.ShopApplication;
@@ -25,8 +26,8 @@ import com.salesmanager.shop.model.store.PersistableMerchantStore;
 import com.salesmanager.shop.model.store.ReadableMerchantStore;
 import com.salesmanager.test.shop.common.ServicesTestSupport;
 
+@AutoConfigureTestRestTemplate
 @SpringBootTest(classes = ShopApplication.class, webEnvironment = WebEnvironment.RANDOM_PORT)
-@RunWith(SpringRunner.class)
 public class MerchantStoreApiIntegrationTest extends ServicesTestSupport {
   
   private static final String TEST_STORE_CODE = "test";
@@ -60,8 +61,8 @@ public class MerchantStoreApiIntegrationTest extends ServicesTestSupport {
    */
   @Test
   public void testCreateStore() throws Exception {
-      
-      
+
+
       PersistableAddress address = new PersistableAddress();
       address.setAddress("121212 simple address");
       address.setPostalCode("12345");
@@ -86,8 +87,8 @@ public class MerchantStoreApiIntegrationTest extends ServicesTestSupport {
       assertThat(response.getStatusCode(), is(HttpStatus.OK));
 
   }
-  
-  
+
+
   @Test
   public void testAddAndDeleteStoreLogo() {
       LinkedMultiValueMap<String, Object> parameters = new LinkedMultiValueMap<String, Object>();
@@ -113,6 +114,5 @@ public class MerchantStoreApiIntegrationTest extends ServicesTestSupport {
 
   }
 
-  
-  
+
 }
